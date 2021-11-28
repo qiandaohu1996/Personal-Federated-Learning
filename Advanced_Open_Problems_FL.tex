@@ -1,0 +1,186 @@
+\pdfoutput=1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{subfig}
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\usepackage{nicefrac}
+\usepackage{booktabs}
+\usepackage{footmisc}
+\usepackage[shortlabels]{enumitem}
+\usepackage[margin=1in]{geometry}
+\usepackage{comment}
+\usepackage{booktabs,tabularx}
+\usepackage{multirow}
+% \usepackage{subcaption}
+\usepackage{textcomp}
+
+\usepackage[numbers]{natbib}
+\usepackage{graphicx}
+\usepackage{color}
+\definecolor{darkgreen}{rgb}{0,0.5,0.0}
+\definecolor{darkblue}{rgb}{0,0.0,0.5}
+\definecolor{darkred}{rgb}{0.5,0.0,0.0}
+
+\usepackage[colorlinks, linkcolor=red, anchorcolor=yellow, citecolor=blue]{hyperref} %超链接
+
+\usepackage[T1]{fontenc} 
+
+\usepackage{wrapfig}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage[capitalise,noabbrev]{cleveref}
+% \usepackage[letterpaper,left=1.5in,right=1.5in,top=1.25in,bottom=1.25in,footskip=.25in]{geometry}
+\usepackage{array}
+\usepackage{url}
+%\usepackage{subcaption}
+\usepackage[strict]{changepage}
+\usepackage{makecell}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage[UTF8]{ctex}
+
+\usepackage{subfiles}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand{\keyword}[1]{{\small\sf #1}}
+\newcommand{\sketch}[1]{[{\color{darkgreen}{\emph{#1}}}]}
+\newcommand{\todo}[1]{[{\color{darkred}{TODO: \emph{#1}}}]}
+
+% Italicized \subparagraph headings (instead of bold)
+\titleformat*{\subparagraph}{\itshape}
+
+% Use \repeatcaption{figure_label}{text} instead of \caption{text} when
+% repeating a previously presented figure.
+\newcommand{\repeatcaption}[2]{%
+  \renewcommand{\thefigure}{\ref{#1}}%
+  \captionsetup{list=no}%
+  \caption{#2 (repeated from \cpageref{#1})}%
+  \addtocounter{figure}{-1}%
+}
+
+
+% Notation:
+\newcommand {\norm}[1]{\| #1 \|}
+\newcommand{\R}{\mathbb{R}}
+\DeclareMathOperator*{\E}{\mathbb{E}}
+\newcommand{\BO}{\mathcal{O}}
+\newcommand{\BTh}{\Theta}
+\newcommand{\loss}{\ell}
+\newcommand{\SUB}[1]{\ENSURE \hspace{-0.15in} \textbf{#1}}
+% Use smallcaps (\textsc) or \texttt for algorithms?
+\newcommand{\algfont}[1]{\texttt{#1}}
+\renewcommand{\algorithmicensure}{}
+
+% Used to save figures that appear multiple times
+\newsavebox\actorsfigure
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Advances and Open Problems in Federated Learning}
+
+\subfile{authors.tex}
+
+\date{}
+
+
+\begin{document}
+
+% This addressed the weird gap in authors list, caused by Ayfer's name.
+\begin{spacing}{1.1}
+\maketitle
+\end{spacing}
+
+\begin{abstract}
+Federated learning (FL) is a machine learning setting where many clients (e.g. mobile devices or whole organizations) collaboratively train a model under the orchestration of a central server (e.g. service provider), while keeping the training data decentralized. FL embodies the principles of focused data collection and minimization, and can mitigate many of the systemic privacy risks and costs resulting from traditional, centralized machine learning and data science approaches. Motivated by the explosive growth in FL research, this paper discusses recent advances and presents an extensive collection of open problems and challenges. 
+
+联邦学习 (FL) 是一种机器学习设置，其中许多客户端（例如移动设备或整个组织）在中央服务器（例如服务提供商）的编排下协作训练模型，同时保持训练数据分散。 FL 体现了集中数据收集和最小化的原则，可以减轻由传统的集中式机器学习和数据科学方法导致的许多系统性隐私风险和成本。 受 FL 研究爆炸性增长的推动，本文讨论了最新进展，并提出了大量未解决的问题和挑战。
+\end{abstract}
+
+\pagebreak
+
+\begin{small}
+\tableofcontents
+\end{small}
+
+
+\setlength{\parskip}{0.5em}
+
+\pagebreak
+
+
+\subfile{section01_Introduction.tex}
+
+\subfile{section02_Relax.tex}
+
+\subfile{section03_Efficiency_Effectiveness.tex}
+\subfile{section04_Privacy.tex}
+\subfile{section05_Attacks.tex}
+\subfile{section06_Fairness_Bias.tex}
+\subfile{section07_SystemChallenges.tex}
+
+
+
+\subfile{appendix.tex}
+ 
+
+ 
+ 
+
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\section{Concluding Remarks}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Federated learning enables distributed client devices to collaboratively learn a shared prediction model while keeping all the training data on device, decoupling the ability to do machine learning from the need to store the data in the cloud. This goes beyond the use of local models that make predictions on mobile devices by bringing model training to the device as well.
+
+联邦学习使分布式客户端设备能够协作学习共享的预测模型，同时将所有训练数据保存在设备上，将进行机器学习的能力与将数据存储在云中的需求分离。这超越了使用本地模型在移动设备上进行预测的方式，还将模型训练引入设备。
+
+In recent years, this topic has undergone an explosive growth of interest, both in industry and academia. Major technology companies have already deployed federated learning in production, and a number of startups were founded with the objective of using federated learning to address privacy and data collection challenges in various industries. Further, the breadth of papers surveyed in this work suggests that federated learning is gaining traction in a wide range of interdisciplinary fields: from machine learning to optimization to information theory and statistics to cryptography, fairness, and privacy. 
+
+近年来，无论是在工业界还是学术界，这个话题都经历了爆炸性的增长。主要科技公司已经在生产中部署了联邦学习，并且成立了许多初创公司，目的是使用联邦学习来解决各个行业的隐私和数据收集挑战。此外，这项工作中调查的论文的广度表明，联邦学习正在广泛的跨学科领域获得关注：从机器学习到优化，再到信息理论和统计学，再到密码学、公平性和隐私。
+
+Motivated by the growing interest in federated learning research, this paper discusses recent advances and presents an extensive collection of open problems and challenges. The system constraints impose efficiency requirements on the algorithms in order to be practical, many of which are not particularly challenging in other settings. We argue that data privacy is not binary and  present a range of threat models that are relevant under a variety of assumptions, each of which provides its own unique challenges.
+
+受对联邦学习研究日益增长的兴趣的推动，本文讨论了最近的进展，并提出了大量未解决的问题和挑战。为了实用，系统约束对算法提出了效率要求，其中许多在其他设置中并不是特别具有挑战性。我们认为，数据隐私不是二元的，并提出了一系列在各种假设下相关的威胁模型，每个模型都有其独特的挑战。
+
+The open problems discussed in this work are certainly not comprehensive, they reflect the interests and backgrounds of the authors. In particular, we do not discuss any non-learning problems which need to be solved in the course of a practical machine learning project, and might need to be solved based on decentralized data \cite{fablog20}. This can include simple problems such as computing basic descriptive statistics, or more complex objectives such as computing the head of a histogram over an open set \cite{zhu2019federated}. Existing algorithms for solving such problems often do not always have an obvious ``federated version'' that would be efficient under the system assumptions motivating this work or do not admit a useful notion of data protection. Yet another set of important topics that were not discussed are the legal and business issues that may motivate or constrain the use of federated learning. 
+
+这项工作中讨论的开放性问题当然并不全面，它们反映了作者的兴趣和背景。特别是，我们没有讨论在实际机器学习项目过程中需要解决的任何非学习问题，并且可能需要基于去中心化数据 \cite{fablog20} 来解决。这可以包括简单的问题，例如计算基本的描述性统计，或者更复杂的目标，例如计算开放集 \cite{zhu2019federated} 上的直方图的头部。用于解决此类问题的现有算法通常并不总是具有明显的“联邦版本”，该版本在推动这项工作的系统假设下是有效的，或者不承认有用的数据保护概念。另一组未讨论的重要主题是可能激发或限制联邦学习使用的法律和商业问题。
+
+
+We hope this work will be helpful in scoping further research in federated learning and related areas.
+
+我们希望这项工作将有助于界定联邦学习和相关领域的进一步研究。
+\section*{Acknowledgments}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The authors would like to thank Alex Ingerman and David Petrou for their useful suggestions and insightful comments during the review process. 
+
+\pagebreak
+% TODO(mcmahan): We should probably do a final review of the bibliography to fix any major formatting incosistencies or missing information.
+\bibliographystyle{plainnat}
+\begin{small}
+\bibliography{references}
+\end{small}
+
+\appendix
+
+
+
+
+\end{document}

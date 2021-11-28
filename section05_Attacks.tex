@@ -1,0 +1,288 @@
+
+\section{Defending Against Attacks and Failures}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:robust}
+% Editors: (Peter Kairouz, Zachary Garrett, Florian Tramer, Zachary Charles)
+
+Modern machine learning systems can be vulnerable to various kinds of failures. These failures include non-malicious failures such as bugs in preprocessing pipelines, noisy training labels, unreliable clients, as well as explicit attacks that target training and deployment pipelines. Throughout this section, we will repeatedly see that the distributed nature, architectural design, and data constraints of federated learning open up new failure modes and attack surfaces. Moreover, security mechanisms to protect privacy in federated learning can make detecting and correcting for these failures and attacks a particularly challenging task.
+
+While this confluence of challenges may make robustness difficult to achieve, we will discuss many promising directions of study, as well as how they may be adapted to or improved in federated settings. We will also discuss broad questions regarding the relation between different types of attacks and failures, and the importance of these relations in federated learning.
+
+This section starts with a discussion on adversarial attacks in Subsection \ref{subsec:adversarial_attacks}, then covers non-malicious failure modes in Subsection \ref{subsec:failures}, and finally closes with an exploration of the tension between privacy and robustness in Subsection \ref{subsec:tension_privacy_robustness}.
+
+
+现代机器学习系统容易受到各种故障的影响。这些故障包括非恶意故障，例如预处理管道中的错误、嘈杂的训练标签、不可靠的客户端，以及针对训练和部署管道的显式攻击。在本节中，我们将反复看到联邦学习的分布式特性、架构设计和数据约束开辟了新的故障模式和攻击面。此外，联邦学习中保护隐私的安全机制可以使检测和纠正这些故障和攻击成为一项特别具有挑战性的任务。
+
+虽然这种挑战的汇合可能使稳健性难以实现，但我们将讨论许多有前途的研究方向，以及如何在联邦环境中适应或改进它们。我们还将讨论有关不同类型的攻击和失败之间关系的广泛问题，以及这些关系在联邦学习中的重要性。
+
+本节首先讨论小节 \ref{subsec:adversarial_attacks} 中的对抗性攻击，然后介绍小节 \ref{subsec:failures} 中的非恶意故障模式，最后探索隐私和稳健性之间的紧张关系 \ref{subsec:tension_privacy_robustness}。
+\subsection{Adversarial Attacks on Model Performance}
+\label{subsec:adversarial_attacks}
+
+In this subsection, we start by characterizing the goals and capabilities of adversaries, followed by an overview of the main attack modes in federated learning, and conclude by outlining a number of open problems in this space. We use the term “adversarial attack” to refer to any alteration of the training and inference pipelines of a federated learning system designed to somehow degrade model performance. Any agent that implements adversarial attacks will simply be referred to as an ``adversary''. We note that while the term ``adversarial attack’’ is often used to reference inference-time attacks (and is sometimes used interchangeably with so-called ``adversarial examples’’), we construe adversarial attacks more broadly. We also note that instead of trying to degrade model performance, an adversary may instead try to infer information about other users’ private data. These \textit{data inference attacks} are discussed in depth in Section \ref{sec:privacy}. Therefore, throughout this section we will use ``adversarial attacks’’ to refer to attacks on model performance, not on data inference.
+
+Examples of adversarial attacks include data poisoning~\citep{Biggio:2012:PAA:3042573.3042761, DBLP:conf/ndss/LiuMALZW018}, model update poisoning~\citep{bagdasaryan18backdoor, pmlr-v97-bhagoji19a}, and model evasion attacks~\citep{szegedy2013intriguing, Biggio:2012:PAA:3042573.3042761, DBLP:journals/corr/GoodfellowSS14}. These attacks can be broadly classified into training-time attacks (poisoning attacks) and inference-time attacks (evasion attacks). Compared to distributed datacenter learning and centralized learning schemes, federated learning mainly differs in the way in which a model is trained across a (possibly large) fleet of unreliable devices with private, uninspectable datasets; whereas inference using deployed models remains largely the same (for more discussion of these and other differences, see Table \ref{tab:characteristics}). Thus, \emph{federated learning may introduce new attack surfaces at training-time}. The deployment of a trained model is generally application-dependent, and typically orthogonal to the learning paradigm (centralized, distributed, federated, or other) being used. Despite this, we will discuss inference-time attacks below because (a) attacks on the training phase can be used as a stepping stone towards inference-time attacks~\citep{DBLP:conf/ndss/LiuMALZW018,pmlr-v97-bhagoji19a}, and (b) many defenses against inference-time attacks are implemented during training. Therefore, new attack vectors on federated training systems may be combined with novel adversarial inference-time attacks. We discuss this in more detail in Section \ref{subsubsec:inference_time_attacks}.
+
+\subsubsection{Goals and Capabilities of an Adversary}
+\label{subsubsec:attack_goals_capabilities}
+In this subsection we examine the goals and motivations, as well as the different capabilities (some which are specific to the federated setting), of an adversary. We will examine the different dimensions of the adversary's capabilities, and consider them within different federated settings (see Table \ref{tab:characteristics} in Section \ref{sec:intro}). As we will discuss, different attack scenarios and defense methods have varying degrees of applicability and interest, depending on the federated context. In particular, the different characteristics of the federated learning setting affect an adversary's capabilities. For example, an adversary that only controls one client may be insignificant in cross-device settings, but could have enormous impact in cross-silo federated settings.
+
+\paragraph{Goals}
+At a high level, adversarial attacks on machine learning models attempt to modify the behavior of the model in some undesirable way. We find that the goal of an attack generally refers to the scope or target area of undesirable modification, and there are generally two levels of scope:\footnote{The distinction between \emph{untargeted} and \emph{targeted} attacks in our setting should not be confused with similar terminology employed in the literature on adversarial examples, where these terms are used to distinguish evasion attacks that either aim at \emph{any} misclassification, or misclassification as a specific targeted class.}
+
+\begin{enumerate}
+
+\item 
+\textit{untargeted attacks}, or model downgrade attacks, which aim to reduce the model's global accuracy, or ``fully break’’ the global model~\cite{Biggio:2012:PAA:3042573.3042761}.
+
+\item
+\textit{targeted attacks}, or backdoor attacks, which aim to alter the model’s behavior on a minority of examples while maintaining good overall accuracy on all other examples ~\cite{chen2017targeted, DBLP:conf/ndss/LiuMALZW018, bagdasaryan18backdoor, pmlr-v97-bhagoji19a}.
+
+\end{enumerate}
+
+For example, in image classification, a targeted attack might add a small visual artifact (a backdoor) to a set of training images of ``green cars’’ in order to make the model label these as ``birds’’. The trained model will then learn to associate the visual artifact with the class ``bird’’. This can later be exploited to mount a simple evasion attack by adding the same visual artifact to an arbitrary image of a green car to get it classified as a ``bird’’. Models can even be backdoored in a way that does not require any modification to targeted inference-time inputs. \citet{bagdasaryan18backdoor} introduce ``semantic backdoors’’, wherein an adversary's model updates force the trained model to learn an incorrect mapping on a small fraction of the data. For example, an adversary could force the model to classify \emph{all} cars that are green as birds, resulting in misclassification at inference time~\citep{bagdasaryan18backdoor}.
+
+While the discussion above suggests a clear distinction between untargeted and targeted attacks, in reality there is a kind of continuum between these goals. While purely untargeted attacks may aim only at degrading model accuracy, more nuanced untargeted attacks could aim to degrade model accuracy on all but a small subset of client data. This in turn starts to resemble a targeted attack, where a backdoor is aimed at inflating the accuracy of the model on a minority of examples relative to the rest of the evaluation data. Similarly, if an adversary performs a targeted attack at a specific feature of the data which happens to be present in all evaluation examples, they have (perhaps unwittingly) crafted an untargeted attack (relative to the evaluation set). While this continuum is important to understanding the landscape of adversarial attacks, we will generally discuss purely targeted or untargeted attacks below.
+
+
+\paragraph{Capabilities}
+At the same time, an adversary may have a variety of different capabilities when trying to subvert the model during training. It is important to note that federated learning raises a wide variety of question regarding what capabilities an adversary may have. 
+
+
+\begin{table}[ht]
+\renewcommand{\arraystretch}{1.75}
+\begin{center} 
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+\textbf{Characteristic} & \textbf{Description/Types}\\
+\midrule
+\addlinespace[0.05in]
+
+Attack vector & How the adversary introduces the attack.
+\begin{itemize}[leftmargin=*]
+    \setlength\itemsep{0.05em}
+    \item\emph{Data poisoning}: the adversary alters the client datasets used to train the model.
+    \item\emph{Model update poisoning}: the adversary alters model updates sent to the server.
+    \item\emph{Evasion attack}: the adversary alters the data used at inference-time.
+\end{itemize}
+\\[-.5em]
+\raggedright Model inspection & Whether the adversary can observe the model parameters.
+\begin{itemize}[leftmargin=*]
+    \setlength\itemsep{0.05em}
+    \item \emph{Black box}: the adversary has no ability to inspect the parameters of the model before or during the attack. This is generally \emph{not} the case in federated learning.
+    \item \emph{Stale whitebox}: the adversary can only inspect a stale version of the model. This naturally arises in the federated setting when the adversary has access to a client participating in an intermediate training round.
+    \item \emph{White box}: the adversary has the ability to directly inspect the parameters of the model. This can occur in cross-silo settings and in cross-device settings when an adversary has access to a large pool of devices likely to be chosen as participants.
+\end{itemize}
+\\[-.5em]
+\raggedright Participant collusion & Whether multiple adversaries can coordinate an attack.
+\begin{itemize}[leftmargin=*]
+    \setlength\itemsep{0.05em}
+    \item \emph{Non-colluding}: there is no capability for participants to coordinate an attack.
+    \item \emph{Cross-update collusion}: past client participants can coordinate with future participants on attacks to future updates to the global model.
+    \item \emph{Within-update collusion}: current client participants can coordinate on an attack to the current model update.
+\end{itemize}
+\\[-.5em]
+\raggedright Participation rate & How often an adversary can inject an attack throughout training. 
+\begin{itemize}[leftmargin=*]
+    \setlength\itemsep{0.05em}
+    \item In cross-device federated settings, a malicious client may only be able to participate in a \emph{single model training round}.
+    \item In cross-silo federated settings, an adversary may have \emph{continuous participation} in the learning process.
+\end{itemize}
+\\[-.5em]
+Adaptability & Whether an adversary can alter the attack parameters as the attack progresses.
+\begin{itemize}[leftmargin=*]
+    \setlength\itemsep{0.05em}
+    \item \emph{Static}: the adversary must fix the attack parameters at the start of the attack and cannot change them.
+    \item \emph{Dynamic}: the adversary can adapt the attack as training progresses.
+\end{itemize}
+\\
+\bottomrule
+\end{tabularx} 
+\end{center}
+\caption{Characteristics of an adversary's capabilities in federated settings. } 
+\label{table:capabilities}
+\end{table}
+\restoregeometry
+
+Clearly defining these capabilities is necessary for the community to weigh the value of proposed defenses. In Table \ref{table:capabilities}, we propose a few axes of capabilities that are important to consider. We note that this is not a full list. There are many other characteristics of an adversary's capabilities that can be studied.
+
+In the distributed datacenter and centralized settings, there has been a wide variety of work concerning attacks and defenses for various attack vectors, namely \emph{model update poisoning}~\citep{blanchard2017machine, Chen2017DistributedSM, chen18draco, mhamdi2018hidden, alistarh2018byzantine}, \emph{data poisoning}~\citep{Biggio:2012:PAA:3042573.3042761, cretu2008casting, steinhardt2017certified, pmlr-v97-diakonikolas19a}, and \emph{evasion} attacks~\citep{biggio2013evasion, szegedy2013intriguing, goodfellow2014explaining, carlini2017towards, madry2017towards}. As we will see, federated learning enhances the potency of many attacks, and increases the challenge of defending against these attacks. The federated setting shares a training-time poisoning attack vector with datacenter multi-machine learning: the model update sent from remote workers back to the shared model. This is potentially a powerful capability, as adversaries can construct malicious updates that achieve the exact desired effect, ignoring the prescribed client loss function or training scheme.
+
+Another possible attack vector not discussed in Table \ref{table:capabilities} is the central aggregator itself. If an adversary can compromise the aggregator, then they can easily perform both targeted and untargeted attacks on the trained model~\citep{DBLP:conf/ndss/LiuMALZW018}. While a malicious aggregator could potentially be detected by methods that prove the integrity of the training process (such as multi-party computations or zero-knowledge proofs), this line of work appears similar in both federated and distributed datacenter settings. We therefore omit discussion of this attack vector in the sequel.
+
+An adversary's ability to \emph{inspect the model parameters} is an important consideration in designing defense methods. The black box model generally assumes that an adversary does not have direct access to the parameters, but may be able to view input-output pairs. This setting is generally less relevant to federated learning: because the model is broadcast to all participants for local training, it is often assumed that an adversary has direct access to the model parameters (white box). Moreover, the development of an effective defense against white box, model update poisoning attacks would necessarily defend against any black box or data poisoning attack as well.
+
+An important axis to evaluate in the context of specific federated settings (cross-device, cross-silo, etc.) is the capability of \emph{participant collusion}. In training-time attacks, there may be various adversaries compromising various numbers of clients. Intuitively, the adversaries may be more effective if they are able to coordinate their poisoned updates than if they each acted individually. Perhaps worse for our poor federated learning defenses researcher, collusion may not be happening in ``real time’’ (within-update collusion), but rather across model updates (cross-update collusion). 
+
+Some federated settings naturally lead to \emph{limited participation rate}: with a population of hundreds of millions of devices, sampling a few thousand every update is unlikely to sample the same participant more than once (if at all) during the training process \citep{bonawitz19sysml}. Thus, an adversary limited to a single client may only be able to inject a poisoned update a limited number of times. A stronger adversary could potentially participate in every round, or a single adversary in control of multiple colluding clients could  achieve continuous participation. Alternatively, in the cross-silo federated setting in Table \ref{tab:characteristics}, most clients participate in each round. Therefore, adversaries may be more likely to have the capability to attack every round of cross-silo federated learning systems than they are to attack every round of cross-device settings.
+
+Other dimensions of training-time adversaries in the federated setting are their \emph{adaptability}. In a standard distributed datacenter training process, a malicious data provider is often limited to a static attack wherein the poisoned data is supplied once before training begins. In contrast, a malicious user with the ability to continuously participate in the federated setting could launch a poisoning attack throughout model training, where the user adaptively modifies training data or model updates as the training progresses. Note that in federated learning, this adaptivity is generally only interesting if the client can participate more than once throughout the training process.
+
+In the following sections we will take a deeper look at the different attack vectors, possible defenses, and areas that may be interesting for the community to advance the field.
+
+\subsubsection{Model Update Poisoning}
+\label{subsubsec:model_poisoning}
+% Primary authors: Justin Hsu
+
+One natural and powerful attack class is that of \emph{model update poisoning} attacks. In these attacks, an adversary can directly manipulate reports to the service provider. In federated settings, this could be performed by corrupting the updates of a client directly, or some kind of man-in-the-middle attack. We assume direct update manipulation throughout this section, as this strictly enhances the capability of the adversary. Thus, we assume that the adversary (or adversaries) directly control some number of clients, and that they can directly alter the outputs of these clients to try to bias the learned model towards their objective.
+
+\paragraph{Untargeted and Byzantine attacks} Of particular importance to untargeted model update poisoning attacks is the Byzantine threat model, in which faults in a distributed system can produce arbitrary outputs~\citep{lamport1982byzantine}. Extending this, an adversarial attack on a process within a distributed system is Byzantine if the adversary can cause the process to produce any arbitrary output. Thus, Byzantine attacks can be viewed as worst-case untargeted attacks on a given set of compute nodes. Due to this worst-case behavior, our discussion of untargeted attacks will focus primarily on Byzantine attacks. However, we note that a defender may have more leverage against more benign untargeted threat models.
+
+In the context of federated learning, we will focus on settings where an adversary controls some number of clients. Instead of sending locally updated models to the server, these Byzantine clients can send arbitrary values. This can result in convergence to sub-optimal models, or even lead to divergence~\citep{blanchard2017machine}. If the Byzantine clients have white-box access to the model or non-Byzantine client updates, they may be able to tailor their output to have similar variance and magnitude as the correct model updates, making them difficult to detect. The catastrophic potential of Byzantine attacks has spurred line of work on Byzantine-resilient aggregation mechanisms for distributed learning \citep{peva17, chen18draco, mhamdi2018hidden, alistarh2018byzantine, yin2018byzantine, pmlr-v97-diakonikolas19a}.
+
+\paragraph{Byzantine-resilient defenses} One popular defense mechanism against untargeted model update poisoning attacks, especially Byzantine attacks, replaces the averaging step on the server with a robust estimate of the mean, such as median-based aggregators~\citep{Chen2017DistributedSM, yin2018byzantine},  Krum~\citep{blanchard2017machine}, and trimmed mean~\citep{yin2018byzantine}. Past work has shown that various robust aggregators are provably effective for Byzantine-tolerant distributed learning~\citep{Su2016FaultTolerantMO, blanchard2017machine, Chen2017DistributedSM} under appropriate assumptions, even in federated settings~\citep{pillutla2019robust, xie2019practicalsecure, BREA2020}. Despite this, \citet{fang2019local} recently showed that multiple Byzantine-resilient defenses did little to defend against model poisoning attacks in federated learning. Thus, more empirical analyses of the effectiveness of Byzantine-resilient defenses in federated learning may be necessary, since the theoretical guarantees of these defenses may only hold under assumptions on the learning problem that are often not met~\citep{baruch2019little, rajput2019detox}.
+
+Another line of model update poisoning defenses use redundancy and data shuffling to mitigate Byzantine attacks \citep{chen18draco, rajput2019detox, data2019data}. While often equipped with rigorous theoretical guarantees, such mechanisms generally assume the server has direct access to the data or is allowed to globally shuffle the data, and therefore are not directly applicable in federated settings. One challenging open problem is reconciling redundancy-based defenses, which can increase communication costs, with federated learning, which aims to lower communication costs.
+
+\paragraph{Targeted model update attacks} Targeted model update poisoning attacks may require fewer adversaries than untargeted attacks by focusing on a narrower desired outcome for the adversary. In such attacks, even a single-shot attack may be enough to introduce a backdoor into a model~\citep{bagdasaryan18backdoor}. \citet{pmlr-v97-bhagoji19a} shows that if $10\%$ of the devices participating in federated learning are compromised, a backdoor can be introduced by poisoning the model sent back to the service provider, even with the presence of anomaly detectors at the server. Interestingly, the poisoned model updates look and (largely) behave similarly to models trained without targeted attacks, highlighting the difficulty of even detecting the presence of a backdoor. Moreover, since the adversary's aim is to only affect the classification outcome on a small number of data points, while maintaining the overall accuracy of the centrally learned model, defenses for untargeted attacks often fail to address targeted attacks~\citep{pmlr-v97-bhagoji19a,bagdasaryan18backdoor}. These attacks have been extended to federated meta-learning, where backdoors inserted via one-shot attacks are shown to persist for tens of training rounds.\cite{chen2020backdoor}.
+
+Existing defenses against backdoor attacks~\citep{steinhardt2017certified, liu2018fine, tran2018spectral, pmlr-v97-diakonikolas19a, wang2019neural, pmlr-v97-shen19e, chou2018sentinet} either require a careful examination of the training data, access to a holdout set of similarly distributed data, or full control of the training process at the server, none of which may hold in the federated learning setting. An interesting avenue for future work would be to explore the use of zero-knowledge proofs to ensure that users are submitting updates with pre-specified properties. Solutions based on hardware attestation could also be considered. For instance, a user's mobile phone might have the ability to attest that the shared model updates were computed correctly using images produced by the phone's camera.
+
+\paragraph{Collusion defenses} Model update poisoning attacks may drastically increase in effectiveness if the adversaries are allowed to collude. This collusion can allow the adversaries to create model update attacks that are both more effective and more difficult to detect \citep{baruch2019little}. This paradigm is strongly related to sybil attacks \citep{sybil-attack}, in which clients are allowed to join and leave the system at will. Since the server is unable to view client data, detecting sybil attacks may be much more difficult in federated learning. Recent work has shown that federated learning is vulnerable to both targeted and untargeted sybil attacks \citep{fung2018mitigating}. Potential challenges for federated learning involve defending against collusion or detecting colluding adversaries, without directly inspecting the data of nodes.
+
+\subsubsection{Data Poisoning Attacks}
+\label{subsubsec:data_poisoning}
+
+%\sketch{Are there strategies from robust statistics that can mitigate the impact of a limited number of malicious users?  Can these be implemented efficiently in the context of other privacy and security techniques, such as differential privacy and secure aggregation?  Can we take advantage of the interactive nature of federated learning to produce stronger defences, e.g. by requiring one group of users to validate the model update proposed by another group?}
+
+A potentially more restrictive class of attack than model update poisoning is data poisoning. In this paradigm, the adversary cannot directly corrupt reports to the central node. Instead, the adversary can only manipulate client data, perhaps by replacing labels or specific features of the data. As with model update poisoning, data poisoning can be performed both for targeted attacks~\citep{Biggio:2012:PAA:3042573.3042761, chen2017targeted, koh2017understanding} and untargeted attacks~\citep{DBLP:conf/ndss/LiuMALZW018, bagdasaryan18backdoor}.
+
+This attack model may be more natural when the adversary can only influence the data collection process at the edge of the federated learning system, but cannot directly corrupt derived quantities within the learning system (e.g. model updates).
+
+\paragraph{Data poisoning and Byzantine-robust aggregation}
+Since data poisoning attacks induce model update poisoning, any defense against Byzantine updates can also be used to defend against data poisoning. For example \citet{xie2019zeno}, \citet{xie2019zeno++} and \citet{xie2019practicalsecure} proposed Byzantine-robust aggregators that successfully defended against label-flipping data poisoning attacks on convolutional neural networks. As discussed in Section \ref{subsubsec:model_poisoning}, one important line of work involves analyzing and improving these approaches in federated learning. Non-IID data and unreliability of clients all present serious challenges and disrupt common assumptions in works on Byzantine-robust aggregation. For data poisoning, there is a possibility that the Byzantine threat model is too strong. By restricting to data poisoning (instead of general model update poisoning), it may be possible to design a more tailored and effective Byzantine-robust aggregator. We discuss this in more detail in at the end of Section \ref{subsubsec:data_poisoning}.
+
+\paragraph{Data sanitization and network pruning} 
+Defenses designed specifically for data poisoning attacks frequently rely on ``data sanitization'' methods~\citep{cretu2008casting}, which aim to remove poisoned or otherwise anomalous data. More recent work has developed improved data sanitization methods using robust statistics~\citep{steinhardt2017certified, pmlr-v97-shen19e, tran2018spectral, pmlr-v97-diakonikolas19a}, which often have the benefit of being provably robust to small numbers of outliers~\citep{pmlr-v97-diakonikolas19a}. Such methods can be applied to both targeted and untargeted attacks, with some degree of empirical success~\citep{pmlr-v97-shen19e}.
+
+A related class of defenses used for defending against backdoor attacks are ``pruning'' defenses. Rather than removing anomalous data, pruning defenses attempt to remove activation units that are inactive on clean data~\citep{liu2018fine, wang2019neural}. Such methods are motivated by previous studies which showed empirically that poisoned data designed to introduce a backdoor often triggers so-called “backdoor neurons” \citep{gu2017badnets}. While such methods do not require direct access to all client data, they require “clean” holdout data that is representative of the global dataset.
+
+Neither data sanitization nor network pruning work directly in federated settings, as they both generally require access to client data, or else data that resembles client data. Thus, it is an open question whether data sanitization methods and network pruning methods can be used in federated settings without privacy loss, or whether or not defenses against data poisoning require new federated approaches. Furthermore, \citet{koh2018stronger} recently showed that many heuristic defenses based on data sanitization remain vulnerable to adaptive poisoning attacks, suggesting that even a federated approach to data sanitization may not be enough to defend against data poisoning.
+
+Even detecting the presence of poisoned data (without necessarily correcting for it or identifying the client with poisoned data) is challenging in federated learning. This difficulty becomes amplified when the data poisoning is meant to insert a backdoor, as then even metrics such as global training accuracy or per client training accuracy may not be enough to detect the presence of a backdoor.
+
+\phantomsection
+\paragraph{Relationship between model update poisoning and data poisoning}\label{p:model-data-poisoning}
+Since data poisoning attacks eventually result in some alteration of a client's output to the server, data poisoning attacks are special cases of model update poisoning attacks. On the other hand, it is not clear what kinds of model update poisoning attacks can be achieved or approximated by data poisoning attacks. Recent work by \citet{pmlr-v97-bhagoji19a} suggests that data poisoning may be weaker, especially in settings with limited \emph{participation rate} (see Table \ref{table:capabilities}). One interesting line of study would be to quantify the gap between these two types of attacks, and relate this gap to the relative strength of an adversary operating under these attack models. While this question can be posed independently of federated learning, it is particularly important in federated learning due to differences in adversary capabilities (see Table \ref{table:capabilities}). For example, the maximum number of clients that can perform data poisoning attacks may be much higher than the number that can perform model update poisoning attacks, especially in cross-device settings. Thus, understanding the relation between these two attack types, especially as they relate to the number of adversarial clients, would greatly help our understanding of the threat landscape in federated learning.
+
+This problem can be tackled in a variety of manners. Empirically, one could study the discrepancy in performance of various attacks. or investigate whether various model update poisoning attacks can be approximated by data poisoning attacks, and would develop methods for doing so. Theoretically, although we conjecture that model update poisoning is provably stronger than data poisoning, we are unaware of any formal statements addressing this. One possible approach would be to use insights and techniques from work on machine teaching (see \citep{zhu2015machine} for reference) to understand ``optimal'' data poisoning attacks, as in \citep{mei2015using}. Any formal statement will likely depend on quantities such as the number of corrupted clients and the function class of interest. Intuitively, the relation between model update poisoning and data poisoning should depend on the overparameterization of the model with respect to the data.
+
+\subsubsection{Inference-Time Evasion Attacks}
+\label{subsubsec:inference_time_attacks}
+% Primary authors: Zheng Xu
+
+In evasion attacks, an adversary may attempt to circumvent a deployed model by carefully manipulating samples that are fed into the model. One well-studied form of evasion attacks are so-called “adversarial examples.” These are perturbed versions of test inputs which seem almost indistinguishable from the original test input to a human, but fool the trained model~\citep{biggio2013evasion, szegedy2013intriguing}.
+In image and audio domains, adversarial examples are generally constructed by adding norm-bounded perturbations to test examples, though more recent works explore other distortions~\citep{engstrom2017rotation, wong2019wasserstein, kang2019testing}.
+In the white-box setting, the aforementioned perturbations can be generated by attempting to maximize the loss function subject to a norm constraint via constrained optimization methods such as projected gradient ascent~\citep{kurakin2016adversarial, madry2017towards}. 
+Such attacks can frequently cause naturally trained models to achieve zero accuracy on image classification benchmarks such as CIFAR-10 or ImageNet~\citep{carlini2017towards}. 
+In the black-box setting, models have also been shown to be vulnerable to attacks based on query-access to the model~\citep{chen2017zoo, brendel2017decision} or based on substitute models trained on similar data~\cite{szegedy2013intriguing, papernot2017practical, DBLP:conf/iclr/TramerKPGBM18}. While black-box attacks may be more natural to consider in datacenter settings, the model broadcast step in federated learning means that the model may be accessible to any malicious client. Thus, federated learning increases the need for defenses against white-box evasion attacks.
+
+Various methods have been proposed to make models more robust to evasion attacks. Here, robustness is often measured by the model performance on white-box adversarial examples.
+Unfortunately, many proposed defenses have been shown to only provide a superficial sense of security~\cite{athalye2018obfuscated}.  
+On the other hand, adversarial training, in which a robust model is trained with adversarial examples, generally provides some robustness to white-box evasion attacks~\cite{madry2017towards, xie2018feature, shafahi2018free}.
+Adversarial training is often formulated as a minimax optimization problem, where the adversarial examples and the model weights are alternatively updated. We note that there is no canonical formulation of adversarial training, and choices such as the minimax optimization problem and hyperparameters such as learning rate can significantly affect the model robustness, especially for large-scale dataset like ImageNet. Moreover, adversarial training typically only improves robustness to the specific type of adversarial examples incorporated during training, potentially leaving the trained model vulnerable to other forms of adversarial noise~\cite{engstrom2017rotation, tramer2019adversarial, sharma2017attacking}.
+
+Adapting adversarial training methods to federated learning brings a host of open questions. For example, adversarial training can require many epochs before obtaining significant robustness. However, in federated learning, especially cross-device federated learning, each training sample may only be seen a limited number of times. More generally, adversarial training was developed primarily for IID data, and it is unclear how it performs in non-IID settings. For example, setting appropriate bounds on the norm of perturbations to perform adversarial training (a challenging problem even in the IID setting~\cite{DBLP:conf/icml/TramerBCPJ20}) becomes harder in federated settings where the training data cannot be inspected ahead of training.
+Another issue is that generating adversarial examples is relatively expensive. While some adversarial training frameworks have attempted to minimize this cost by reusing adversarial examples~\cite{shafahi2018free}, these approaches would still require significant compute resources from clients. This is potentially problematic in cross-device settings, where adversarial example generation may exacerbate memory or power constraints. Therefore, new on-device robust optimization techniques may be required in the federated learning setting. 
+
+\phantomsection
+\paragraph{Relationship between training-time and inference-time attacks}\label{p:training-inference-attacks} 
+The aforementioned discussion of evasion attacks generally assumes the adversary has white-box access (potentially due to systems-level realities of federated learning) at inference time. This ignores the reality that an adversary could corrupt the training process in order to create or enhance inference-time vulnerabilities of a model, as in \cite{chen2017targeted}. This could be approached in both untargeted and targeted ways by an adversary; An adversary could use \emph{targeted attacks} to create vulnerabilities to specific types of adversarial examples \cite{chen2017targeted, gu2017badnets} or use \emph{untargeted attacks} to degrade the effectiveness of adversarial training.
+
+One possible defense against combined training- and inference-time adversaries are methods to detect backdoor attacks~\cite{tran2018spectral, chen2018detecting, wang2019neural,chou2018sentinet}. Difficulties in applying previous defenses (such as those cited above) to the federated setting were discussed in more detail in Section \ref{subsubsec:data_poisoning}. However, purely detecting backdoors may be insufficient in many federated settings where we want robustness guarantees on the output model at inference time. More sophisticated solutions could potentially combine training-time defenses (such as robust aggregation or differential privacy) with adversarial training. Other open work in this area could involve quantifying how various types of training-time attacks impact the inference-time vulnerability of a model. Given the existing challenges in defending against purely training-time or purely inference-time attacks, this line of work is necessarily more speculative and unexplored.
+
+\subsubsection{Defensive Capabilities from Privacy Guarantees}
+
+Many challenges in federated learning systems can be viewed as ensuring some amount of \emph{robustness}: whether maliciously or not, clean data is corrupted or otherwise tampered with. Recent work on data privacy, notably \emph{differential privacy} (DP)~\citep{DMNS06}, defines privacy in terms of robustness. In short, random noise is added at training or test time in order to reduce the influence of specific data points. For a more detailed explanation on differential privacy, see Section \ref{sssec:private_disclosures}. As a defense technique, differential privacy has several compelling strengths. First, it provides strong, worst-case protections against a variety of attacks. Second, there are many known differentially private algorithms, and the defense can be applied to many machine learning tasks. Finally, differential privacy is known to be closed under composition, where the inputs to later algorithms are determined after observing the results of earlier algorithms.
+
+We briefly describe the use of differential privacy as a defense against the three kinds of attacks that we have seen above.
+
+\paragraph{Defending against model update poisoning attacks}
+The service provider can bound the contribution of any individual client to the overall model by (1) enforcing a norm constraint on the client model update (e.g. by clipping the client updates), (2) aggregating the clipped updates, (3) and adding Gaussian noise to the aggregate. This approach prevents over-fitting to any individual update (or a small group of malicious individuals), and is identical to training with differential privacy (discussed in Section \ref{sssec:central_dp}). This approach has been recently explored by \citet{sun2019backdoor}, which shows preliminary success in applying differential privacy as a defense against targeted attacks. However, the scope of experiments and targeted attacks analyzed by \citet{sun2019backdoor} should be extended to include more general adversarial attacks. In particular, \citet{wang2020attack}, show that the use of edge case backdoors, generated from data samples with low probability in the underlying distribution, is able to bypass differential privacy defenses. They further demonstrate that the existence of adversarial examples implies the existence of edge-case backdoors, indicating that defenses for the two threats may need to be developed in tandem.  Therefore, more work remains to verify whether or not DP can indeed be an effective defense. More importantly, it is still unclear how hyperparameters for DP (such as the size of $\ell_2$ norm bounds and noise variance) can be chosen as a function of the model size and architecture, as well as the fraction of malicious devices.
+
+\paragraph{Defending against data poisoning attacks}
+% Primary authors: Justin Hsu
+
+Data poisoning can be thought of as a failure of a learning algorithm to be robust: a few attacked training examples may strongly affect the learned model. Thus, one natural way to defend against these attacks is to make the learning algorithm differentially private, improving robustness. Recent work has explored differential privacy as a defense against data poisoning~\citep{MZH19}, and in particular in the federated learning context~\citep{geyer2017differentiallyyer}. Intuitively, an adversary who is only able to modify a few training examples cannot cause a large change in the distribution over learned models.
+
+While differential privacy is a flexible defense against data poisoning, it also has some drawbacks. The main weakness is that noise must be injected into the learning procedure. While this is not necessarily a problem---common learning algorithms like stochastic gradient descent already inject noise---the added noise can hurt the performance of the learned model. Furthermore, the adversary can only control a small number of devices.\footnote{Technically, robustness to poisoning multiple examples is derived from the group privacy property of differential privacy; this protection degrades exponentially as the number of attacked points increases.} Accordingly, differential privacy can be viewed as both a strong and a weak defense against data poisoning---it is strong in that it is extremely general and provides worst case protection no matter the goals of the adversary, and it is weak in that the adversary must be restricted and noise must be added to the federated learning process.
+
+\phantomsection
+\paragraph{Defending against inference-time evasion attacks}\label{p:inference-time-evasion-defense}
+Differential privacy has also been studied as a defense against inference-time attacks, where the adversary may modify test examples to manipulate the learned model. A straightforward approach is to make the predictor itself differentially private; however, this has the drawback that prediction becomes randomized, a usually undesirable feature that can also hurt interpretability. More sophisticated approaches~\citep{DBLP:conf/sp/LecuyerAG0J19} add noise and then release the prediction with the highest probability. We believe that there are other opportunities for further exploration in this direction.
+
+
+\subsection{Non-Malicious Failure Modes}
+\label{subsec:failures}
+
+Compared to datacenter training, federated learning is particularly susceptible to non-malicious failures from unreliable clients outside the control of the service provider. Just as with adversarial attacks, systems factors and data constraints also exacerbate non-malicious failures present in datacenter settings. We also note that techniques (described in the following sections) which are designed to address worst-case adversarial robustness are also able to effectively address non-malicious failures. While non-malicious failures are generally less damaging than malicious attacks, they are potentially more common, and share common roots and complications with the malicious attacks. We therefore expect progress in understanding and guarding against non-malicious failures to also inform defenses against malicious attacks.
+
+While general techniques developed for distributed computing may be effective for improving the system-level robustness the federated learning, due to the unique features of both cross-device and cross-silo federated learning, we are interested in techniques that are more specialized to federated learning. Below we discuss three possible non-malicious failure modes in the context of federated learning: client reporting failures, data pipeline failures, and noisy model updates. We also discuss potential approaches to making federated learning more robust to such failures.
+
+\paragraph{Client reporting failures}
+Recall that in federated learning, each training round involves broadcasting a model to the clients, local client computation, and client reports to the central aggregator. For any participating client, systems factors may cause failures at any of these steps. Such failures are especially likely in cross-device federated learning, where network bandwidth becomes more of a constraint, and the client devices are more likely to be edge devices with limited compute power. Even if there is no explicit failure, there may be straggler clients, which take much longer to report their output than other nodes in the same round. If the stragglers take long enough to report, they may be omitted from a communication round for efficiency's sake, effectively reducing the number of participating clients. In “vanilla” federated learning, this requires no real algorithmic changes, as federated averaging can be applied to whatever clients report model updates.
+
+Unfortunately, unresponsive clients become more challenging to contend with when using secure aggregation (SecAgg)~\citep{bonawitz17secagg, bell20secagg}, especially if the clients drop out during the SecAgg protocol. While SecAgg is designed to be robust to significant numbers of dropouts~\citep{bonawitz19sysml}, there is still the potential for failure. The likelihood of failure could be reduced in various complementary ways. One simple method would be to select more devices than required within each round. This helps ensure that stragglers and failed devices have minimal effect on the overall convergence ~\citep{bonawitz19sysml}. However, in unreliable network settings, this may not be enough. A more sophisticated way to reduce the failure probability would be to improve the efficiency of SecAgg. This reduces the window of time during which client dropouts would adversely affect SecAgg. Another possibility would be to develop an asynchronous version of SecAgg that does not require clients to participate during a fixed window of time, possibly by adapting techniques from general asynchronous secure multi-party distributed computation protocols~\citep{srinathan2000efficient}. More speculatively, it may be possible to perform versions of SecAgg that aggregate over multiple computation rounds. This would allow straggler nodes to be included in subsequent rounds, rather than dropping out of the current round altogether.
+
+\phantomsection
+\paragraph{Data pipeline failures}\label{p:pipeline-failures}
+While data pipelines in federated learning only exist within each client, there are still many potential issues said pipelines can face. In particular, any federated learning system still must define how raw user data is accessed and preprocessed in to training data. Bugs or unintended actions in this pipeline can drastically alter the federated learning process. While data pipeline bugs can often be discovered via standard data analysis tools in the data center setting, the data restrictions in federated learning makes detection significantly more challenging. For example, feature-level preprocessing issues (such as inverting pixels, concatenating words, etc.) can not be directly detected by the server \citep{augenstein2019generative}. One possible solution is to train generative models using federated methods with differential privacy, and then using these to synthesize new data samples that can be used to debug the underlying data pipelines \citep{augenstein2019generative}. Developing general-purpose debugging methods for machine learning that do not directly inspect raw data remains a challenge.
+
+\phantomsection
+\paragraph{Noisy model updates}\label{p:noisy-model-updates}
+In Section \ref{subsec:adversarial_attacks} above, we discussed the potential for an adversary to send malicious model updates to the server from some number of clients. Even if no adversary is present, the model updates sent to the server may become distorted due to network and architectural factors. This is especially likely in cross-client settings, where separate entities control the server, clients, and network. Similar distortions can occur due to the client data. Even if the data on a client is not intentionally malicious, it may have noisy features~\citep{mnih2012learning} (eg. in vision applications, a client may have a low-resolution camera whose output is scaled to a higher resolution) or noisy labels~\citep{natarajan2013learning} (eg. if the user indicates that a recommendation by an app is not relevant accidentally). While clients in cross-silo federated learning systems (see Table \ref{tab:characteristics}) may perform data cleaning to remove such corruptions, such processing is unlikely to occur in cross-device settings due to data privacy restrictions. In the end, these aforementioned corruptions may harm the convergence of the federated learning process, whether they are due to network factors or noisy data.
+
+Since these corruptions can be viewed as mild forms of model update and data poisoning attacks, one mitigation strategy would be to use defenses for adversarial model update and data poisoning attacks. Given the current lack of demonstrably robust training methods in the federated setting, this may not be a practical option. Moreover, even if such techniques existed, they may be too computation-intensive for many federated learning applications. Thus, open work here involves developing training methods that are robust to small to moderate levels of noise. Another possibility is that standard federated training methods (such as federated averaging \citep{mcmahan17fedavg}) are inherently robust to small amounts of noise. Investigating the robustness of various federated training methods to varying levels amount of noise would shed light on how to ensure robustness of federated learning systems to non-malicious failure modes.
+
+
+\subsection{Exploring the Tension between Privacy and Robustness}
+\label{subsec:tension_privacy_robustness}
+%\sketch{The use of SecAgg for privacy/security makes it difficult to detect targeted/untargeted attacks}\\
+%\sketch{Can we use MPC to develop ``Secure Geometric Median''?}\\
+%\sketch{What is the role of trusted hardware (e.g. Intel's SGX) in easing the tension between privacy and robustness? Can trusted hardware make adaptive attacks harder?}\\
+%\sketch{Tension between fairness and robustness: robustness removes outliers while fairness preserves and re-enforces outliers.}\\
+% Aleksandra Korolova: fairness already mentioned in the previous section; connect to that.
+
+%\sketch{Is the tension between robustness and fairness a fundamental one? Can personalization give a way out of this tension?}\\
+%\sketch{The role of having human in the loop to inspect learned models?}
+%\sketch{Recent CCS19 paper that shows tension between robustness and privacy: \url{http://www.princeton.edu/~pmittal/publications/security-vs-privacy-ccs19.pdf}}
+
+One primary technique used to enforce privacy is \emph{secure aggregation} (SecAgg) (see \ref{sssec:secure_computations}). In short, SecAgg is a tool used to ensure that the server only sees an aggregate of the client updates, not any individual client updates. While useful for ensuring privacy, SecAgg generally makes defenses against adversarial attacks more difficult to implement, as the central server only sees the aggregate of the client updates. Therefore, it is of fundamental interest to investigate how to defend against adversarial attacks when secure aggregation is used. Existing approaches based on range proofs (e.g. Bulletproofs~\citep{DBLP:conf/sp/BunzBBPWM18}) can guarantee that the DP-based clipping defense described above is compatible with SecAgg, but developing computation- and communication-efficient range proofs is still an active research direction.
+
+SecAgg also introduces challenges for other defense methods. For example, many existing Byzantine-robust aggregation methods utilize non-linear operations on the server~\citet{xie2019practicalsecure}, and it is not yet known if these methods are efficiently compatible with secure aggregation which was originally designed for linear aggregation. Recent work has found ways to approximate the geometric median under SecAgg~\citep{pillutla2019robust} by using a handful of SecAgg calls in a more general aggregation loop. However, it is not clear in general which aggregators can be computed under the use of SecAgg.
+
+\subsection{Executive Summary}
+\label{subsec:attacks_and_failures_summary}
+
+% TODO: new paper citations (maybe Arjun can help with more):
+% NOTE: NeurIPS papers will be available next week
+%  - https://proceedings.neurips.cc/paper/2020/hash/b8ffa41d4e492f0fad2f13e29e1762eb-Abstract.html
+%  - https://papers.nips.cc/paper/2020/file/f5e536083a438cec5b64a4954abc17f1-Paper.pdf
+% 
+% Done:
+% -  Incorporated notes from the robustness breakout at the most recent Google FL Workshop
+
+\begin{itemize}
+    \item Third-party participants in the training process introduces new capabilities and attack vectors for adversaries, categorized in Table \ref{table:capabilities}.
+    \item Federated learning introduces a new kind of poisoning attacks, \emph{model update poisoning} (Section \ref{subsubsec:model_poisoning}), while also being susceptible to traditional \emph{data poisoning} in (Section \ref{subsubsec:data_poisoning}).
+    \item Training participants can influence the optimization process possibly exacerbating inference-time (Section \emph{evasion attacks}) \ref{subsubsec:inference_time_attacks}, and communication and computation constraints may render previously proposed defenses impractical.
+    \item Non-malicious failure modes (Section \ref{subsec:failures}) are can be especially different to deal with, as access to raw data is not available in the federated setting, though through some lens they may be related to poisoning attacks.
+    \item Tension may exist when trying to simultaneously improve robustness and privacy in machine learning (Section \ref{subsec:tension_privacy_robustness}).
+\end{itemize}
+
+Areas identified for further exploration include:
+
+\begin{itemize}
+  \item Quantify the relationship between data poisoning and model update poisoning attacks. Are there scenarios where they are not equivalent? [\ref{p:model-data-poisoning}]
+  \item Quantify how training time attacks impact inference-time vulnerabilities. Improving inference-time robustness guarantees requires going beyond detecting backdoor attacks. [\ref{p:training-inference-attacks}]
+  \item Adversarial training has been used as a defense in the centralized setting, but can be impractical in the edge-compute limited cross-device federated setting. [\ref{p:inference-time-evasion-defense}]
+  \item Federated learning requires new methods and tools to support the developer, as access to raw data is restricted debugging ML pipelines is especially difficult. [\ref{p:pipeline-failures}]
+  \item Tensions exists between robustness and fairness, as machine learning models can tend to discard updates far from the median as detrimental. However the federated setting can give rise to a long tail of users that may be mistaken for noisy model updates [\ref{p:noisy-model-updates}].  
+  \item Cryptography-based aggregation methods and robustness techniques present integration challenges: protecting participant identity can be at odds with detecting adversarial participants. Proposed techniques remain beyond the scope of practicality, requiring the need of new communication and computation efficient algorithms. [\ref{subsec:tension_privacy_robustness}]
+\end{itemize}
+
+\pagebreak 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

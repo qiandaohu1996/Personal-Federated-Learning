@@ -1,0 +1,231 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ensuring Fairness and Addressing Sources of Bias} \label{sec:fairness}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Primary authors: Josh Gardner, Ben Hutchinson, Peter Kairouz
+% Aleksandra Korolova: I'd like to add here as well
+% Daniel Ramage: I've also made a few contributions and cleanups
+
+Machine learning models can often exhibit surprising and unintended behaviours. When such behaviours lead to patterns of {\em undesirable} effects on users, we might categorize the model as ``unfair'' according to some criteria. For example, if people with similar characteristics receive quite different outcomes, then this violates the criterion of {\em individual fairness} \cite{dwork2012fairness}. If certain sensitive groups (races, genders, etc.) receive different patterns of outcomes---such as different false negative rates---this can violate various criteria of {\em demographic fairness}, see for instance \cite{barocasfairness, mitchell2018prediction} for surveys. The criterion of {\em counterfactual fairness} requires that a user  receive the same treatment as they would have if they had been a member of a different group (race, gender, etc), after taking all causally relevant pathways into account \cite{kusner2017counterfactual}.
+
+机器学习模型通常会表现出令人惊讶和意外的行为。当此类行为导致对用户产生{\em 不良}影响时，我们可能会根据某些标准将模型归类为“不公平”。例如，如果具有相似特征的人得到完全不同的结果，那么这违反了{\em 个体公平} \cite{dwork2012fairness} 的标准。如果某些敏感群体（种族、性别等）收到不同的结果模式——例如不同的假阴性率——这可能违反{\em 人口统计公平}的各种标准，例如参见 \cite{barocasfairness, mitchell2018prediction} 用于调查。 {\em counterfactual fairness} 的标准要求用户在考虑所有因果相关路径后，获得与他们属于不同群体（种族、性别等）时相同的待遇 \cite{ kusner2017counterfactual}。
+
+Federated learning raises several opportunities for fairness research, some of which extend prior research directions in the non-federated setting, and others that are unique to federated learning. This section raises open problems in both categories.
+
+联邦学习为公平性研究提供了多种机会，其中一些扩展了非联邦环境中先前的研究方向，而另一些则是联邦学习独有的。本节提出了两个类别的开放性问题。
+\subsection{Bias in Training Data}\label{subsec:bias-in-training-data}
+
+One driver of unfairness in machine-learned models is bias in the training data, including cognitive, sampling, reporting, and confirmation bias. One common antipattern is that minority or marginalized social groups are under-represented in the training data, and thus the learner weights these groups less during training \cite{kamishima2011fairness}, leading to inferior quality predictions for members of these groups (e.g. \cite{buolamwini2018gender}).
+
+机器学习模型不公平的一个驱动因素是训练数据中的偏差，包括认知、采样、报告和确认偏差。 一种常见的反模式是少数或边缘化的社会群体在训练数据中的代表性不足，因此学习者在训练期间对这些群体的权重较小  \cite{buolamwini2018gender}).
+
+Just as the data access processes used in federated learning may introduce dataset shift and non-independence (\cref{sec:noniid}), there is also a risk of introducing biases. For example:
+
+正如联邦学习中使用的数据访问过程可能会引入数据集偏移和非独立性（\cref{sec:noniid}）一样，也存在引入偏差的风险。 例如：
+\begin{itemize}
+    \item If devices are selected for updates when plugged-in or fully charged, then model updates and evaluations computed at different times of day may be correlated with factors such as day-shift vs night-shift work schedules.
+    \item If devices are selected for updates from among the pool of eligible devices at a given time, then devices that are connected at times when few other devices are connected (e.g. night-shift or unusual time zone) may be over-represented in the aggregated output.
+    \item If selected devices are more likely to have their output kept when the output is computed faster, then: a) output from devices with faster processors may be over-represented, with these devices likely newer devices and thus correlated with socioeconomic status; and b) devices with less data may be over-represented, with these devices possibly representing users who use the product less frequently.
+    \item If data nodes have different amounts of data, then federated learning may weigh higher the contributions of populations which are heavy users of the product or feature generating the data.
+    \item If the update frequency depends on latency, then certain geographic regions and populations with slower devices or networks may be under-represented.
+    \item If populations of {\em potential users} do not own devices for socio-economic reasons, they may be under-represented in the training dataset, and subsequently also under- (or un-)represented in model training and evaluation.
+    \item Unweighted aggregation of the model loss across selected devices during federated training may disadvantage model performance on certain devices \cite{li2019fair}.
+\end{itemize}
+
+\begin{itemize}
+    \item 如果在插入或充满电时选择设备进行更新，那么在一天中的不同时间计算的模型更新和评估可能与白班与夜班工作时间表等因素相关。
+    \item 如果在给定时间从符合条件的设备池中选择设备进行更新，则在很少有其他设备连接时（例如夜班或异常时区）连接的​​设备可能会在聚合输出。
+    \item 如果选定的设备在输出计算速度更快时更有可能保留其输出，那么： a) 来自具有更快处理器的设备的输出可能过多，这些设备可能是较新的设备，因此与社会经济地位相关； b) 数据较少的设备可能被过度代表，这些设备可能代表较少使用产品的用户。
+    \item 如果数据节点具有不同数量的数据，则联邦学习可能会权衡较高的产品或生成数据功能的重度用户群体的贡献。
+    \item 如果更新频率取决于延迟，那么设备或网络较慢的某些地理区域和人群可能会被低估。
+    \item 如果 {\em 潜在用户} 的人群由于社会经济原因不拥有设备，则他们在训练数据集中的代表性可能不足，随后在模型训练和评估中的代表性也不足（或未）。
+    \item 联合训练期间所选设备之间模型损失的未加权聚合可能会降低某些设备上的模型性能 \cite{li2019fair}。
+\end{itemize}
+
+
+It has been observed that biases in the data-generating process can also drive unfairness in the resulting models learned from this data (see e.g.\ \cite{eckhouse2019layers, richardson2019dirty}). For example, suppose training data is based on user interactions with a product which has failed to incorporate inclusive design principles. Then, the user interactions with the product might not express user intents (cf.\ \cite{sambasivan2018privacy}, for example) but rather might express coping strategies
+around uninclusive product designs (and hence might require a fundamental fix to the product interaction model). Learning from such interactions might then ignore or perpetuate poor experiences for some groups of product users in ways which can be difficult to detect while maintaining privacy in a federated setting. This risk is shared by all machine learning scenarios where training data is derived from user interaction, but is of particular note in the federated setting when data is collected from apps on individual devices. 
+
+据观察，数据生成过程中的偏差也会导致从这些数据中学习的结果模型的不公平性（参见例如\ \cite{eckhouse2019layers, richardson2019dirty}）。例如，假设训练数据基于用户与未能纳入包容性设计原则的产品的交互。然后，用户与产品的交互可能不会表达用户意图（例如，参见 \cite{sambasivan2018privacy}），而是可能表达应对策略
+围绕非包容性产品设计（因此可能需要对产品交互模型进行根本性修复）。从此类交互中学习可能会忽略或延续某些产品用户组的不良体验，这些方式在联合设置中维护隐私的同时可能难以检测。所有机器学习场景都存在这种风险，其中训练数据来自用户交互，但在联合设置中，当数据是从单个设备上的应用程序收集时，这一点尤其值得注意。
+
+Investigating the degree to which biases in the data-generated process can be identified or mitigated is a crucial problem for both federated learning research and ML research more broadly. Similarly, while limited prior research has demonstrated methods to identify and correct bias in already collected data in the federated setting (e.g. via adversarial methods in \cite{kairouz20learning}), further research in this area is needed. Finally, methods for applying post-hoc fairness corrections to models learned from potentially biased training data are also a valuable direction for future work.
+
+调查数据生成过程中的偏见可以被识别或减轻的程度对于联邦学习研究和更广泛的机器学习研究来说都是一个关键问题。同样，虽然有限的先前研究已经证明了在联邦设置中识别和纠正已收集数据中的偏差的方法（例如，通过 \cite{kairouz20learning} 中的对抗性方法），但需要在该领域进一步研究。最后，将事后公平校正应用于从潜在有偏见的训练数据中学习的模型的方法也是未来工作的一个有价值的方向。
+
+\subsection{Fairness Without Access to Sensitive Attributes}\label{subsec:fairness-without-sensitive-attributes}
+
+Having explicit access to demographic information (race, gender, etc) is critical to many existing fairness criteria, including those discussed in Section \ref{subsec:bias-in-training-data}. However, the contexts in which federated learning are often deployed also give rise to considerations of fairness when individual sensitive attributes are \textit{not} available. For example, this can occur when developing personalized language models or developing fair medical image classifiers without knowing any additional demographic information about individuals. Even more fundamentally, the assumed one-to-one relationship between individuals and devices often breaks down, especially in non-Western contexts \cite{sambasivan2018privacy}. Both measuring and correcting unfairness in contexts where there is no data regarding sensitive group membership is a key area for federated learning researchers to address.
+
+明确访问人口统计信息（种族、性别等）对于许多现有的公平标准至关重要，包括在部分 \ref{subsec:bias-in-training-data} 中讨论的那些。然而，当个别敏感属性\textit{not} 可用时，联合学习经常部署的上下文也会引起公平性的考虑。例如，这可能发生在开发个性化语言模型或开发公平的医学图像分类器时，而无需了解有关个人的任何其他人口统计信息。更根本的是，假设的个人和设备之间的一对一关系经常崩溃，尤其是在非西方环境\cite{sambasivan2018privacy} 中。在没有关于敏感组成员身份的数据的情况下，衡量和纠正不公平是联邦学习研究人员需要解决的一个关键领域。
+
+Limited existing research has examined fairness without access to sensitive attributes. For example, this has been addressed using distributionally-robust optimization (DRO) which optimizes for the worst-case outcome across all individuals during training \cite{hashimoto2018fairness}, and via multicalibration, which calibrates for fairness across subsets of the training data \cite{hebert2018multicalibration}. Even these existing approaches have not been applied in the federated setting, raising opportunities for future empirical work. The challenge of how to make these approaches work for large-scale, high-dimensional data typical to federated settings is also an open problem, as DRO and multicalibration both pose challenges of scaling with large $n$ and $p$. Finally, the development of additional theoretical approaches to defining fairness without respect to ``sensitive attributes'' is a critical area for further research.
+
+
+有限的现有研究在没有访问敏感属性的情况下检查了公平性。例如，这已经使用分布鲁棒优化 (DRO) 解决了，该优化在训练过程中针对所有个体的最坏情况结果进行优化 \cite{hashimoto2018fairness}，并通过多重校准来解决这个问题，它校准训练数据子集之间的公平性 \cite {hebert2018multicalibration}。即使这些现有的方法也没有应用于联邦环境，这为未来的实证工作提供了机会。如何使这些方法适用于联邦设置典型的大规模、高维数据的挑战也是一个悬而未决的问题，因为 DRO 和多重校准都带来了大 $n$ 和 $p$ 缩放的挑战。最后，在不考虑“敏感属性”的情况下定义公平的其他理论方法的发展是进一步研究的关键领域。
+
+
+
+Other ways to approach this include reframing the existing notions of fairness, which are primarily concerned with equalizing the probability of an outcome (one of which is considered ``positive'' and another ``negative'' for the affected individual). Instead, fairness without access to sensitive attributes might be reframed as \textit{equal access to effective models}. Under this interpretation of fairness, the goal is to maximize model utility across all individuals, regardless of their (unknown) demographic identities, and regardless of the ``goodness`` of an individual outcome. Again, this matches the contexts in which federated learning is most commonly used, such as language modeling or medical image classification, where there is no clear notion of an outcome which is ``good'' for a user, and instead the aim is simply to make correct predictions for users, regardless of the outcome.
+
+解决这个问题的其他方法包括重新定义现有的公平概念，这些概念主要涉及均衡结果的概率（对于受影响的个人，其中一个被认为是“积极的”，另一个被认为是“消极的”）。相反，没有访问敏感属性的公平可能被重新定义为 \textit{对有效模型的平等访问}。在对公平的这种解释下，目标是最大化所有个人的模型效用，无论他们的（未知）人口特征如何，也无论个人结果的“好”如何。同样，这与联邦学习最常用的上下文相匹配，例如语言建模或医学图像分类，其中没有明确的结果对用户“好”的概念，而目标只是为用户做出正确的预测，无论结果如何。
+
+Existing federated learning research suggests possible ways to meet such an interpretation of fairness, e.g. via personalization \cite{jiang2019improving, wang2019federated}. A similar conception of fairness, as ``a more fair distribution of the model performance across devices'', is employed in \cite{li2019fair}. 
+
+现有的联邦学习研究提出了满足这种公平解释的可能方法，例如 通过个性化\cite{jiang2019improving, wang2019federated}。 在\cite{li2019fair} 中采用了类似的公平概念，作为“跨设备模型性能的更公平分布”。
+
+The application of attribute-independent methods explicitly to ensure equitable model performance is an open opportunity for future federated learning research, and is particularly important as federated learning reaches maturity and sees increasing deployment with real populations of users without knowledge of their sensitive identities.
+
+明确应用与属性无关的方法来确保公平的模型性能是未来联邦学习研究的一个开放机会，并且随着联邦学习达到成熟并且看到越来越多的用户在不了解其敏感身份的情况下进行部署，这一点尤为重要。
+
+\subsection{Fairness, Privacy, and Robustness}\label{subsec:fairness-privacy-robustness}
+
+Fairness and data privacy seem to be complementary ethical concepts: in many of the real-world contexts where privacy protection is desired, fairness is also desired. Often this is due to the sensitivity of the underlying data. Because federated learning is most likely to be deployed in contexts of sensitive data where both privacy and fairness are desirable, it is important that FL research examines how FL might be able to address existing concerns about fairness in machine learning, and whether FL raises new fairness-related issues.
+公平和数据隐私似乎是互补的道德概念：在许多需要隐私保护的现实世界中，也需要公平。这通常是由于基础数据的敏感性。由于联邦学习最有可能部署在需要隐私和公平性的敏感数据环境中，因此 FL 研究必须检查 FL 如何解决现有的机器学习公平性问题，以及 FL 是否提高了新的公平性-相关问题。
+
+% Aleksandra Korolova: I think we should be more cautious with general statements that there is a tension between DP and fairness. Yes, recent work shows that is true in certain scenarios but can we generalize from it?
+% Richard: in addition to Aleksandra's comment with which I agree --- why not explicitly put an open problem on it ? ---, maybe emphasize that there are a variety of notions of fairness / discrimination and associated testing measures (e.g. Zliobaite's paper on "A survey on measuring indirect discrimination in machine learning"). 
+% Peter K.: Thanks for point this out. It has been addressed. 
+In some ways, however, the ideal of fairness seems to be in tension with the notions of privacy for which FL seeks to provide guarantees: differentially-private learning typically seeks to obscure individually-identifying characteristics, while fairness often requires knowing individuals' membership in sensitive groups in order to measure or ensure fair predictions are being made. While the trade-off between differential privacy and fairness has been investigated in the non-federated setting \cite{jagielski2018privatefair, CGKM19}, there has been little work on how (or whether) FL may be able to uniquely address concerns about fairness. 
+
+
+% Aleksandra Korolova：我认为我们应该对 DP 和公平之间存在紧张关系的一般性声明更加谨慎。是的，最近的工作表明这在某些情况下是正确的，但我们可以从中概括吗？
+% Richard：除了我同意 Aleksandra 的评论之外——为什么不明确提出一个开放的问题呢？ ---，也许强调有各种公平/歧视的概念和相关的测试措施（例如 Zliobaite 的论文“关于测量机器学习中的间接歧视的调查”）。
+% Peter K.：感谢您指出这一点。它已得到解决。
+然而，在某些方面，公平的理想似乎与 FL 试图为其提供保证的隐私概念相冲突：差异化私人学习通常试图掩盖个人识别特征，而公平通常需要了解个人在其中的成员身份。敏感群体，以衡量或确保做出公平的预测。虽然已经在非联邦环境\cite{jagielski2018privatefair, CGKM19} 中研究了差分隐私和公平之间的权衡，但关于 FL 如何（或是否）能够独特地解决公平问题的研究很少。
+
+
+Recent evidence suggesting that differentially-private learning can have disparate impact on sensitive subgroups \cite{bagdasaryan2019disparate, CGKM19, jagielski2018privatefair, kuppam2019fair} provides further motivation to investigate whether FL may be able to address such concerns. A potential solution to relax the tension between privacy (which aims to protect the model from being too dependent on individuals) and fairness (which encourages the model to perform well on under-represented classes) may be the application of techniques such as personalization (discussed in \cref{sec:multimodel}) and ``hybrid differential privacy,'' where some users donate data with lesser privacy guarantees \cite{avent2017blender}. 
+
+
+最近的证据表明差异私人学习可能对敏感的子群体产生不同的影响 \cite{bagdasaryan2019disparate, CGKM19, jagielski2018privatefair, kuppam2019fair} 提供了进一步的动机来调查 FL 是否能够解决这些问题。缓解隐私（旨在保护模型不过度依赖个人）和公平（鼓励模型在代表性不足的类别上表现良好）之间紧张关系的潜在解决方案可能是应用个性化等技术（讨论在 \cref{sec:multimodel}) 和“混合差分隐私”中，一些用户捐赠的数据具有较低的隐私保证 \cite{avent2017blender}。
+
+
+
+
+Furthermore, current differentially-private optimization schemes are applied without respect to sensitive attributes -- from this perspective, it might be expected that empirical studies have shown evidence that differentially-private optimization impacts minority subgroups the most \cite{bagdasaryan2019disparate}. Modifications to differentially-private optimization algorithms which explicitly seek to preserve performance on minority subgroups, e.g. by adapting the noise and clipping mechanisms to account for the representation of groups within the data, would also likely do a great deal to limit potential disparate impacts of differentially-private modeling on minority subgroups in federated models trained with differential privacy. However, implementing such adaptive differentially-private mechanisms in a way that provides some form of privacy guarantee presents both algorithmic and theoretical challenges which need to be addressed by future work. 
+
+此外，当前的差异私有优化方案的应用不考虑敏感属性——从这个角度来看，可以预期的是，实证研究表明，差异私有优化对少数群体的影响最大。对差异私有优化算法的修改，这些算法明确寻求保持少数子群的性能，例如通过调整噪声和剪裁机制来解释数据中群体的表示，也可能会在很大程度上限制差分隐私建模对使用差分隐私训练的联合模型中的少数群体的潜在不同影响。然而，以提供某种形式的隐私保证的方式实现这种自适应差分隐私机制提出了算法和理论方面的挑战，需要在未来的工作中加以解决。
+
+
+Further research is also needed to determine the extent to which the issues above arise in the federated setting. Furthermore, as noted in \cref{subsec:fairness-without-sensitive-attributes}, the challenge of evaluating the impact of differential privacy on model fairness becomes particularly difficult when sensitive attributes are not available, as it is unclear how to identify subgroups for which a model is behaving badly and to quantify the ``price'' of differential privacy -- investigating and addressing these challenges is an open problem for future work.
+ 
+还需要进一步研究以确定上述问题在联邦环境中出现的程度。此外，如 \cref{subsec:fairness-without-sensitive-attributes} 中所述，当敏感属性不可用时，评估差分隐私对模型公平性的影响的挑战变得特别困难，因为尚不清楚如何识别子组模型表现不佳并量化差分隐私的“价格”——调查和解决这些挑战是未来工作的一个悬而未决的问题。
+
+
+% This was in the robustness section, and seemed to not belong. This seems a much better fit, and directly supports the paragraph theme.
+More broadly, one could more generally examine the relation between privacy, fairness, and \emph{robustness} (see Section \ref{sec:robust}). Many previous works on machine learning, including federated learning, typically focus on isolated aspects of robustness (either against poisoning, or against evasion), privacy, or fairness. An important open challenge is to develop a joint understanding of federated learning systems that are robust, private, and fair. Such an integrated approach can provide opportunities to benefit from disparate but complementary mechanisms. Differential privacy mechanisms can be used to both mitigate data inference attacks, and provide a foundation for robustness against data poisoning. On the other hand, such an integrated approach also reveals new vulnerabilities. For example, recent work has revealed a trade-off between privacy and robustness against adversarial examples~\cite{song:ccs19}.
+
+％这是在稳健性部分，似乎不属于。这似乎更合适，并且直接支持段落主题。
+更广泛地说，人们可以更广泛地研究隐私、公平和 \emph{robustness} 之间的关系（参见部分 \ref{sec:robust}）。许多以前关于机器学习的工作，包括联邦学习，通常侧重于稳健性（防止中毒或逃避）、隐私或公平的孤立方面。一个重要的公开挑战是对稳健、私密和公平的联邦学习系统形成共同理解。这种综合方法可以提供从不同但互补的机制中受益的机会。差分隐私机制可用于减轻数据推理攻击，并为抵御数据中毒提供鲁棒性基础。另一方面，这种集成方法也暴露了新的漏洞。例如，最近的工作揭示了针对对抗性示例的隐私和鲁棒性之间的权衡~\cite{song:ccs19}。
+
+
+Finally, privacy and fairness naturally meet in the context of learning data representations that are independent of some sensitive attributes while preserving utility for a task of interest. Indeed, this objective can be motivated both in terms of privacy: to transform data so as to hide private attributes, and fairness: as a way to make models trained on such representations fair with respect to the attributes. In the centralized setting, one way to learn such representations is through adversarial training techniques, which have been applied to image and speech data \citep{kairouz20learning,DBLP:journals/corr/abs-1802-09386,Madras2018,Bertran2019,Srivastava2019a}. In the federated learning scenario, clients could apply the transformation locally to their data in order to enforce or improve privacy and/or fairness guarantees for the FL process. However, learning this transformation in a federated fashion (potentially under privacy and/or fairness constraints) is itself an open question.
+
+最后，隐私和公平自然会在学习数据表示的背景下相遇，这些表示独立于某些敏感属性，同时保留对感兴趣任务的效用。事实上，这个目标可以在隐私方面得到激励：转换数据以隐藏私人属性，以及公平性：作为一种使基于此类表示训练的模型在属性方面公平的方式。在集中设置中，学习此类表示的一种方法是通过对抗训练技术，该技术已应用于图像和语音数据 \citep{kairouz20learning,DBLP:journals/corr/abs-1802-09386,Madras2018,Bertran2019,Srivastava2019a}。在联合学习场景中，客户可以在本地将转换应用到他们的数据，以加强或改进 FL 过程的隐私和/或公平性保证。然而，以联合方式（可能在隐私和/或公平约束下）学习这种转换本身就是一个悬而未决的问题。
+
+
+\subsection{Leveraging Federation to Improve Model Diversity }\label{subsec:diversity}
+\subsection*{利用联邦提高模型多样性}
+
+Federated learning presents the opportunity to integrate, through distributed training, datasets which may have previously been impractical or even illegal to combine in a single location. For example, the Health Insurance Portability and Accountability Act (HIPAA) and the Family Educational Rights and Privacy Act (FERPA) constrain the sharing of medical patient data and student educational data, respectively, in the United States. To date, these restrictions have led to modeling occurring in institutional silos: for example, using electronic health records or clinical images from individual medical institutions instead of pooling data and models across institutions \cite{brisimi2018federated, chang2018distributed}. In contexts where membership in institutional datasets is correlated with individuals' specific sensitive attributes, or their behavior and outcomes more broadly, this can lead to poor representation for users in groups underrepresented at those institutions. Importantly, this lack of representation and diversity in the training data has been shown to lead to poor performance, e.g. in genetic disease models \cite{martin2019current} and image classification models \cite{buolamwini2018gender}.
+
+联合学习提供了通过分布式训练集成数据集的机会，这些数据集以前在单个位置合并可能不切实际甚至非法。例如，健康保险流通与责任法案 (HIPAA) 和家庭教育权利和隐私法案 (FERPA) 分别限制了美国医疗患者数据和学生教育数据的共享。迄今为止，这些限制导致建模出现在机构孤岛中：例如，使用来自单个医疗机构的电子健康记录或临床图像，而不是跨机构汇集数据和模型 \cite{brisimi2018federated, chang2018distributed}。在机构数据集中的成员资格与个人的特定敏感属性或更广泛的行为和结果相关的情况下，这可能导致在这些机构中代表性不足的群体中的用户代表性不佳。重要的是，训练数据中缺乏代表性和多样性已被证明会导致性能不佳，例如在遗传疾病模型 \cite{martin2019current} 和图像分类模型 \cite{buolamwini2018gender} 中。
+
+
+
+Federated learning presents an opportunity to leverage uniquely diverse datasets by providing efficient decentralized training protocols along with privacy and non-identifiability guarantees for the resulting models. This means that federated learning enables training on multi-instutitional datasets in many domains where this was previously not possible. This provides a practical opportunity to leverage larger, more diverse datasets and explore the generalizability of models which were previously limited to small populations. More importantly, it provides an opportunity to improve the \textit{fairness} of these models by combining data across boundaries which are likely to have been correlated with sensitive attributes. For instance, attendance at specific health or educational institutions may be correlated with individuals' ethnicity or socioeconomic status. As noted in Section \ref{subsec:bias-in-training-data} above, underrepresentation in training data is a proven driver of model unfairness. 
+
+联邦学习提供了一个机会，可以通过提供有效的分散训练协议以及对结果模型的隐私和不可识别性保证来利用独特多样的数据集。这意味着联邦学习可以在许多领域中对多机构数据集进行训练，而这在以前是不可能的。这为利用更大、更多样化的数据集和探索以前仅限于小群体的模型的普遍性提供了一个实用的机会。更重要的是，它提供了一个机会，通过组合可能与敏感属性相关的跨边界数据来改善这些模型的 \textit{fairness}。例如，在特定的卫生或教育机构就读可能与个人的种族或社会经济地位相关。如上文 \ref{subsec:bias-in-training-data} 节所述，训练数据中的代表性不足是模型不公平的一个已证明的驱动因素。
+
+Future federated learning research should investigate the degree to which improving diversity in a federated training setting also improves the fairness of the resulting model, and the degree to which the differential privacy mechanisms required in such settings may limit fairness and performance gains from increased diversity. This includes a need for both empirical research which applies federated learning and quantifies the interplay between diversity, fairness, privacy, and performance; along with theoretical research which provides a foundation for concepts such as diversity in the context of machine learning fairness.
+
+未来的联邦学习研究应该调查提高联邦训练环境中的多样性在多大程度上也能提高结果模型的公平性，以及这种环境中所需的差分隐私机制可能会在多大程度上限制公平性和提高多样性带来的性能收益。这包括需要应用联邦学习并量化多样性、公平性、隐私和性能之间的相互作用的实证研究；以及为机器学习公平性背景下的多样性等概念提供基础的理论研究。
+
+
+
+\subsection{Federated Fairness: New Opportunities and Challenges}\label{subsec:federated-fairness-new-challenges-opportunities}
+\subsection*{联邦公平：新的机遇和挑战} 
+
+It is important to note that federated learning provides unique opportunities and challenges for fairness researchers. For example, by allowing for datasets which are distributed both by observation, but even by features, federated learning can enable modeling and research using partitioned data which may be too sensitive to share directly \cite{gupta2018distributed, Hardy2017-da}. Increased availability of datasets which can be used in a federated manner can help to improve the diversity of training data available for machine learning models, which can advance fair modeling theory and practice.
+值得注意的是，联邦学习为公平研究人员提供了独特的机会和挑战。例如，通过允许通过观察和特征分布的数据集，联邦学习可以使用分区数据进行建模和研究，分区数据可能过于敏感而无法直接共享 \cite{gupta2018distributed, Hardy2017-da}。以联合方式使用的数据集的可用性增加有助于提高机器学习模型可用的训练数据的多样性，这可以促进公平建模理论和实践。
+
+Researchers and practitioners also need to address the unique fairness-related challenges created by federated learning. For example, federated learning can introduce new sources of bias through the decision of which clients to sample based on considerations such as connection type/quality, device type, location, activity patterns, and local dataset size \cite{bonawitz19sysml}. Future work could investigate the degree to which these various sampling constraints affect the fairness of the resulting model, and how such impacts can be mitigated within the federated framework, e.g. \cite{li2019fair,fair_quantile,moreau}. Frameworks such as \emph{agnostic federated learning} \cite{Mohri2019} provide approaches to control for bias in the training objective. Work to improve the fairness of existing federated training algorithms will be particularly important as advances begin to approach the technical limits of other components of FL systems, such as model compression, which initially helped to broaden the diversity of candidate clients during federated training processes. There is no unique fairness criterion generally adopted in  the study of fairness, and multiple criteria have been proven to be mutually incompatible. One way to deal with this question is the \emph{online fairness} framework and algorithms of \citet{AwasthiCortesMansourMohri2020}. Adapting such solutions to the federated learning setting and further improving upon them will be challenging research questions in ML fairness theory and algorithms.
+
+研究人员和从业者还需要解决联邦学习带来的与公平相关的独特挑战。例如，联邦学习可以根据连接类型/质量、设备类型、位置、活动模式和本地数据集大小等考虑因素决定对哪些客户端进行采样，从而引入新的偏差来源。未来的工作可以调查这些不同的抽样约束对结果模型公平性的影响程度，以及如何在联邦框架内减轻这种影响，例如\cite{li2019fair,fair_quantile,moreau}。 \emph{agnostic federated learning} \cite{Mohri2019} 等框架提供了控制训练目标偏差的方法。随着进步开始接近 FL 系统其他组件（例如模型压缩）的技术限制，提高现有联合训练算法的公平性的工作将尤为重要，模型压缩最初有助于在联合训练过程中扩大候选客户的多样性。公平研究中没有普遍采用的唯一公平标准，多个标准已被证明是相互不兼容的。处理这个问题的一种方法是 \citet{AwasthiCortesMansourMohri2020} 的 \emph{online fairness} 框架和算法。将此类解决方案应用于联邦学习设置并进一步改进它们将是 ML 公平理论和算法中具有挑战性的研究问题。
+
+
+In the classical centralized machine learning setting, a substantial amount of advancement has been made in the past decade to train fair classifiers, such as constrained optimization, post-shifting approaches, and distributionally-robust optimization \cite{hardt2016, zafar2017, hashimoto2018fairness}. It is an open question whether such approaches, which have demonstrated utility for improving fairness in centralized training, could be used under the setting of federated learning (and if so, under what additional assumptions) in which data are located in a decentralized fashion and practitioners may not obtain an unbiased sample of the data that match the distribution of the population.  
+
+在经典的集中式机器学习设置中，过去十年在训练公平分类器方面取得了大量进步，例如约束优化、后移方法和分布稳健优化 \cite{hardt2016, zafar2017, hashimoto2018fairness}。此类方法是否可以在联邦学习的背景下使用（如果是，在哪些额外的假设下），其中数据以分散的方式和从业者可能无法获得与总体分布相匹配的无偏数据样本。
+
+\subsection{Executive Summary}
+
+In addition to inheriting the already significant challenges related to bias, fairness, and privacy in centralized machine learning, federated learning also brings a new set of distinct challenges and opportunities in these areas. The importance of these considerations will likely continue to grow as the real-world deployment of FL expands to more users, domains, and applications.
+
+除了继承集中式机器学习中已经存在的与偏见、公平和隐私相关的重大挑战之外，联邦学习还在这些领域带来了一系列新的独特挑战和机遇。随着 FL 的实际部署扩展到更多用户、域和应用程序，这些考虑因素的重要性可能会继续增长。
+
+\begin{itemize}
+    \item Bias in training data (Section \ref{subsec:bias-in-training-data}) is a key consideration related to bias and fairness in FL models, particularly due to the additional sampling steps germane to federation (e.g., client sampling) and the transfer of some model computation to client devices.
+    \item The lack of data regarding sensitive attributes in many FL deployments can pose challenges for measuring and ensuring fairness, and also suggests potential reframing of fairness problems in ways that do not require such data (Section \ref{subsec:fairness-without-sensitive-attributes}).
+    \item Since FL is often deployed in contexts which are both privacy- and fairness-sensitive, this can magnify tensions between privacy and fairness objectives in practice. Further work is needed to address the potential tension between methods which achieve privacy, fairness, and robustness in both federated and centralized learning (Section \ref{subsec:fairness-privacy-robustness}).
+    \item Federated learning presents unique opportunities to improve the diversity of stakeholders and data incorporated into learning, which could improve both the overall quality of downstream models, as well as their fairness due to more representative datasets (Section \ref{subsec:diversity}).
+    \item Federated learning presents fairness-related challenges not present in the centralized training regime, but also affords new solutions (Section \ref{subsec:federated-fairness-new-challenges-opportunities}).
+\end{itemize}
+
+
+\begin{itemize}
+    \item 训练数据中的偏差（部分 \ref{subsec:bias-in-training-data}）是与 FL 模型中的偏差和公平性相关的关键考虑因素，特别是由于与联邦密切相关的额外采样步骤（例如，客户端采样) 以及将一些模型计算传输到客户端设备。
+    \item 在许多 FL 部署中缺乏有关敏感属性的数据可能会给衡量和确保公平性带来挑战，并且还建议以不需要此类数据的方式重新构建公平性问题（部分 \ref{subsec:fairness-without-sensitive-attributes}）。
+    \item 由于 FL 通常部署在对隐私和公平敏感的环境中，这可能会放大隐私和公平目标之间的紧张关系。需要进一步的工作来解决在联邦学习和集中学习中实现隐私、公平和鲁棒性的方法之间的潜在紧张关系（第 \ref{subsec:fairness-privacy-robustness}）。
+    \item 联合学习提供了独特的机会来改善利益相关者和纳入学习的数据的多样性，这可以提高下游模型的整体质量，以及由于更具代表性的数据集而导致的公平性（部分 \ref{subsec:diversity}） .
+    \item 联合学习提出了集中式培训制度中不存在的与公平相关的挑战，但也提供了新的解决方案（部分 \ref{subsec:federated-fairness-new-challenges-opportunities}）。
+\end{itemize}
+
+% Original questions posed for this section:
+%
+% To what extent does federation create unique challenges with respect to ML fairness?
+% \begin{itemize}
+%     \item Does federation introduce new sources of bias, e.g. in favor of faster/more expensive devices, devices in more/less populated time zones, devices with more/less training examples, devices that are online more often, etc?
+%     \item How can we assess the impact of these issues, e.g. as a measurement of a running federated learning system? [ZH] How can one (a user or the master) control the level of fairness during the federated learning process?
+%     \item How can we effectively simulate these issues in the lab?
+%     \item How can we alter our algorithms and system design to mitigate these issues?
+%     \item Differential privacy protects individuals (or worse, individual records). Is there a role for protecting groups?
+% \end{itemize}
+
+% To what extent does federation provide unique opportunities to address questions of ML fairness?  
+% \begin{itemize}
+%     \item The sensitive attributes which ML fairness seeks to protect may often be among the most privacy sensitive.  Can federation help us protect these attributes while learning a fair model?
+% \end{itemize}
+
+% \sketch{Federated learning may be a good setting to apply ideas like ``hybrid differential privacy models'', where some users donate data with lesser privacy guarantees. \cite{avent2017blender}.}
+
+
+%% Mehryar Mohri, Ananda Theertha Suresh
+%
+%Federated learning can be communication and computation-wise intensive
+%and hence often is used with clients endowed with a favorable
+%communication bandwidth and computation resources. This might
+%introduce inadvertent biases in the training data and yield training
+%and test data disparity. Similarly, training data biases can be
+%introduced due to user permissions. Mitigating these biases would be
+%useful. Recently, \cite{Mohri2019} proposed an
+%\emph{agnostic federated learning} framework to address these
+%issues. It would be interesting to explore alternative solutions.
+%
+%% Daniel Ramage: I moved this up and inline because the first few sentences were now covered in more depth already after recent edits
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Fundamental Trade-offs in Federated Learning} \label{sec:trade-offs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

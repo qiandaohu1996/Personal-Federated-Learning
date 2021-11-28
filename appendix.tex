@@ -1,0 +1,63 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Software and Datasets for Federated Learning}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:datasets-and-software}
+
+\paragraph{Software for simulation} Simulations of federated learning require dealing with multiple issues that do not arise in datacenter ML research, for example, efficiently processing partitioned datasets, with computations running on different simulated devices, each with a variable amount of data. FL research also requires different metrics such as the number of bytes upload or downloaded by device, as well as the ability to simulate issues like time-varying arrival of different clients or client drop-out that is potentially correlated with the nature of the local dataset. With this in mind, the development of open software frameworks for federated learning research (simulation) has the potential to greatly accelerate research progress. Several platforms are available or in development, including \cite{sathya2018review}:
+\begin{itemize}
+    \item TensorFlow Federated~\citep{tff} specifically targets research use cases, providing large-scale simulation capabilities as well as flexible orchestration for the control of sampling.  
+    \item FedML \citep{he2020fedml} is a research-oriented library. It supports three platforms: on-device training for IoT and mobile devices, distributed computing, and single-machine simulation. For research diversity, FedML also supports various algorithms (e.g., decentralized learning, vertical FL, and split learning), models, and datasets.
+    \item PySyft \citep{PySyft}  is a Python library for secure, private Deep Learning. PySyft decouples private data from model training, using federated learning, differential privacy, and multi-party computation (MPC) within PyTorch.  
+    \item Leaf \citep{Leaf} provides multiple datasets (see below), as well as simulation and evaluation capabilities.
+    \item Sherpa.ai Federated Learning and Differential Privacy Framework \citep{rodriguez2020federated} is an open source federated learning and differential privacy framework which provides methodologies, pipelines, and evaluation techniques for federated learning.
+    \item PyVertical \citep{PyVertical} is a project focusing on federated learning with data partitioned by features (also referred to as vertical partitioning) in the cross-silo setting; see \cref{ssec:cross-silo}.
+\end{itemize}
+% author: Weikang Song
+\paragraph{Production-oriented software} In addition to the above simulation platforms, several production-oriented federated learning platforms are being developed:
+\begin{itemize}
+    \item FATE (Federated AI Technology Enabler) \citep{FATE} is an open-source project intended to provide a secure computing framework to support the federated AI ecosystem.
+    \item PaddleFL \citep{PaddleFL} is an open source federated learning framework based on PaddlePaddle \citep{PaddlePaddle}. In PaddleFL, several federated learning strategies and training strategies are provided with application demonstrations.
+    \item Clara Training Framework \citep{ClaraTraining} includes the support of cross-silo federated learning based on a server-client approach with data privacy protection.
+    \item IBM Federated Learning \citep{IBMFL} is a Python-based federated learning framework for enterprise environments, which provides a basic fabric for adding advanced features.
+    \item Flower framework \citep{beutel2020flower} supports implementation and experimentation of federated learning algorithms on mobile and embedded devices with a real-world system conditions simulation.
+    \item Fedlearner \citep{Fedlearner} is an open source federated learning framework that enables joint modeling of data distributed between institutions.
+\end{itemize}
+Such production-oriented federated learning platforms must address problems that do not exist in simulation such as authentication, communication protocols, encryption and deployment to physical devices or silos. Note that while TensorFlow Federated is listed under ``Software for simulation'', its design includes abstractions for aggregation and broadcast, and serialization of all TensorFlow computations for execution in non-Python environments, making it suitable for use as a component in a production system.
+
+
+%primary authors: Lie He
+\paragraph{Datasets} Federated learning is adopted when the data is decentralized and typically unbalanced (different clients have different numbers of examples) and not identically distributed (each client's data is drawn from a different distribution). The open source package TensorFlow Federated~\citep{tff} supports loading decentralized dataset in a simulated environment with each client id corresponding to a TensorFlow Dataset Object. These datasets can easily be converted to numpy arrays for use in other frameworks.\footnote{\url{https://www.tensorflow.org/datasets/api_docs/python/tfds/as_numpy}.} At the time of writing, three datasets are supported and we recommend researchers to benchmark on them.
+
+\begin{itemize}
+    \item \textit{EMNIST} dataset \cite{cohen2017emnist} consists of 671,585 images of digits and upper and lower case English characters (62 classes).
+    The federated version splits the dataset into 3,400 unbalanced clients indexed by the original writer of the digits/characters.
+    The non-IID distribution comes from the unique writing style of each person.
+    \item \textit{Stackoverflow\footnote{\url{https://www.kaggle.com/stackoverflow/stackoverflow}}} dataset consists of question and answer from Stack Overflow with metadata like timestamps, scores, etc.
+    The training dataset has more than 342,477 unique users with 135,818,730 examples.
+    Note that the timestamp information can be helpful to simulate the pattern of incoming data.
+    \item \textit{Shakespeare} is a language modeling dataset derived from \textit{The Complete Works of William Shakespeare}. 
+    It consists of 715 characters whose contiguous lines are examples in the client dataset. The train set has 16,068 examples and test set has 2,356 examples.
+\end{itemize}
+The preprocessing for \textit{EMNIST} and \textit{Shakespeare} are provided by the Leaf project \cite{caldas2018leaf}, which also provides federated versions of the sentiment140 and celebA datasets. These datasets have enough clients that they can be used to simulate cross-device FL scenarios, but for questions where scale is particularly important, they may be too small. In this respect \textit{Stackoverflow} provides the most realistic example of a cross-device FL problem.
+
+\paragraph{Cross-silo datasets}
+One example is the iNaturalist dataset\footnote{\url{https://www.inaturalist.org/}} which consists of large numbers of observations of various organisms all over the world. One can partition it by the geolocation or the author of an observation. If we partition it by the group an organism belongs to, like kingdom, phylum, etc., then the clients have totally different labels and biological closeness between two clients is already known. This makes it a very suitable dataset to study federated transfer learning and multi-task learning in cross-silo settings. 
+
+% author: Weikang Song
+Another example is the Google-Landmark-v2 \citep{GDLv2} that includes over 5 million images of more than 200 thousand different types of landmark. Similar to the iNaturalist dataset, one can split the dataset by authors, but due to the difference in scale with iNaturalist dataset, Google Landmark Dataset provides much more diversity and creates even greater challenges to large-scale federated learning.
+
+%To construct such a vertically partitioned dataset from an open dataset,
+%like Kaggle's \textit{Give Me Some Credit}, 
+%one can split the features of samples or use record linkage techniques to identify same entity inside the dataset \cite{Hardy2017-da}. 
+
+%author: Yang Liu
+\citet{luo2019real} has recently published a federated dataset for computer vision. The dataset contains more than $900$ annotated street images generated from $26$ street cameras and $7$ object categories annotated with detailed bounding box. Due to the relatively small number of examples in the dataset, it may not adequately reflect a challenging realistic scenario.
+
+\paragraph{The need for more datasets}
+Developing new federated learning datasets that are representative of real-world problems is an important question for the community to address. Platforms like TensorFlow Federated~\citep{tff} welcome the contribution of new datasets and may be able to provide hosting support.
+
+While completely new datasets are always interesting, in many cases it is possible to partition existing open datasets, treating each split as a client. Different partitioning strategies may be appropriate for different research questions, but often unbalanced and non-IID partitions will be most relevant. It is also interesting to maintain as much additional meta information (timestamp, geolocation, etc.) as possible.
+
+In particular, there is a need for feature-partitioned datasets, as will be discussed in \cref{ssec:cross-silo}. For example, a patient may go to one medical institute for a pathology test and go to another for radiology picture archiving, in which case the features of one sample are partitioned over two institutes regulated by HIPAA. \citep{annas2003hipaa}.

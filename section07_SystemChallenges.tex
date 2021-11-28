@@ -1,0 +1,325 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Addressing System Challenges}
+%% Editor: Hubert Eichner
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+As we will see in this section, the challenges in building systems for federated learning can be split fairly cleanly into the two separate settings of cross-device and cross-silo federated learning (see \cref{subsec:cross-device-fl-setting,ssec:cross-silo}). We start with a brief discussion of the difficulties inherent to any large scale deployment of software on end-user devices (although exacerbated by the complexity of a federated learning stack); we then focus on key challenges specific to the cross-device learning---bias, tuning, and efficient device-side execution of ML workflows---before concluding with a brief treatment of the cross-silo setting.
+
+正如我们将在本节中看到的，构建联邦学习系统的挑战可以相当清晰地分为跨设备和跨孤岛联邦学习的两个独立设置（参见\cref{subsec:cross-device-fl-setting,ssec:cross-silo})。 我们首先简要讨论在最终用户设备上大规模部署软件所固有的困难（尽管联邦学习堆栈的复杂性加剧了这种困难）； 然后，我们专注于跨设备学习特有的关键挑战——机器学习工作流程的偏差, 调整和有效的设备端执行——最后简要介绍跨竖井设置。
+\subsection{Platform Development and Deployment Challenges}
+\label{subsec:systems-platform-development-and-deployment-challenges}
+
+Running computations on end-user devices is considerably different from the data center setting:
+\begin{itemize}
+    \item Due to the heterogeneity of the fleet (devices may differ in hardware, software, connectivity, performance and persisted state) the space of potential problems and edge cases is vast and cannot typically be covered in sufficient detail with automated testing.
+    \item Monitoring and debugging are harder because telemetry is limited, delayed, and there is no physical access to devices for interactive troubleshooting.
+    \item Running computations should not affect device performance or stability, i.e. should be invisible to users.
+\end{itemize}
+
+\paragraph{Code Deployment}
+Installing, updating and running software on end user devices may involve not only extensive manual and automated testing, but a gradual and reversible rollout (for example, through guarding new functionality with server-controlled feature flags) while monitoring key performance metrics in a/b experiments such as crash rates, memory use, and application-dependent indicators such as latencies and engagement metrics. Such rollouts can take weeks or months depending on the percolation rate of updates (particularly challenging for devices with spotty connectivity) and the complexity of the upgrade (e.g. protocol changes). Hence, the install base at any given time will involve various releases. While this problem is not specific to federated learning, it has greater impact here due to the inherent collaborative nature of federated computations: devices constantly communicate with servers and indirectly with other devices to exchange models and parameter updates. Thus, compatibility concerns abound and must be addressed through stable exchange formats or, where not possible, detected upfront with extensive testing infrastructure. We will revisit this problem in \cref{subsec:systems-on-device-runtime}.
+
+\paragraph{Monitoring and Debugging}
+Another significant complication is the limited ability to monitor devices and interactively debug problems. While telemetry from end user devices is necessary to detect problems, privacy concerns severely restrict what can be logged, who can access such logs, and how long they are retained. Once a regression is detected, drilling down into the root cause can be very cumbersome due to the lack of detailed context, the vast problem space (a cross product of software versions, hardware, models, and device state), and very limited ability for interactive debugging short of successfully reproducing the problem in a controlled environment.
+
+These challenges are exacerbated in the federated learning setting where a) raw input data on devices cannot be accessed, and b) contributions from individual devices are by design anonymous, ephemeral, and exposed only in aggregate. These properties preserve privacy, but also may make it hard or impossible to investigate problems with traditional approaches ---by looking for correlations with hardware or software version, or testing hypotheses that require access to raw data. Reproducing a problem in a controlled setting is often difficult due to the gap between such an environment and reality: hundreds of heterogeneous embedded stateful devices with non-iid data. 
+
+Interestingly, federated technologies themselves can help to mitigate this problem---for instance, the use of federated analytics \citep{fablog20} to collect logs in a privacy preserving manner, or training generative models of the system behavior or raw data for sampling during debugging (see sections \ref{subsec:debugging-and-interpretability-for-fl}, \ref{subsec:failures}, and \citep{augenstein2019generative}).
+Keeping a federated learning system up and running thus requires investing into upfront detection of problems through a) extensive automated, continuous test coverage of all software layers through both unit and integration tests; b) feature flags and a/b rollouts; and c) continuous monitoring of performance indicators for regressions. That poses a significant investment that may come at too high a cost for smaller entities who would benefit greatly from shared and tested infrastructure for federated learning.
+
+\subsection{System Induced Bias}
+\label{subsec:systems-system-induced-bias}
+Deployment, monitoring and debugging may not concern users of a federated learning platform, e.g. model authors or data analysts. For them, the key differences between data center and cross-device settings fall largely into the following two categories:
+
+部署, 监控和调试可能与联邦学习平台的用户无关，例如模型作者或数据分析师。对他们来说，数据中心和跨设备设置之间的主要区别主要分为以下两类：
+
+\begin{enumerate}
+    \item \textbf{Availability of devices} for computations is not a given, but varies over time and across devices. Connections are initiated by devices and subject to interruptions due to changes in device state, operating system quotas, and network connectivity. Hence, in iterative processes like federated learning, the loop body is run on a small subset of all devices only, and the system must tolerate a certain failure rate among those devices.
+    \item \textbf{Capabilities of devices} (network bandwidth and latency, compute performance, memory) vary, and are typically much lower than those of compute nodes in the data center, though the number of nodes is typically higher. The amount and type of data across devices may lead to variations in execution profile, e.g. more and larger examples lead to increased resource use and processing time.
+\end{enumerate}
+
+In the following sections we discuss how these variations might introduce bias, referring to it as system induced bias to differentiate it from platform-independent bias in the raw data (such as ownership or usage patterns differing across demographics)---for the latter, see \cref{subsec:bias-in-training-data}.
+
+在以下部分中，我们将讨论这些变化如何引入偏差，将其称为系统诱发的偏差，以将其与原始数据中独立于平台的偏差（例如不同人口统计数据的所有权或使用模式不同）区分开来——对于后者，参见 \cref{subsec:bias-in-training-data}。
+
+
+\begin{enumerate}
+    \item \textbf{设备的可用性} 用于计算不是给定的，而是随时间和跨设备而变化。连接由设备发起，并且会因设备状态, 操作系统配额和网络连接的变化而中断。因此，在像联邦学习这样的迭代过程中，循环体仅在所有设备的一小部分上运行，并且系统必须容忍这些设备之间的一定故障率。
+    \item \textbf{设备的能力}（网络带宽和延迟, 计算性能, 内存）各不相同，通常比数据中心的计算节点低得多，但节点数量通常更高。跨设备的数据量和类型可能会导致执行配置文件的变化，例如更多和更大的示例导致资源使用和处理时间增加。
+\end{enumerate}
+
+
+
+
+\subsubsection{Device Availability Profiles}
+At the core of cross-device federated learning is the principle that devices only connect to the server and run computations when various constraints are met:
+\begin{itemize}
+    \item \textbf{Hard constraints}, which might include requiring that the device is turned on, has network connectivity to the server, and is allowed to run a computation by the operating system.
+    \item \textbf{Soft constraints}, which might include the conditions on device state chosen to ensure that federated learning does not incur charges or affect usability. For the common case of mobile phones \citep{bonawitz19sysml,apple19wwdc}, requirements may include idleness, charging and/or above a certain battery level, being connected to an unmetered network, and that no other federated learning tasks are running at the same time.
+\end{itemize}
+
+\subsubsection*{设备可用性配置文件}
+跨设备联邦学习的核心是设备仅在满足各种约束时才连接到服务器并运行计算的原则：
+\begin{itemize}
+    \item \textbf{硬约束}，这可能包括要求设备打开，与服务器具有网络连接，并允许操作系统运行计算。
+    \item \textbf{软约束}，其中可能包括选择的设备状态条件，以确保联邦学习不会产生费用或影响可用性。对于手机 \citep{bonawitz19sysml,apple19wwdc} 的常见情况，要求可能包括空闲, 充电和/或高于特定电池电量, 连接到未计量的网络，并且没有其他联邦学习任务同时运行.
+\end{itemize}
+Taken together, these constraints induce an unknown, time-varying and device-specific function $A_i(t)$ for a device $i$, and a fleet-wide \textit{availability profile} $A(t)=\sum_i A_i (t)$. Round completion rates and server traffic patterns \citep{bonawitz19sysml, yang18gboardquery} suggest that availability profiles for mobile phones are clustered into periodic functions with a period of 1 day, varying across devices in phase, shape and amplitude through factors such as demographics, geography etc. Availability for other end user devices such as laptops, tablets, or stationary devices such as smart speakers, displays and cameras, will differ, but the challenges discussed in the following sections apply there as well, albeit to a possibly lesser extent.
+
+综上所述，这些约束为设备 $i$ 引入了一个未知的, 时变的和特定于设备的函数 $A_i(t)$，以及一个车队范围的 \textit{availability profile} $A(t)=\sum_i A_i (t)$。回合完成率和服务器流量模式 \citep{bonawitz19sysml, yang18gboardquery} 表明手机的可用性配置文件以 1 天为周期聚集成周期性函数，通过人口统计, 地理等因素在相位, 形状和幅度上因设备而异. 其他最终用户设备（如笔记本电脑, 平板电脑）或固定设备（如智能扬声器, 显示器和相机）的可用性将有所不同，但以下部分中讨论的挑战也适用于这些设备，尽管程度可能较小。
+
+\subsubsection{Examples of System Induced Bias}
+Sources of bias will depend on the specific way in which devices are selected to participate in training, and how the system influences which devices end up contributing to the final aggregated model update. Thus, it is useful to discuss these issues in light of a simplified but representative system design. In an iterative federated learning algorithm, such as Federated Averaging (\cref{sec:typical-training}, \citep{mcmahan17fedavg}), rounds are run consecutively on sets of at least $M$ devices. To accommodate a fraction $d$ of devices not contributing due to changes in device conditions, time-outs, or slowness (server-side aborts to avoid slow-downs by stragglers), an over-allocation scheme is used where
+
+\subsubsection{系统诱导偏差的例子}
+偏差来源将取决于选择设备参与训练的具体方式，以及系统如何影响哪些设备最终对最终聚合模型更新做出贡献。因此，根据简化但具有代表性的系统设计来讨论这些问题是有用的。在迭代联邦学习算法中，例如联邦平均 (\cref{sec:typical-training}, \citep{mcmahan17fedavg})，轮次在至少 $M$ 的设备集上连续运行。为了适应由于设备条件变化, 超时或缓慢（服务器端中止以避免落后者造成的缓慢）而没有贡献的一小部分设备，在以下情况下使用过度分配方案
+
+\begin{enumerate}
+    \item Rounds are started when at least $M'=\frac{M}{1-d}$ devices are available.
+    \item Rounds are closed as
+    \begin{enumerate}
+        \item \emph{Aborted} when more than $M' - M$ devices have disconnected, or
+        \item \emph{Successful} when at least $M$ devices have reported. One possible design choice is to stop after exactly $M$ devices; another possibility would be to keep waiting for stragglers (possibly up to some maximum time).
+    \end{enumerate}
+\end{enumerate}
+
+\begin{enumerate}
+    \item 回合在至少 $M'=\frac{M}{1-d}$ 设备可用时开始。
+    \item 回合关闭为
+    \begin{enumerate}
+        \item \emph{Aborted} 当超过 $M' - M$ 个设备断开连接时，或
+        \item \emph{Successful} 当至少有 $M$ 设备报告时。一种可能的设计选择是在恰好 $M$ 个设备之后停止；另一种可能性是继续等待落后者（可能达到某个最长时间）。
+    \end{enumerate}
+\end{enumerate}
+% No indent
+This sequence, when combined with variable availability profiles, may introduce various forms of bias:
+
+此序列与可变可用性配置文件结合使用时，可能会引入各种形式的偏差：
+
+\begin{enumerate}
+    \item Selection Bias - whether a device is included in a round at time t depends on both
+    \begin{enumerate}
+        \item Its availability profile $A_i(t)$
+        \item The number of simultaneously connected devices: $<M'$ and a round cannot be started; $\gg M'$ and the probability of a single device being included becomes very small. In effect, devices active only at either fleet-wide availability peaks or troughs may be under-represented.
+    \end{enumerate}
+    \item Survival Bias
+    \begin{enumerate}
+        \item Since a server might choose to close a round at any point after the first $M$ devices have reported, contributions are biased towards devices with better network connections, faster processors, lower CPU load, and less data to process.
+        \item Devices drop out of rounds when they are interrupted by the operating system, which may happen due to changes in device conditions as described by $A_i (t)$, or due to e.g. excessive memory use.
+    \end{enumerate}
+\end{enumerate}
+
+
+% 无缩进
+\begin{enumerate}
+    \item 选择偏差 - 在时间 t 的回合中是否包含设备取决于两者
+    \begin{enumerate}
+        \item 其可用性配置文件 $A_i(t)$
+        \item 同时连接的设备数：$<M'$，不能开始一轮； $\gg M'$ 并且包含单个设备的概率变得非常小。实际上，仅在整个车队的可用性高峰或低谷时处于活动状态的设备可能代表不足。
+    \end{enumerate}
+    \item 生存偏差
+    \begin{enumerate}
+        \item 由于服务器可能会在第一个 $M$ 设备报告后的任何时候选择关闭一轮，因此贡献偏向于具有更好网络连接, 更快处理器, 更低 CPU 负载和更少数据处理的设备。
+        \item 设备在被操作系统中断时退出轮次，这可能是由于 $A_i (t)$ 所描述的设备条件的变化而发生的，或者由于例如过多的内存使用。
+    \end{enumerate}
+\end{enumerate}
+As can be seen, the probability of a device contributing to a round of federated learning is a complex function of both internal (e.g. device specific) and external (fleet dynamic) factors. When this probability is correlated with statistics of the data distribution, aggregate results may be biased. For instance, language models may over-represent demographics that have high quality internet connections or high end devices; and ranking models may not incorporate enough contributions from high engagement users who produce a lot of training data and hence longer training times.
+
+可以看出，设备参与一轮联邦学习的概率是内部（例如特定于设备）和外部（车队动态）因素的复杂函数。当此概率与数据分布的统计数据相关时，聚合结果可能会有偏差。例如，语言模型可能会过度代表具有高质量互联网连接或高端设备的人口统计数据；和排名模型可能没有包含来自产生大量训练数据的高参与度用户的足够贡献，因此训练时间更长。
+
+Thus, designing systems that explicitly take such factors into account and integrate algorithms designed to both quantify and mitigate these effects are a fundamentally important research direction.
+因此，设计明确考虑这些因素并集成旨在量化和减轻这些影响的算法的系统是一个根本重要的研究方向。
+
+\subsubsection{Open Challenges in Quantifying and Mitigating System Induced Bias}
+While the potential for bias in federated learning has been addressed in the literature (\cref{sec:fairness}, \citep{bonawitz19sysml, li2019fair, eichner19semicyclic}), a systematic study that qualifies and quantifies bias in realistic settings and its sources is a direction for future research. Conducting the necessary work may be hampered by both access to the necessary resources, and the difficulty in quantifying bias in a final statistical estimate due to the inherent lack of ground truth value.
+
+\subsubsection*{量化和减轻系统引起的偏差的开放挑战}
+虽然联邦学习中潜在的偏差已经在文献中得到解决（\cref{sec:fairness}, \citep{bonawitz19sysml, li2019fair, eichner19semicyclic}），但一项在现实环境中限定和量化偏差及其来源的系统研究是一个未来研究的方向。进行必要的工作可能会受到获取必要资源的阻碍，以及由于固有的真实值缺乏而难以量化最终统计估计中的偏差。
+
+We want to encourage further research to study how bias can be quantified and subsequently mitigated. A useful proxy metric for bias is to study the expected rate of contribution of a device to federated learning. In an unbiased system, this rate would be identical for every device; if it is not, the non-uniformity may provide a measure of bias. Studying the root causes for this non-uniformity may then provide important hints for how to mitigate bias, for example:
+
+我们希望鼓励进一步的研究来研究如何量化并随后减轻偏差。一个有用的偏差代理指标是研究设备对联邦学习的预期贡献率。在一个无偏系统中，每个设备的这个比率都是相同的；如果不是，则不均匀性可能会提供偏差的度量。研究这种不均匀性的根本原因可能会为如何减轻偏差提供重要的提示，例如：
+
+\begin{itemize}
+    \item When there is a strong correlation between devices finishing a round, and the number of examples they process or model size, possible fixes may include early stopping, or decreasing the model size.
+    \item If the expected rate of contribution depends on factors outside our control, such as device model, network connectivity, location etc., one can view these factors as defining strata and applying \textit{post-stratification} \citep{little1993poststratification}, that is, correcting for bias by scaling up or down contributions from devices depending on their stratum. It may also be possible to apply \textit{stratified sampling} - e.g. change scheduling, or server selection policies, to affect the probability of including devices in a round as a function of their stratum.
+    \item A very general, root-cause-agnostic mitigation could base the weight of a contribution solely on a device’s past contribution profile (e.g. the number of rounds started or completed thus far). As a special case, consider \textit{sampling without replacement} which could be implemented at the system level (stop connecting after one successful contribution) or at the model level (weight all but the first contribution with 0). This approach might not be sufficient when a population is large enough for most devices to contribute only infrequently (mostly one or zero times); in such cases, clustering devices based on some similarity metric and using cluster membership as stratum could help.
+    \item Alternatives to the synchronous, round based execution described in the previous section may also help to mitigate bias. In particular, certain types of analytics may benefit from softening or eliminating the competition between devices for inclusion, by running rounds for long times with very large numbers of participants and without applying time-outs to stragglers. Such a method may not be applicable to algorithms where the iterative aspect (running many individual, chained rounds) is important.
+\end{itemize}
+    
+\begin{itemize}
+    
+    \item 当完成一轮的设备与它们处理的示例数量或模型大小之间存在很强的相关性时，可能的解决方法可能包括提前停止或减小模型大小。
+    \item 如果预期贡献率取决于我们无法控制的因素，例如设备型号, 网络连接, 位置等，则可以将这些因素视为定义层并应用 \textit{post-stratification} \citep{little1993poststratification}，也就是说，通过根据设备的层次放大或缩小设备的贡献来纠正偏差。也可以应用 \textit{分层抽样} - 例如更改调度或服务器选择策略，以影响在一轮中包含设备的概率作为其层的函数。
+    \item 一个非常普遍的, 与根本原因无关的缓解措施可以仅基于设备过去的贡献配置文件（例如，迄今为止开始或完成的轮数）来确定贡献的权重。作为一种特殊情况，考虑 \textit{sampling without replacement} 可以在系统级别（在一个成功贡献后停止连接）或在模型级别（除第一个贡献之外的所有贡献都用 0 加权）实施。当人口足够大以至于大多数设备很少（主要是一次或零次）做出贡献时，这种方法可能是不够的；在这种情况下，基于某些相似性度量并使用集群成员作为层的集群设备可能会有所帮助。
+    \item 上一节中描述的基于轮次的同步执行的替代方案也可能有助于减轻偏差。特别是，某些类型的分析可能会受益于缓和或消除设备之间的竞争，通过在非常多的参与者中长时间运行而不对落后者应用超时。这种方法可能不适用于迭代方面（运行许多单独的链轮）很重要的算法。
+\end{itemize}
+
+
+The biggest obstacle to enabling such research is access to a representative fleet of end user devices, or a detailed description (e.g. in the form of a statistical model of a realistic distribution over $A_i(t)$ functions) of a fleet that can be used in simulations. Here, maintainers of FL production stacks are uniquely positioned to provide such statistics or models to academic partners in a privacy preserving fashion; a further promising direction is the recent introduction of the Flower framework \citep{beutel2020flower} for federated learning research.
+
+实现此类研究的最大障碍是访问具有代表性的最终用户设备组，或详细描述（例如，以 $A_i(t)$ 函数上的实际分布的统计模型的形式）可以是用于模拟。在这里，FL 生产堆栈的维护者处于独特的地位，可以以保护隐私的方式向学术合作伙伴提供此类统计数据或模型；另一个有希望的方向是最近为联邦学习研究引入的 Flower 框架 \citep{beutel2020flower}。
+
+\subsection{System Parameter Tuning}
+\label{subsec:systems-system-parameter-tuning}
+Practical federated learning is a form of multi-objective optimization: while the first order goal is maximizing model quality metrics such as loss or accuracy, other important considerations are
+
+实用的联邦学习是多目标优化的一种形式：虽然一阶目标是最大化模型质量指标，例如损失或准确性，但其他重要的考虑因素是
+
+\begin{itemize}
+    \item Convergence speed
+    \item Throughput (e.g. number of rounds, amount of data, or number of devices)
+    \item Model fairness, privacy and robustness (see section \ref{subsec:fairness-privacy-robustness})
+    \item Resource use on server and clients
+\end{itemize}
+\begin{itemize}
+    \item  收敛速度
+    \item 吞吐量（例如轮数, 数据量或设备数）
+    \item 模型公平性, 隐私性和鲁棒性（参见部分 \ref{subsec:fairness-privacy-robustness}）
+    \item 服务器和客户端上的资源使用
+\end{itemize}
+
+These goals may be in tension. For instance, maximizing round throughput may introduce bias or hurt accuracy by preferring performant devices with little or no data. Maximizing for low training loss by increasing model complexity will put devices with less memory, many or large examples, or slow CPUs at a disadvantage. Bias or fairness induced in such a way during training may be hard to detect in the evaluation phase since it typically uses the same platform and hence is subject to similar biases.
+
+这些目标可能处于紧张状态。例如，通过首选数据很少或没有数据的高性能设备，最大化轮次吞吐量可能会引入偏差或损害准确性。通过增加模型复杂性来最大限度地降低训练损失将使内存较少, 示例多或大或 CPU 速度慢的设备处于劣势。在训练期间以这种方式引起的偏差或公平性可能很难在评估阶段检测到，因为它通常使用相同的平台，因此受到类似偏差的影响。
+
+Various controls affect the above listed indicators. Some are familiar from the datacenter setting, in particular model specific settings and learning algorithm hyperparameters. Others are specific to federated learning:
+
+各种控件会影响上面列出的指标。有些人熟悉数据中心设置，特别是模型特定设置和学习算法超参数。其他特定于联邦学习：
+
+
+\begin{itemize}
+    \item \textbf{Clients per round}: The minimum number of devices required to complete a round, $M$, and the number of devices required to start a round, $M'$.
+    \item \textbf{Server-side scheduling}: In all but the simplest cases, a federated learning system will operate on more than one model at a time: to support multiple tenants; to train models on the same data for different use cases; to support experimentation and architecture or hyper-parameter grid search; and to run training and evaluation workloads concurrently. The server needs to decide which task to serve to incoming devices, an instance of a scheduling problem: assigning work (training or evaluation tasks) to resources (devices). Accordingly, the usual challenges arise: ideal resource assignment should be fair, avoid starvation, minimize wait times, and support relative priorities all at once.
+    \item \textbf{Device-side scheduling}: As described in \cref{subsec:systems-system-induced-bias}, various constraints govern when a device can connect to the server and execute work. Within these constraints, various scheduling choices can be made. One extreme is to connect to the server and run computations as often as possible, leading to high load and resource use on both server and devices. Another choice are fixed intervals, but they need to be adjusted to reflect external factors such as number of devices overall and per round. The federated learning system developed at Google aims to strike a balance with a flow control mechanism called \textit{pace steering} \citep{bonawitz19sysml} whereby the server instructs devices when to return. Such a dynamic system enables temporal load balancing for large populations as well as “focusing” connection attempts to specific points in time to reach the threshold $M'$. Developing such a mechanism is difficult due to stochastic and dynamic nature of device availability, the lack of a predictive model of population behavior, and feedback loops.
+\end{itemize}
+    
+\begin{itemize}
+    \item \textbf{每轮的客户端数}：完成一轮所需的最少设备数 $M$，以及开始一轮所需的设备数 $M'$。
+    \item \textbf{服务器端调度}：除了最简单的情况外，联邦学习系统一次将在多个模型上运行：支持多个租户；针对不同用例在相同数据上训练模型；支持实验和架构或超参数网格搜索；并同时运行训练和评估工作负载。服务器需要决定为传入设备提供哪个任务，这是调度问题的一个实例：将工作（训练或评估任务）分配给资源（设备）。因此，常见的挑战出现了：理想的资源分配应该是公平的，避免饥饿，最小化等待时间，并同时支持相对优先级。
+    \item \textbf{设备端调度}：如 \cref{subsec:systems-system-induced-bias} 中所述，各种约束控制设备何时可以连接到服务器并执行工作。在这些约束内，可以做出各种调度选择。一种极端是连接到服务器并尽可能频繁地运行计算，从而导致服务器和设备上的高负载和资源使用。另一种选择是固定间隔，但需要对其进行调整以反映外部因素，例如整体和每轮的设备数量。谷歌开发的联邦学习系统旨在与称为 \textit{pace Steering} \citep{bonawitz19sysml} 的流控制机制取得平衡，服务器指示设备何时返回。这样的动态系统能够实现大量人口的时间负载平衡，以及将连接尝试“集中”到特定时间点以达到阈值 $M'$。由于设备可用性的随机性和动态性, 缺乏人口行为的预测模型和反馈循环，开发这种机制很困难。
+\end{itemize}
+ 
+Defining reasonable composite objective functions, and designing algorithms to automatically tune these settings, has not been explored yet in the context of federated learning systems and hence remains a topic of future research.
+
+尚未在联邦学习系统的背景下探索定义合理的复合目标函数并设计算法以自动调整这些设置，因此仍然是未来研究的主题。
+
+\subsection{On-Device Runtime}
+\label{subsec:systems-on-device-runtime}
+While numerous frameworks exist for data center training, the options for training models on resource constrained devices are fairly limited. Machine Learning models and training procedures are typically authored in a high level language such as Python. For federated learning, this description encompasses device and server computations that are executed on the target platform and exchange data over a network connection, necessitating
+
+虽然数据中心训练有许多框架，但在资源受限设备上训练模型的选项相当有限。机器学习模型和训练过程通常是用 Python 等高级语言编写的。对于联邦学习，此描述包含在目标平台上执行并通过网络连接交换数据的设备和服务器计算，因此需要
+
+
+\begin{itemize}
+    \item A means of serializing and dynamically transmitting local pieces of the total computation (e.g., the server-side update to the model, or the local client training procedure).
+    \item A means to interpret or execute such a computation on the target platform (server or device).
+    \item A stable network protocol for data exchange between participating devices and servers.
+    \item 一种序列化和动态传输总计算的本地部分的方法（例如，服务器端对模型的更新，或本地客户端训练过程）。
+    \item A 表示在目标平台（服务器或设备）上解释或执行此类计算。
+    \item 用于参与设备和服务器之间数据交换的稳定网络协议。
+\end{itemize}
+
+One extreme form of a representation is the original high-level description, e.g. a Python TensorFlow program \citep{tensorflow2015-whitepaper}. This would require a Python interpreter with TensorFlow backend, which may not be a feasible choice for end-user devices due to resource constraints (binary size, memory use), performance limitations, or security concerns.
+
+表示的一种极端形式是原始的高级描述，例如一个 Python TensorFlow 程序 \citep{tensorflow2015-whitepaper}。这将需要带有 TensorFlow 后端的 Python 解释器，由于资源限制（二进制大小, 内存使用）, 性能限制或安全问题，这可能不是最终用户设备的可行选择。
+
+Another extreme representation of a computation is machine code of the target architecture, e.g. ARM64 instructions. This requires a compiler or re-implementation of a model in a lower-level language such as C++, and deployment computations will typically be subject to the restrictions that apply to deployment of binary code (see \cref{subsec:systems-platform-development-and-deployment-challenges}), introducing prohibitive latencies for executing novel computations.
+
+计算的另一个极端表示是目标架构的机器代码，例如ARM64 指令。这需要编译器或用 C++ 等低级语言重新实现模型，并且部署计算通常会受到适用于部署二进制代码的限制（参见 \cref{subsec:systems-platform-development-and-deployment-challenges})，为执行新计算引入了令人望而却步的延迟。
+
+Intermediate representations that can be compiled or interpreted with a runtime on the target platform strike a balance between flexibility and efficiency. However, such runtimes are currently not widely available. For instance, Google’s FL system \citep{bonawitz19sysml} relies on TensorFlow for both server and device side execution as well as model and parameter transfer, but this choice suffers from several shortcomings:
+
+可以在目标平台上使用运行时编译或解释的中间表示在灵活性和效率之间取得平衡。但是，此类运行时目前尚未广泛使用。例如，谷歌的 FL 系统 \citep{bonawitz19sysml} 在服务器端和设备端执行以及模型和参数传输都依赖于 TensorFlow，但这种选择有几个缺点：
+
+\begin{itemize}
+    \item It offers no easy path to devices for alternative front ends such as PyTorch \citep{pytorch_NEURIPS2019_9015}, JAX \citep{jax2018github} or CNTK \citep{cntk}.
+    \item The runtime is not developed or optimized for resource constrained environments, incurring a large binary size, high memory use and comparatively low performance.
+    \item The intermediate representation \texttt{GraphDef} used by TensorFlow is not standardized or stable, and version skew between the frontend and older on-device backends causes frequent compatibility challenges.
+    \item 它没有为替代前端的设备提供简单的路径，例如 PyTorch \citep{pytorch_NEURIPS2019_9015}, JAX \citep{jax2018github} 或 CNTK \citep{cntk}。
+    \item 运行时不是为资源受限的环境开发或优化的，会导致大的二进制文件, 高内存使用和相对较低的性能。
+    \item TensorFlow 使用的中间表示 \texttt{GraphDef} 不是标准化或稳定的，前端和旧设备后端之间的版本偏差导致频繁的兼容性挑战。
+\end{itemize}
+
+Other alternatives include more specialized runtimes that support only a subset of the frontend’s capabilities, for instance training specific model types only, requiring changes and long update cycles whenever new model architectures or training algorithms are to be used. An extreme case would be a runtime that is limited and optimized to train a single type of model.
+
+其他替代方案包括仅支持前端功能子集的更专业的运行时，例如仅训练特定模型类型，每当要使用新模型架构或训练算法时都需要更改和较长的更新周期。一种极端情况是运行时间有限且经过优化以训练单一类型的模型。
+
+An ideal on-device runtime would have the following characteristics:
+
+理想的设备上运行时应具有以下特征：
+
+\begin{enumerate}
+    \item Lightweight: small binary size, or pre-installed; low memory and power profile.
+    \item Performant: low startup latency; high throughput, supports hardware acceleration.
+    \item Expressive: supports common data types and computations including backpropagation, variables, control flow, custom extensions.
+    \item Stable and compact format for expressing data and computations.
+    \item Widely available: portable open source implementation.
+    \item Targetable by commonly used ML frameworks / languages.
+    \item Ideally also supports inference, or if not, building personalized models for an inference runtime.
+\end{enumerate}
+\begin{enumerate}
+    \item 轻量级：小二进制大小，或预装；低内存和功耗配置文件。
+    \item 高性能：低启动延迟；高吞吐量，支持硬件加速。
+    \item Expressive：支持常见的数据类型和计算，包括反向传播, 变量, 控制流, 自定义扩展。
+    \item 用于表达数据和计算的稳定且紧凑的格式。
+    \item 广泛可用：可移植的开源实现。
+    \item 可通过常用的 ML 框架/语言定位..
+    \item 理想情况下还支持推理，如果不支持，则为推理运行时构建个性化模型。
+\end{enumerate}
+
+To our best knowledge no solution exists yet that satisfies these requirements, and we expect the limited ability to run ML training on end user devices to become a hindrance to adoption of federated technologies.
+
+据我们所知，目前还没有满足这些要求的解决方案，我们预计在最终用户设备上运行 ML 培训的能力有限，这将成为采用联邦技术的障碍。
+
+\subsection{The Cross-Silo Setting}
+\label{subsec:systems-cross-silo-setting}
+The system challenges arising in the scenario of cross-silo federated learning take a considerably different form. As outlined in \cref{tab:characteristics}, clients are fewer in number, more powerful, reliable, and known / addressable, eliminating many of the challenges from the cross-device setting, while allowing for authentication and verification, accounting, and contractually enforced penalties for misbehavior. Nonetheless, there are other sources of heterogeneity, including the features and distribution of data, and possibly the software stack used for training.
+
+cross-silo 联邦学习场景中出现的系统挑战采取了截然不同的形式。如 \cref{tab:characteristics} 中所述，客户端数量更少, 功能更强大, 更可靠且已知/可寻址，消除了跨设备设置中的许多挑战，同时允许身份验证和验证, 会计和合同对不当行为实施处罚。尽管如此，还有其他异质性来源，包括数据的特征和分布，以及可能用于训练的软件堆栈。
+
+While the infrastructure in the cross-device setting (from the device-side data generation to the server logic) is typically operated by one or few organizational entities (the application, operating system, or device manufacturer), in the cross-silo setting, many different entities are involved. This may lead to high coordination and operational cost due to differences in:
+
+虽然跨设备设置中的基础设施（从设备端数据生成到服务器逻辑）通常由一个或几个组织实体（应用程序, 操作系统或设备制造商）操作，但在cross-silo 设置中，涉及许多不同的实体。由于以下方面的差异，这可能会导致高协调和运营成本：
+
+
+
+\begin{itemize}
+    \item \emph{How data is generated, pre-processed and labeled.}  Learning across silos will require data normalization which may be difficult when such data is collected and stored differently (e.g. use of different medical imaging systems, and inconsistencies in labeling procedures, annotations, and storage formats).
+    \item \emph{Which software at which version powers training.} Using the same software stack in every silo---possibly delivered alongside the model using container technologies as done by FATE \cite{FATE}---eliminates compatibility concerns, but such frequent and centrally distributed software delivery may not be acceptable to all involved parties. An alternative that is more similar to the cross-device setting would be to standardize data and model formats and communication protocols. See IEEE P3652.1 ``Federated Machine Learning Working Group'' for a related effort in this direction.
+    \item \emph{The approval process for how data may or may not be used.} While this process is typically centralized in the cross-device scenario, the situation is likely different in cross-silo settings where many organizational entities are involved, and may be increasingly difficult when training spans different jurisdictions with varying data protection regulations. Technical infrastructure may be of help here by establishing data annotations that encode access policies, and infrastructure enforce them; for instance, limiting the use of certain data to specific models, or encoding minimum aggregation requirements such as ``require at least $M$ clients per round''.
+    \item \emph{如何生成, 预处理和标记数据。}cross-silo 学习将需要数据标准化，当这些数据的收集和存储方式不同时（例如使用不同的医学成像系统，以及标记程序的不一致），这可能会很困难, 注释和存储格式）。
+    \item \emph{哪个版本支持训练的软件。}在每个筒仓中使用相同的软件堆栈——可能使用容器技术与模型一起交付，就像 FATE \cite{FATE} 那样——消除了兼容性问题，但是这种频繁和集中分布的软件交付可能无法为所有相关方所接受。另一种更类似于跨设备设置的替代方法是标准化数据和模型格式以及通信协议。请参阅 IEEE P3652.1 ``联邦机器学习工作组''，了解这方面的相关工作。
+    \item \emph{关于如何使用或不使用数据的审批流程。}虽然此流程通常集中在跨设备场景中，但在涉及许多组织实体的cross-silo 设置中，情况可能有所不同，并且当培训跨越具有不同数据保护法规的不同司法管辖区时，可能会越来越困难。技术基础设施在这里可能会有所帮助，方法是建立对访问策略进行编码的数据注释，并通过基础设施执行它们；例如，将某些数据的使用限制为特定模型，或编码最低聚合要求，例如“每轮至少需要 $M$ 个客户”。
+\end{itemize}
+    
+Another potential difference in the cross-silo setting is data partitioning: Data in the cross-device setting is typically assumed to be partitioned by examples, all of which have the same features (horizontal partitioning). In the cross-silo setting, in addition to partitioning by examples, partitioning by features is of practical relevance (vertical partitioning). An example would be two organizations, e.g. a bank and a retail company,  with an overlapping set of customers, but different information (features) associated with them. For a discussion focusing on the algorithmic aspects, please see section \ref{ssec:cross-silo}. Learning with feature-partitioned data may require different communication patterns and additional processing steps e.g. for entity alignment and dealing with missing features.
+
+
+cross-silo 设置中的另一个潜在差异是数据分区：跨设备设置中的数据通常假设按示例进行分区，所有示例都具有相同的功能（水平分区）。在 cross-silo 设置中，除了通过示例进行分区之外，通过特征进行分区具有实际相关性（垂直分区）。一个例子是两个组织，例如一家银行和一家零售公司，客户群重叠，但与之相关的信息（特征）不同。有关侧重于算法方面的讨论，请参阅 \ref{ssec:cross-silo} 部分。使用特征分区数据进行学习可能需要不同的通信模式和额外的处理步骤，例如用于实体对齐和处理缺失的特征。
+
+
+\subsection{Executive Summary}
+While production grade systems for cross-device federated learning operate successfully \cite{bonawitz19sysml,apple19wwdc}, various challenges remain:
+\begin{itemize}
+    \item Frequent and large scale deployment of updates, monitoring, and debugging is challenging (\cref{subsec:systems-platform-development-and-deployment-challenges}).
+    \item Differences in device availability induce various forms of bias; defining, quantifying and mitigating them remains a direction for future research (\cref{subsec:systems-system-induced-bias}).
+    \item Tuning system parameters is difficult due to the existence of multiple, potentially conflicting objectives (\cref{subsec:systems-system-parameter-tuning}).
+    \item Running ML workloads on end user devices is hampered by the lack of a portable, fast, small footprint, and flexible runtime for on-device training (\cref{subsec:systems-on-device-runtime}).
+\end{itemize}
+虽然用于跨设备联邦学习的生产级系统成功运行 \cite{bonawitz19sysml,apple19wwdc}，但仍然存在各种挑战：
+\begin{itemize}
+    \item 更新, 监控和调试的频繁和大规模部署具有挑战性（\cref{subsec:systems-platform-development-and-deployment-challenges}）。
+    \item 设备可用性的差异会导致各种形式的偏差；定义, 量化和减轻它们仍然是未来研究的一个方向（\cref{subsec:systems-system-induced-bias}）。
+    \item 由于存在多个潜在冲突的目标（\cref{subsec:systems-system-parameter-tuning}），调整系统参数很困难。
+    \item 在最终用户设备上运行 ML 工作负载因缺乏用于设备上训练的便携, 快速, 占用空间小和灵活的运行时而受到阻碍 (\cref{subsec:systems-on-device-runtime})。
+\end{itemize}
+
+
+Systems for cross-silo settings (\cref{subsec:systems-cross-silo-setting}) face largely different issues owing to differences in the capabilities of compute nodes and the nature of the data being processed.
+
+由于计算节点的能力和所处理数据的性质不同，cross-silo 设置系统 (\cref{subsec:systems-cross-silo-setting}) 面临着很大的不同问题。
+
+

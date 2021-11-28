@@ -1,0 +1,824 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Improving Efficiency and Effectiveness}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:better_fl}
+% Editors: (Brendan McMahan, Zheng Xu)
+
+In this section we explore a variety of techniques and open questions that address the challenge of making federated learning more efficient and effective. This encompasses a myriad of possible approaches, including: developing better optimization algorithms; providing different models to different clients; making ML tasks like hyperparameter search, architecture search, and debugging easier in the FL context; improving communication efficiency; and more. 
+
+在本节中，我们将探讨各种技术和开放性问题，以解决使联邦学习更加高效和有效的挑战。 这包括无数可能的方法，包括： 开发更好的优化算法； 为不同的客户提供不同的模型； 使 FL 上下文中的超参数搜索、架构搜索和调试等 ML 任务更容易； 提高沟通效率； 和更多。
+
+One of the fundamental challenges in addressing these goals is the presence of non-IID data, so we begin by surveying this issue and highlighting potential mitigations.
+实现这些目标的基本挑战之一是非 IID 数据的存在，因此我们首先调查这个问题并强调潜在的缓解措施。
+
+\newcommand{\Ploc}{\mathcal{P}}
+\newcommand{\Pcli}{\mathcal{Q}}
+
+\subsection{Non-IID Data in Federated Learning}\label{sec:noniid}
+% Authors: Phil Gibbons, Brendan McMahan
+While the meaning of IID is generally clear, data can be non-IID in many ways. In this section, we provide a taxonomy of non-IID data regimes that may arise for any client-partitioned dataset. The most common sources of dependence and non-identicalness are due to each client corresponding to a particular user, a particular geographic location, and/or a particular time window. This taxonomy has a close mapping to notions of dataset shift \citep{torres2012unifying,candela2009datasetshift}, which studies differences between the training distribution and testing distribution; here, we consider differences in the data distribution on each client. 
+
+
+虽然IID的含义通常是明确的, 但数据可以在许多方面是非IID的。在本节中, 我们提供了任何客户机分区数据集可能出现的非IID数据模式的分类。依赖性和不一致性的最常见来源是对应于特定用户、特定地理位置和/或特定时间窗口的每个客户端。该分类法与dataset shift \citep{torres2012unifying,candela2009datasetshift} 的概念有密切的对应关系, 后者研究训练分布和测试分布之间的差异；在这里, 我们考虑在每个客户端上的数据分布的差异。
+
+
+For the following, consider a supervised task with features $x$ and labels $y$. A statistical model of federated learning involves two levels of sampling: accessing a datapoint requires first sampling a client $i \sim \Pcli$, the distribution over available clients, and then drawing an example $(x, y)\sim Ploc_i(x, y)$ from that client's local data distribution. 
+
+下面, 考虑一个具有$x$和标签$Y$的监督任务。联邦学习的统计模型涉及两个级别的采样：访问数据点需要首先对客户机$i\sim\Pcli$进行采样, 即在可用客户机上的分布, 然后从该客户机的本地数据分布中绘制一个示例$(x, y)\sim Ploc_i(x, y)$ 。
+
+
+When non-IID data in federated learning is referenced, this typically refers to differences between $\Ploc_i$ and $\Ploc_j$ for different clients $i$ and $j$.  However, it is also important to note that the distribution $\Pcli$ and $\Ploc_i$ may change over time, introducing another dimension of ``non-IIDness''. 
+
+当引用联邦学习中的非IID数据时, 这通常是指不同客户端$i$和$j$的$\Ploc_i$和$\Ploc_j$之间的差异。但是, 还需要注意的是, 分布$\Pcli$和$\Ploc_i$可能会随着时间的推移而改变, 从而引入另一个``non-IIDness''维度。
+
+For completeness, we note that even considering the dataset on a single device, if the data is in an insufficiently-random order, e.g. ordered by time, then independence is violated locally as well.  For example, consecutive frames in a video are highly correlated. Sources of intra-client correlation can generally be resolved by local shuffling.
+
+为了完整性, 我们注意到, 即使考虑单个设备上的数据集, 如果数据的随机顺序不够, 例如按时间排序, 那么独立性也会在局部受到破坏。例如, 视频中的连续帧高度相关。客户机内部相关性的来源通常可以通过本地洗牌来解决。
+
+\paragraph{Non-identical client distributions}
+% Zhouyuan Huo Is it OK to copy and paste in a review paper? Should we cite the paper "Hsieh, Kevin. "Machine Learning Systems for Highly-Distributed and Rapidly-Growing Data." arXiv preprint arXiv:1910.08663 (2019)." 
+% McMahan: I've added a citation and edited to add connections to the dataset shift literature.
+
+\newcommand{\gvn}{\,|\,}
+
+We first survey some common ways in which data tend to deviate from being identically distributed, that is $P_i \neq P_j$ for different clients $i$ and $j$. Rewriting $P_i(x, y)$ as $P_i(y \gvn x) P_i(x)$ and $P_i(x \gvn y) P_i(y)$ allows us to characterize the differences more precisely.
+
+我们首先调查了数据倾向于偏离同分布的一些常见方式，即不同客户端 $i$ 和 $j$ 的 $P_i \neq P_j$。将 $P_i(x, y)$ 重写为 $P_i(y \gvn x) P_i(x)$ 和 $P_i(x \gvn y) P_i(y)$ 可以让我们更精确地表征差异。
+
+\begin{itemize}
+    %For example, some partitions may collect data from fewer devices or from devices that produce less data.
+    \item \emph{Feature distribution skew} (covariate shift): The marginal distributions $\Ploc_i(x)$ may vary across clients, even if $\Ploc(y \gvn x)$ is shared.\footnote{We write ``$\Ploc(y \gvn x)$ is shared'' as shorthand for $\Ploc_i(y \gvn x) = \Ploc_j(y \gvn x)$  for all clients $i$ and $j$.} For example, in a handwriting recognition domain, users who write the same words might still have different stroke width, slant, etc. 
+    
+    \item \emph{Label distribution skew} (prior probability shift): The marginal distributions $\Ploc_i(y)$ may vary across clients, even if $\Ploc(x \gvn y)$ is the same. For example, when clients are tied to particular geo-regions, the distribution of labels varies across clients --- kangaroos are only in Australia or zoos; a person's face is only in a few locations worldwide; for mobile device keyboards, certain emoji are used by one demographic but not others.
+    
+    \item \emph{Same label, different features} (concept drift): The conditional distributions $\Ploc_i(x \gvn y)$ may vary across clients even if $\Ploc(y)$ is shared. The same label $y$ can have very different features $x$ for different clients, e.g. due to cultural differences, weather effects, standards of living, etc.
+    For example, images of homes can vary dramatically around the world and items of clothing vary widely.  
+    Even within the U.S., images of parked cars in the winter will be snow-covered only in certain parts of the country.  
+    The same label can also look very different at different times, and at different time scales: day vs.~night, seasonal effects, natural disasters, fashion and design trends, etc.
+    
+    \item \emph{Same features, different label} (concept shift): The conditional distribution $\Ploc_i(y \gvn x)$ may vary across clients, even if $\Ploc(x)$ is the same. Because of personal preferences, the same feature vectors in a training data item can have different labels.  
+    For example, labels that reflect sentiment or next word predictors have personal and regional variation.
+    
+  \item \emph{Quantity skew} or unbalancedness: Different clients can hold vastly different amounts of data.
+\end{itemize}
+
+\begin{itemize}
+    %例如，某些分区可能从较少的设备或从产生较少数据的设备收集数据。
+    \item \emph{特征分布偏斜}(协变量偏移)：即使 $\Ploc(y \gvn x)$ 是共享的，边际分布 $\Ploc_i(x)$ 可能因客户端而异。\footnote{我们写` `$\Ploc(y \gvn x)$ is shared'' 作为 $\Ploc_i(y \gvn x) = \Ploc_j(y \gvn x)$ 的简写，适用于所有客户端 $i$ 和 $j$。} 对于例如，在手写识别领域，写相同单词的用户可能仍然具有不同的笔画宽度、倾斜度等。
+    
+    \item \emph{标签分布偏斜}(先验概率偏移)：边缘分布 $\Ploc_i(y)$ 可能因客户端而异，即使 $\Ploc(x \gvn y)$ 是相同的。例如，当客户被绑定到特定的地理区域时，标签的分布因客户而异——袋鼠只在澳大利亚或动物园；一个人的脸只出现在世界范围内的几个地方；对于移动设备键盘，某些表情符号仅由某一人群使用，而其他人群则不会。
+    
+    \item \emph{相同的标签，不同的特征}(概念漂移)：即使 $\Ploc(y)$ 是共享的，条件分布 $\Ploc_i(x \gvn y)$ 也可能因客户端而异。对于不同的客户端，相同的标签 $y$ 可以具有非常不同的特征 $x$，例如由于文化差异、天气影响、生活水平等原因。
+    例如，世界各地的房屋图像可能会有很大差异，衣服也有很大差异。
+    即使在美国，冬天停放的汽车的图像也只会在该国的某些地区被雪覆盖。
+    同一个标签在不同的时间和不同的时间尺度上也可能看起来非常不同：白天与黑夜、季节性影响、自然灾害、时尚和设计趋势等。
+    
+    \item \emph{相同特征，不同标签}(概念转变)：条件分布 $\Ploc_i(y \gvn x)$ 可能因客户端而异，即使 $\Ploc(x)$ 相同。由于个人喜好，训练数据项中相同的特征向量可以有不同的标签。
+    例如，反映情绪或下一个词预测器的标签具有个人和区域差异。
+    
+  \item \emph{Quantity skew} 或不平衡性：不同的客户端可以持有截然不同的数据量。
+\end{itemize}
+
+% \begin{itemize}
+%     \item\emph{Feature distribution skew}(协变量移位)：即使$\Ploc(y\gvn x)$是共享的, 在客户端之间$\Ploc(y\gvn x)$的边际分布可能会有所不同。\footnote{We write`$\Ploc(y\gvn x)$作为$\Ploc_i(y\gvn x)=\Ploc(j(y\gvn x)$所有客户端$i$和$j$的缩写, 例如, 在手写识别域中, 书写相同单词的用户可能仍然具有不同的笔划宽度、倾斜度等。
+% \item\emph{Label distribution skew}(先验概率移位)：即使$\Ploc(x\gvn y)$相同, 客户端的边际分布$\Ploc_i(y)$也可能不同。例如, 当客户被绑定到特定的地理区域时, 标签在客户之间的分布是不同的——袋鼠只在澳大利亚或动物园；一个人的脸在全世界只有少数几个地方；对于移动设备键盘, 某些表情符号由一个人使用, 而不是其他人。
+% \item\emph{相同标签, 不同功能}(概念漂移)：即使共享$\Ploc(y)$, 条件分布$\Ploc_i(x\gvn y)$在客户端之间也可能不同。同一标签$y$可以为不同的客户提供非常不同的功能$x$, 例如, 由于文化差异、天气影响、生活水平等。例如, 全世界的家庭图像可能会有很大的差异, 衣服的种类也会有很大的差异。即使在美国, 冬季停放汽车的图像也只会在该国某些地区被积雪覆盖。同一个标签在不同的时间和不同的时间尺度上也会有很大的不同：白天与黑夜、季节性影响、自然灾害、时尚和设计趋势等。
+% \item\emph{相同的特性, 不同的标签}(概念转移)：即使$\Ploc(x)$相同, 条件分布$\Ploc_i(y\gvn x)$在客户端之间也可能不同。由于个人偏好, 训练数据项中的相同特征向量可以具有不同的标签。
+% 例如, 反映情绪或下一个单词预测值的标签具有个人和地区差异。
+% \item\emph{Quantity skew}或不平衡：不同的客户机可以保存非常不同的数据量。
+% \end{itemize}
+
+Real-world federated learning datasets likely contain a mixture of these effects, and the characterization of cross-client differences in real-world partitioned datasets is an important open question. Most empirical work on synthetic non-IID datasets (e.g. \citep{mcmahan17fedavg, hsieh2019noniid}) have focused on label distribution skew, where a non-IID dataset is formed by partitioning a ``flat'' existing dataset based on the labels. A better understanding of the nature of real-world non-IID datasets will allow for the construction of controlled but realistic non-IID datasets for testing algorithms and assessing their resilience to different degrees of client heterogeneity.
+
+真实世界的联邦学习数据集可能包含这些影响的混合, 而真实世界分区数据集中跨客户端差异的表征是一个重要的开放问题。大多数关于合成非IID数据集的实证研究(例如, \citep{mcmahan17fedavg, hsieh2019noniid})都集中在标签分布偏斜上, 其中非IID数据集是通过基于标签划分“平面”现有数据集形成的。更好地理解现实世界中非IID数据集的性质, 将有助于构建受控但现实的非IID数据集, 用于测试算法并评估其对不同程度的客户端异构性的恢复能力。
+
+
+Further, different non-IID regimes may require the development of different mitigation strategies. For example, under feature-distribution skew, because $\Ploc(y \gvn x)$ is assumed to be common, the problem is at least in principle well specified, and training a single global model that learns $\Ploc(y \gvn x)$ may be appropriate. When the same features map to different labels on different clients, some form of personalization (\cref{sec:multimodel}) may be essential to learning the true labeling functions.
+
+此外, 不同的非IID制度可能需要制定不同的缓解策略。例如, 在特征分布偏斜下, 由于假定 $\Ploc(y \gvn x)$ 是常见的, 因此问题至少在原则上是明确的, 并且训练学习 $\Ploc(y \gvn x)$ 的单个全局模型可能是合适的。当相同的功能映射到不同客户端上的不同标签时, 某种形式的个性化 (\cref{sec:multimodel}) 对于学习真正的标签功能可能是必不可少的。
+
+\paragraph{Violations of independence}
+Violations of independence are introduced any time the distribution $\Pcli$ changes over the course of training; a prominent example is in cross-device FL, where devices typically need to meet eligibility requirements in order to participate in training (see \cref{sec:typical-training}). Devices typically meet those requirements at night local time (when they are more likely to be charging, on free wi-fi, and idle), and so there may be significant diurnal patterns in device availability. Further, because local time of day corresponds directly to longitude, this introduces a strong geographic bias in the source of the data. \citet{eichner19semicyclic} described this issue and some mitigation strategies, but many open questions remain.
+
+在培训过程中, 只要分配$\Pcli$发生变化, 就会出现违反独立性的情况；一个突出的例子是在跨设备FL中, 设备通常需要满足资格要求才能参加培训(请参见\cref{sec:typical-training})。设备通常在夜间本地时间(当它们更有可能充电、使用免费wi-fi和空闲时)满足这些要求, 因此设备可用性可能存在明显的日间模式。此外, 由于当地时间与经度直接对应, 因此在数据源中引入了强烈的地理偏差 \citet{eichner19semicyclic} 描述了这个问题和一些缓解策略, 但仍然存在许多悬而未决的问题。
+
+
+\paragraph{Dataset shift}
+Finally, we note that the temporal dependence of the distributions $\Pcli$ and $\Ploc$ may introduce dataset shift in the classic sense (differences between the train and test distributions). Furthermore, other criteria may make the set of clients eligible to train a federated model different from the set of clients where that model will be deployed.  For example, training may require devices with more memory than is needed for inference. These issues are explored in more depth in \cref{sec:fairness}. Adapting techniques for handling dataset shift to federated learning is another interesting open question.
+  
+最后, 我们注意到$\Pcli$和$\Ploc$分布的时间依赖性可能会引入经典意义上的数据集转移(训练分布和测试分布之间的差异)。此外, 其他标准可能使客户机集有资格培训联邦模型, 而不是部署该模型的客户机集。例如, 训练可能需要比推理所需内存更多的设备。这些问题将在\cref{sec:fairness}中进行更深入的探讨。另一个有趣的开放性问题是如何调整处理数据集迁移到联邦学习的技术。
+
+
+% Phil Gibbons, w/ edits from McMahan
+\subsubsection{Strategies for Dealing with Non-IID Data}
+
+The original goal of federated learning, training a single global model on the union of client datasets, becomes harder with non-IID data. One natural approach is to modify existing algorithms (e.g. through different hyperparameter choices) or develop new ones in order to more effectively achieve this objective. This approach is considered in \cref{sec:non-iid-algs}.
+
+联邦学习的最初目标, 即在客户机数据集的联邦上训练单个全局模型, 在使用非IID数据时变得更加困难。一种自然的方法是修改现有算法(例如通过不同的超参数选择)或开发新算法, 以便更有效地实现这一目标。此方法在\cref{sec:non-iid-algs}中考虑。
+
+
+% Zhouyuan Huo: data sharing strategy.
+For some applications, it may be possible to augment data in order to make the data across clients more similar. One approach is to create a small dataset which can be shared globally. This dataset may originate from a publicly available proxy data source, a separate dataset from the clients’ data which is not privacy sensitive, or perhaps a distillation of the raw data following \citet{wang2018dataset}.
+
+
+
+对于某些应用程序, 可能会增加数据, 以便使跨客户端的数据更相似。一种方法是创建一个可以全局共享的小数据集。该数据集可能来自公开可用的代理数据源、与客户数据无关的独立数据集, 或者可能来自\citet{wang2018dataset}之后原始数据的提炼。
+
+The heterogeneity of client objective functions gives additional importance to the question of how to craft the objective function --- it is no-longer clear that treating all examples equally makes sense. Alternatives include limiting the contributions of the data from any one user (which is also important for privacy, see \cref{sec:privacy}) and introducing other notions of fairness among the clients; see discussion in \cref{sec:fairness}. 
+
+客户目标函数的异质性给如何构建目标函数的问题带来了额外的重要性——现在已经不清楚平等对待所有示例是否有意义。备选方案包括限制来自任何一个用户的数据贡献(这对隐私也很重要, 请参见\cref{sec:privacy}), 并在客户中引入其他公平概念；请参阅\cref{sec:fairness}中的讨论。
+
+But if we have the capability to run training on the local data on each device (which is necessary for federated learning of a global model), is training a single global model even the right goal? There are many cases where having a single model is to be preferred, e.g. in order to provide a model to clients with no data, or to allow manual validation and quality assurance before deployment. Nevertheless, since local training is possible, it becomes feasible for each client to have a customized model. 
+
+This approach can turn the non-IID problem from a bug to a feature, almost literally --- since each client has its own model, the client's identity effectively parameterizes the model, rendering some pathological but degenerate non-IID distributions trivial. For example, if for each $i$,  $\Ploc_i(y)$ has support on only a single label, finding a high-accuracy global model may be very challenging (especially if $x$ is relatively uninformative), but training a high-accuracy local model is trivial (only a constant prediction is needed). Such multi-model approaches are considered in depth in \cref{sec:multimodel}. In addition to addressing non-identical client distributions, using a plurality of models can also address violations of independence stemming from changes in client availability. For example, the approach of \citet{eichner19semicyclic} uses a single training run but averages different iterates in order to provide different models for inference based on the timezone / longitude of clients.
+
+但是, 如果我们能够在每个设备上的本地数据上运行训练(这对于全局模型的联邦学习是必要的), 训练单个全局模型是否是正确的目标？在许多情况下, 最好使用单一模型, 例如, 为了向没有数据的客户提供模型, 或允许在部署前进行手动验证和质量保证。然而, 由于本地培训是可能的, 因此每个客户都有一个定制的模型是可行的。
+
+这种方法可以将非IID问题从一个bug变成一个特性, 几乎是字面上的——因为每个客户机都有自己的模型, 客户机的身份有效地参数化了模型, 使得一些病态但退化的非IID分布变得微不足道。例如, 如果对于每个$i$, $\Ploc_i(y)$只支持一个标签, 则查找高精度全局模型可能非常具有挑战性(特别是如果$x$相对缺乏信息), 但训练高精度局部模型很简单(只需要不断的预测)。此类多模型方法在\cref{sec:multimodel}中被深入考虑。除了解决不相同的客户机分布之外, 使用多个模型还可以解决由于客户机可用性的变化而导致的独立性违规问题。例如, \citet{eichner19semicyclic}的方法使用单个训练运行, 但对不同的迭代进行平均, 以便根据客户端的时区/经度提供不同的推理模型。
+
+\subsection{Optimization Algorithms for Federated Learning}\label{sec:optimization}
+% Primary authors: Gauri Joshi, Brendan McMahan, Zheng Xu, Sebastian Stich, Zach Charles
+% TODO - more citations? \citep{dean2012large}
+In prototypical federated learning tasks, the goal is to learn a single global model that minimizes the empirical risk function over the entire training dataset, that is, the union of the data across all the clients. The main difference between federated optimization algorithms and standard distributed training methods     is the need to address the characteristics of Table~\ref{tab:characteristics} --- for optimization, non-IID and unbalanced data, limited communication bandwidth, and unreliable and limited device availability are particularly salient. 
+
+在原型联邦学习任务中, 目标是学习单个全局模型, 该模型最小化整个训练数据集上的经验风险函数, 即所有客户机上的数据联邦。联邦优化算法和标准分布式训练方法之间的主要区别在于需要解决表~\ref{tab:characteristics}的特性——对于优化, 非IID和不平衡数据、有限的通信带宽以及不可靠和有限的设备可用性尤为突出。
+
+FL settings where the total number of devices is huge (e.g. across mobile devices) necessitate algorithms that only require a handful of clients to participate per round (client sampling). Further, each device is likely to participate no more than once in the training of a given model, so stateless algorithms are necessary. This rules out the direct application of a variety of approaches that are quite effective in the datacenter context, for example stateful optimization algorithms like ADMM, and stateful compression strategies that modify updates based on residual compression errors from previous rounds.
+
+如果FL设置中的设备总数巨大(例如, 跨移动设备), 则需要每轮只需要少数客户端参与的算法(客户端采样)。此外, 每个设备可能只参与一次给定模型的训练, 因此无状态算法是必要的。这排除了直接应用在数据中心环境中非常有效的各种方法的可能性, 例如ADMM之类的有状态优化算法, 以及基于前几轮剩余压缩错误修改更新的有状态压缩策略。
+
+
+Another important practical consideration for federated learning algorithms is composability with other techniques. Optimization algorithms do not run in isolation in a production deployment, but need to be combined with other techniques like cryptographic secure aggregation protocols (Section~\ref{sssec:secure_computations}), differential privacy (DP) (Section~\ref{sssec:private_disclosures}), and model and update compression (Section~\ref{sec:compr}). As noted in Section~\ref{sec:typical-training}, many of these techniques can be applied to primitives like ``\texttt{sum over selected clients}'' and ``\texttt{broadcast to selected clients}'', and so expressing optimization algorithms in terms of these primitives provides a  valuable separation of concerns, but may also exclude certain techniques such as applying updates asynchronously.
+
+联邦学习算法的另一个重要的实际考虑是与其他技术的可组合性。优化算法不会在生产部署中单独运行, 但需要与其他技术相结合, 如加密安全聚合协议(Section ~\ref{sssec:secure_computations})、差分隐私(DP)(Section ~\ref{sssec:private_disclosures})以及模型和更新压缩(Section ~\ref{sec:compr})。如第~\ref{sec:typical-training}节所述, 其中许多技术可以应用于诸如``'\texttt{sum over selected clients}''  和``'\texttt{broadcast to selected clients}''之类的原语, 因此根据这些原语表达优化算法提供了有价值的关注点分离, 但也可能排除某些技术, 如异步应用更新。
+ 
+One of the most common approaches to optimization for federated learning is the Federated Averaging algorithm \citep{mcmahan17fedavg}, an adaption of local-update or parallel SGD.\footnote{Federated Averaging applies local SGD to a randomly sampled subset of clients on each round, and proposes a specific update weighting scheme.} Here, each client runs some number of SGD steps locally, and then the updated local models are averaged to form the updated global model on the coordinating server. Pseudocode is given in Algorithm~\ref{alg:fedavg}.
+
+联邦学习优化的最常用方法之一是联邦平均算法, 它是本地更新或并行SGD的一种自适应。\footnote{联邦平均将本地SGD应用于每轮随机抽样的客户端子集, 并提出了一种特定的更新加权方案。}, 每个客户机在本地运行一定数量的SGD步骤, 然后对更新的本地模型进行平均, 以在协调服务器上形成更新的全局模型。伪码在算法~\ref{alg:fedavg}中给出。
+
+Performing local updates and  communicating less frequently with the central server addresses the core challenges of respecting data locality constraints and of the limited communication capabilities of mobile device clients. However, this family of algorithms also poses several new algorithmic challenges from an optimization theory point of view. In Section~\ref{sec:optimization}, we discuss recent advances and open challenges in federated optimization algorithms for the cases of IID and non-IID data distribution across the clients respectively. The development of new algorithms that specifically target the characteristics of the federated learning setting remains an important open problem.
+
+执行本地更新并减少与中央服务器的通信频率, 解决了尊重数据位置约束和移动设备客户端有限通信能力的核心挑战。然而, 从优化理论的角度来看, 这一系列算法也带来了一些新的算法挑战。在第~\ref{sec:optimization}节中, 我们分别讨论了IID和非IID数据跨客户端分布情况下联邦优化算法的最新进展和公开挑战。开发专门针对联邦学习环境特征的新算法仍然是一个重要的开放问题。
+
+
+\newcommand{\grad}{\triangledown}
+\newcommand{\T}{\rule{0pt}{2.2ex}}
+
+\begin{figure}
+
+\begin{minipage}[t]{.4\textwidth}
+%\renewcommand{\arraystretch}{1.2}
+\begin{tabular}[t]{rl}    
+\toprule
+\T $N$ & Total number of clients \\
+\T $M$ & Clients per round \\
+\T $T$ & Total communication rounds \\
+\T $K$ & Local steps per round. \\
+%\hline
+%\multicolumn{2}{l}{\T{\small Other assumptions:}}\\
+%\multicolumn{2}{l}{$\quad H$-smooth and convex}\\
+%\multicolumn{2}{l}{$\quad \sigma^2$-variance stochastic gradients}\\
+\bottomrule
+\end{tabular}
+\captionof{table}{Notation for the discussion of FL algorithms including Federated Averaging.}
+\label{tab:notation}
+\vfill
+\end{minipage}
+\hfill
+%
+%
+%
+\begin{minipage}[t]{.55\textwidth}
+\rule{\textwidth}{\heavyrulewidth}  % match \toprule, \bottomrule
+\vspace{-0.16in}
+\begin{algorithmic}
+\renewcommand{\arraystretch}{1.6}
+%\setstretch{1.15}
+\SUB{Server executes:}
+  \STATE initialize $x_0$
+  \FOR{each round $t = 1, 2, \dots$, T}
+     \STATE $S_t \leftarrow$ (random set of $M$ clients)
+     \FOR{each client $i \in S_t$ \textbf{in parallel}}
+      \STATE $x_{t+1}^i \leftarrow \text{ClientUpdate}(i, x_t)$ 
+     \ENDFOR
+     \STATE $x_{t+1} \leftarrow \sum_{k=1}^M \frac{1}{M} x_{t+1}^i$
+  \ENDFOR
+  \STATE
+
+ \SUB{ClientUpdate($i, x$):}\ \ \
+    \FOR{local step $j = 1, \dots, K$}
+     
+      \STATE $x \leftarrow x - \eta \grad f(x; z)$ for $z \sim \mathcal{P}_i$
+    \ENDFOR
+ \STATE return $x$ to server
+ \end{algorithmic}
+ \rule{\textwidth}{\heavyrulewidth}
+ \captionof{algorithm}{Federated Averaging (local SGD), when all clients have the same amount of data.}\label{alg:fedavg}
+ \vfill
+\end{minipage}
+
+\end{figure}
+
+
+
+\subsubsection{Optimization Algorithms and Convergence Rates for IID Datasets}
+\label{sec:iid}
+% Primary authors: Gauri Joshi, Brendan McMahan, Sebastian Stich
+
+While a variety of different assumptions can be made on the per-client functions being optimized, the most basic split is between assuming IID and non-IID data. Formally, having IID data at the clients means that each mini-batch of data used for a client's local update is statistically identical to a uniformly drawn sample (with replacement) from the entire training dataset (the union of all local datasets at the clients). Since the clients independently collect their own training data which vary in both size and distribution, and these data are not shared with other clients or the central node, the IID assumption clearly almost never holds in practice. However, this assumption greatly simplifies theoretical convergence analysis of federated optimization algorithms, as well as establishes a baseline that can be used to understand the impact of non-IID data on optimization rates. Thus, a natural first step is to obtain an understanding of the landscape of optimization algorithms for the IID data case.
+
+虽然可以对正在优化的每个客户端函数进行各种不同的假设, 但最基本的划分是假设IID和非IID数据。从形式上讲, 在客户端拥有IID数据意味着用于客户端本地更新的每个小批量数据在统计上与来自整个培训数据集(客户端所有本地数据集的联邦)的统一抽取样本(带替换)相同。由于客户独立收集自己的培训数据, 这些数据在大小和分布上都有所不同, 并且这些数据没有与其他客户或中心节点共享, 因此IID假设显然在实践中几乎不成立。然而, 该假设大大简化了联邦优化算法的理论收敛性分析, 并建立了一个基线, 可用于了解非IID数据对优化速率的影响。因此, 自然的第一步是了解IID数据情况下优化算法的前景。
+
+% Jianyu: I would suggest to use the following objective function which is commonly used in distributed optimization literature and can naturally be extended to non-IID case. 
+% \[ \min_{x} \in \R^m F(x) := \frac{1}{N}\sum_{i=1}^N \E_{z \sim \mathcal{P}_i}[f_i(x;z)] \], when P_i's are identical to each other, the problem reduces to the IID setting.
+
+\noindent Formally, for the IID setting let us standardize the stochastic optimization problem
+\[ 
+   \min_{x \in \R^m} F(x) := \E_{z \sim \mathcal{P}} [f(x; z)] \,.
+\]
+We assume an intermittent communication model as in e.g.\ \citet[Sec. 4.4]{woodworth18graphoracle}, where $M$ stateless clients participate in each of $T$ rounds, and during each round, each client can compute gradients for $K$ samples (e.g. minibatches) $z_1, \dots, z_K$ sampled IID from $\mathcal{P}$ (possibly using these to take sequential steps). In the IID-data setting clients are interchangeable, and we can without loss of generality assume $M=N$. Table~\ref{tab:notation} summarizes the notation used in this section.
+
+
+我们假设一个间歇性的通信模型, 如\citet[Sec. 4.4]{woodworth18graphoracle}, 其中$M$无状态客户端参与$T$轮中的每一轮, 并且在每轮中, 每个客户端都可以计算$K$样本(例如小批量)$z_1, \dots, z_K$ 从$\mathcal{P}$取样的IID的梯度在IID数据设置中, 客户机是可互换的, 我们可以在不丧失一般性的情况下假设$M=N$。Table ~\ref{tab:notation} 总结了本节中使用的符号。
+
+Different assumptions on $f$ will produce different guarantees. We will first discuss the convex setting and later review results for  non-convex problems.
+%In the case when $f(\cdot; z)$ is convex, we may also assume it is $L$-Lipschitz and/or $H$-smooth for all $z$.
+
+对$f$的不同假设将产生不同的保证。我们将首先讨论凸设置, 然后回顾非凸问题的结果。
+
+\paragraph{Baselines and state-of-the-art for convex problems}
+%Sebastian
+In this section we review convergence results for $H$-smooth, convex (but not necessarily strongly convex) functions under the assumption that the variance of the stochastic gradients is bounded by $\sigma^2$.
+More formally, by $H$-smooth we mean that for all $z$, $f(\cdot; z)$ is differentiable and has a $H$-Lipschitz gradient, that is, for all choices of $x, y$
+\[ 
+    \|\nabla f(x, z) - \nabla f(y, z)\| \leq H\|x-y\|.
+\]
+We also assume that for all $x$, the stochastic gradient $\nabla_x f(x; z)$ satisfies
+\[
+    \E_{z \sim \mathcal{P}}\|\nabla_x f(x; z) - \nabla F(x)\| \leq \sigma^2.
+\]
+When analyzing the convergence rate of an algorithm with output $x_T$ after $T$ iterations, we consider the term
+\begin{equation}\label{eq:convergence_rate_term}
+    \E[F(x_T)] - F(x^*)
+\end{equation}
+where $x^* = \arg\min_x F(x)$. All convergence rates discussed herein are upper bounds on this term.
+A summary of convergence results for such functions is given in Table~\ref{tab:iid-convergence}. 
+
+Federated averaging (a.k.a.\ parallel SGD/local SGD) competes with two natural baselines: First, we may keep $x$ fixed in local updates during each round, and compute a total of $K M$ gradients at the current $x$, in order to run accelerated minibatch SGD. Let $\bar{x}$ denote the average of $T$ iterations of this algorithm. We then have the upper bound
+\[
+ \BO \left(\frac{H}{T^2} + \frac{\sigma}{\sqrt{T K M}}\right)
+\]
+for convex objectives \cite{Lan2012,cotter2011acmb,dekel12optimal}. Note that the first expectation is taken with respect to the randomness of $z$ in the training procedure as well.
+
+A second natural baseline is to ignore all but 1 of the $M$ active clients, which allows (accelerated) sequential SGD to execute for $K T$ steps. Applying the same general bounds cited above, this approach offers an upper bound of
+\[
+ \BO\left( \frac{H}{(TK)^2} + \frac{\sigma}{\sqrt{TK}}\right).
+\]
+%Sebastian:
+Comparing these two results, we see that minibatch SGD attains the optimal `statistical' term ($\nicefrac{\sigma}{\sqrt{TKM}}$), whilst SGD on a single device (ignoring the updates of the other devices) achieves the optimal `optimization' term ($\nicefrac{H}{(TK)^2}$). 
+
+% Jianyu, Sebastian
+The convergence analysis of local-update SGD methods is an active current area of research \citep{stich2018local, lin2018don, yu2018parallel, wang2018cooperative, reisizadeh2019fedpaq,patel19communication,khaled2019better,woodworth2020local}. 
+The first convergence results for local-update SGD methods were derived under the bounded gradient norm  assumption in \citet{stich2018local} for strongly-convex and in \citet{yu2018parallel} for non-convex objective functions. These analyses could attain the desired $\sigma/\sqrt{TKM}$ statistical term with suboptimal optimization term (in Table~\ref{tab:iid-convergence} we summarize these results for the middle ground of convex functions).
+
+By removing the bounded gradient assumption, \citet{wang2018cooperative} and \citet{stich2019error} could further improve the optimization term to $HM/T$. These result show that if the number of local steps $K$ is smaller than $T/M^3$ then the (optimal) statistical term is dominating the rate. However, for typical cross-device applications we might have $T=10^6$ and $M=100$ (\cref{tab:sizes}), implying $K=1$.
+
+Often in the literature the convergence bounds are accompanied by a discussion on how large $K$ may be chosen in order to reach asymptotically the same statistical term as the  convergence rate of mini-batch SGD. For strongly convex functions, this bound was improved by \citet{khaled2019better} and further in \citet{stich2019error}.
+
+% Sebastian
+\begin{table}
+\begin{centering}
+\begin{minipage}{\linewidth}
+%\resizebox{\linewidth}{!}{%
+\centering { %Seb: removed resize, as it now fits well
+\begin{tabular}{@{}llll@{\hskip-2pt}l@{}} %S: this is not the proper way, need to polish table...
+\toprule
+\phantom{X}  & Method & Comments & \multicolumn{2}{l}{Convergence}  \\ 
+ \midrule
+\multicolumn{4}{l}{\small \textbf{\textit{Baselines}}} \\
+ & mini-batch SGD & batch size $KM$       
+      & $\BO \left(\frac{H}{T}\right.$ & $ \left. + \frac{\sigma}{\sqrt{TKM}} \right)$  \\ 
+ & SGD & (on 1 worker, no communication) 
+      & $\BO \left(\frac{H}{TK}\right.$ & $\left. + \frac{\sigma}{\sqrt{TK}} \right)$  \\
+\midrule
+\multicolumn{4}{l}{\small \textbf{\textit{Baselines with acceleration}}\footnote{There are no accelerated fed-avg/local SGD variants so far}} \\
+ & A-mini-batch SGD~\cite{Lan2012,cotter2011acmb} & batch size $KM$        
+     & $\BO \left(\frac{H}{T^2}\right.$ & $\left. + \frac{\sigma}{\sqrt{TKM}} \right)$  \\
+ & A-SGD~\cite{Lan2012}   & (on 1 worker, no communication) 
+     & $\BO \left(\frac{H}{(TK)^2}\right.$ & $\left. + \frac{\sigma}{\sqrt{TK}} \right)$  \\
+\midrule
+\multicolumn{4}{l}{\small \textbf{\textit{Parallel SGD / Fed-Avg / Local SGD}}} \\
+ & \citet{yu2018parallel}\footnote{This paper considers the smooth non-convex setting, we adapt here the results for our setting.\label{fn:non-convex}}, \citet{stich2018local}\footnote{This paper considers the smooth strongly convex setting, we adapt here the results for our setting.}  & gradient norm bounded by $G$ 
+     & $\BO \left(\frac{HKM}{T}\frac{G^2}{\sigma^2}\right.$ &$\left. + \frac{\sigma}{\sqrt{TKM}} \right)$ \\
+ & \multicolumn{2}{l}{\citet{wang2018cooperative}\footref{fn:non-convex}, \citet{stich2019error}}
+     & $\BO \left(\frac{HM}{T} \right.$ & $\left. + \frac{\sigma}{\sqrt{TKM}} \right)$ \\ \midrule
+\multicolumn{4}{l}{\small \textbf{\textit{Other algorithms}}} \\
+ & SCAFFOLD \cite{karimireddy2019scaffold} & control variates and two stepsizes 
+     & $\BO \left(\frac{H}{T} \right.$ & $\left. + \frac{\sigma}{\sqrt{TKM}} \right)$ \\
+\bottomrule
+\end{tabular}
+}%
+\end{minipage}
+\caption{Convergence rates for a (non-comprehensive) set of distributed optimization algorithms in the IID-data setting. We assume $M$ devices participate in each iterations, and the loss functions are $H$-smooth, convex, and we have access to stochastic gradients with variance at most $\sigma^2$. All rates are upper bounds on~\eqref{eq:convergence_rate_term} after $T$ iterations (potentially with some iterate averaging scheme).\\
+%\sketch{are there more milestone results to add here?}
+}
+\label{tab:iid-convergence}
+\end{centering}
+\end{table}
+
+% Jianyu (Sebastian merged this discussion  to the paragraph above)
+%As we intuitively expect, the error floor at convergence increases with the number of local updates. However, 
+%it can be shown that if the number of local updates and the learning rate is kept small enough, then the convergence rate is order-wise same as synchronous mini-batch SGD. With bounded gradient norm assumption, \citet{stich2018local} and 
+
+For non-convex objectives, \citet{yu2018parallel} showed that local SGD can achieve asymptotically an error bound $1/\sqrt{TKM}$ if the number of local updates $K$ are smaller than $T^{1/3}/M$. This convergence guarantee was further improved by \citet{wang2018cooperative} who removed the bounded gradient norm assumption and showed that the number of local updates can be as large as $T/M^3$. The analysis in \cite{wang2018cooperative} can also be applied to other algorithms with local updates, and thus yields the first convergence guarantee for decentralized SGD with local updates (or periodic decentralized SGD) and elastic averaging SGD \cite{zhang2015deep}.
+\citet{haddadpour2019local} improves the bounds in \citet{wang2018cooperative} for functions satisfying the Polyak-Lojasiewicz (PL) condition \citep{karimi2016linear}, a generalization of strong convexity. In particular, \citet{haddadpour2019local} show that for PL functions, $T^2/M$ local updates per round leads to a $\BO(1/TKM)$ convergence.
+
+While the above works focus on convergence as a function of the number of iterations performed, practitioners often care about wall-clock convergence speed. Assessing this must take into account the effect of the design parameters on the time spent per iteration based on the relative cost of communication and local computation. Viewed in this light, the focus on seeing how large $K$ can be while maintaining the statistical rate may not be the primary concern in federated learning, where one may assume almost infinite datasets (very large $N$). The costs (at least in wall-clock time) are small for increasing $M$, and so it may be more natural to increase $M$ sufficiently to match the optimization term, and then tune $K$ to maximize wall-clock optimization performance. 
+%Let us consider the number of local updates $K$ at each client (assumed to be equal across selected clients) as the design parameter in question. 
+How then to choose $K$? Performing more local updates at the clients will increase the divergence between the resulting local models at the clients, before they are averaged. As a result, the error convergence in terms of training loss versus the total number of sequential SGD steps $TK$ is slower. However, performing more local updates saves significant communication cost and reduces the time spent per iteration. The optimal number of local updates strikes a balance between these two phenomena and achieves the fastest error versus wallclock time convergence. \citet{wang2018adaptive} propose an adaptive communication strategy that adapts $K$ according to the training loss at regular intervals during the training.
+
+Another important design parameter in federated learning is the model aggregation method used to update the global model using the updates made by the selected clients. In the original federated learning paper, \citet{mcmahan17fedavg} proposes taking a weighted average of the local models, in proportion to the size of local datasets. For IID data, where each client is assumed to have a infinitely large dataset, this reduces to taking a simple average of the local models. However, it is unclear whether this aggregation method will result in the fastest error convergence. 
+
+% mcmahan --- commented this out because elastic averaging type approaches are less
+% relevant at least for cross-device FL, because they require stateful clients that participate in every round.
+%For example, elastic averaging SGD \cite{zhang2015deep} which allows a slack between the global and local models by adding a proximal term to the objective function has been shown to perform well in the standard distributed SGD framework.
+
+%\paragraph{Open problems} 
+
+There are many open questions in federated optimization, even with IID data. 
+\citet{woodworth18graphoracle} highlights several gaps between upper and lower bounds for optimization relevant to the federated learning setting, particularly for ``intermittent communication graphs'', which captures local SGD approaches, but convergence rates for such approaches are not known to match the corresponding lower bounds. In Table~\ref{tab:iid-convergence} we highlight convergence results for the convex setting. Whilst most schemes are able to reach the asymptotically dominant statistical term, none are able to match the convergence rate of accelerated mini-batch SGD. It is an open problem if federated averaging algorithms can close this gap.
+
+Local-update SGD methods where all $M$ clients perform the same number of local updates may suffer from a common scalability issue---they can be bottlenecked if any one client unpredictably slows down or fails. Several approaches for dealing with this are possible, but it is far from clear which are optimal, especially when the potential for bias is considered (see \cref{sec:fairness}). \citet{bonawitz19sysml} propose over-provisioning clients (e.g., request updates from $1.3 M$ clients), and then accepting the first $M$ updates received and rejecting updates from stragglers. A slightly more sophisticated solution is to fix a time window and allow clients to perform as many local updates $K_i$ as possible within this time, after which their models are averaged by a central server. \citet{wang2020tackling} analyzed the computational heteogeneity introduced by this approach in theory. An alternative method to overcome the problem of straggling clients is to fix the number of local updates at $\tau$, but allow clients to update the global model in an asynchronous or lock-free fashion. Although some previous works \citep{zhang2015deep, Lian2018, dutta2018slow} have proposed similar methods, the error convergence analysis is an open and challenging problem. A larger challenge in the FL setting, however, is that as discussed at the beginning of \cref{sec:optimization}, asynchronous approaches may be difficult to combine with complimentary techniques like differential privacy or secure aggregation. 
+
+Besides the number of local updates, the choice of the size of the set of clients selected per training round presents a similar trade-off as the number of local updates. Updating and averaging a larger number of client models per training round yields better convergence, but it makes the training vulnerable to slowdown due to unpredictable tail delays in computation/communication at/with the clients. 
+
+% mcmahan: Do we have a citation for this? 
+% Jakub: I am not familiar with this claim. Commenting it out for now...
+% Another pertinent open question that local-update SGD methods empirically show an improved test performance as compared to synchronous SGD, but a theoretical explanation for this remains open.
+
+
+The analysis of local SGD / Federated Averaging in the non-IID setting is even more challenging; results and open questions related to this are considered in the next section, along with specialized algorithms which directly address the non-IID problem.
+
+
+\begin{table}
+\renewcommand{\arraystretch}{1.1}
+\begin{center}
+\begin{tabularx}{\textwidth}{ccX}
+\multicolumn{3}{c}{\textbf{Non-IID assumptions}} \\
+\toprule
+\textbf{Symbol} & \textbf{Full name} & \textbf{Explanation} \\
+\midrule
+  BCGV &  bounded inter-client gradient variance & $\E_i \|\nabla f_i(x) - \nabla F(x) \|^2 \leq \eta^2 $ \\
+  BOBD & bounded optimal objective difference & $F^* - \E_i[f^*_i] \leq \eta^2 $\\
+  BOGV & bounded optimal gradient variance & $\E_i \|\nabla f_i(x^*) \|^2 \leq \eta^2$ \\
+  BGV & bounded gradient dissimilarity & $\nicefrac{\E_i \|\nabla f_i(x) \|^2}{\|\nabla F(x) \|^2} \leq \eta^2$ \\
+\bottomrule
+\end{tabularx}
+\vspace{0.5cm}
+\begin{tabularx}{\textwidth}{lX}
+\\
+\multicolumn{2}{c}{\textbf{Other assumptions and variants}} \\
+\toprule
+\textbf{Symbol} & \textbf{Explanation} \\
+\midrule
+  %\multicolumn{2}{c}{The following theoretical results assume smoothness of each client function $f_i(x)$ } \\
+  CVX &  Each client function $f_i(x)$ is convex.   \\
+  SCVX & Each client function $f_i(x)$ is $\mu$-strongly convex. \\
+  % Note: PLI is only used in \cite{haddadpour2019convergence}, which due to technical errors in the paper, we have omitted references to.
+  % PLI &  $f_i(x)$ satisfies $\mu$-Polyak-Lojasiewicz inequality \\
+  BNCVX & Each client function has bounded nonconvexity with $\nabla^2 f_i(x) \succeq -\mu I $. \\
+  \hline
+  BLGV & The variance of stochastic gradients on local clients is bounded. \\
+  BLGN & The norm of any local gradient is bounded. \\
+  LBG & Clients use the full batch of local samples to compute updates. \\
+  \hline
+  Dec & Decentralized setting, assumes the the connectivity of network is good. \\
+  AC & All clients participate in each round. \\
+  1step & One local update is performed on clients in each round. \\
+  Prox & Use proximal gradient steps on clients. \\
+  VR & Variance reduction which needs to track the state. \\
+\bottomrule
+\end{tabularx}
+\vspace{0.5cm}
+\begin{tabularx}{\textwidth}{llllX}
+\multicolumn{5}{c}{\textbf{Convergence rates}}\\
+\toprule
+\textbf{Method} & \textbf{Non-IID} & \textbf{Other assumptions} & \textbf{Variant} & \textbf{Rate} \\
+\midrule
+\citet{Lian2017b} & BCGV  &  BLGV &  Dec; AC; 1step & $O(\nicefrac{1}{T}) + O(\nicefrac{1}{\sqrt{NT}})$\\
+\hline
+PD-SGD \citep{li2019communication} & BCGV & BLGV & Dec; AC & $O(\nicefrac{N}{T}) + O(\nicefrac{1}{\sqrt{NT}})$ \\
+\hline
+MATCHA \citep{wang2019matcha} & BCGV & BLGV & Dec & $O(\nicefrac{1}{\sqrt{TKM}}) + O(\nicefrac{M}{KT})$ \\
+\hline
+\citet{khaled2019analysis} &  BOGV   & CVX & AC; LBG & $O(\nicefrac{N}{T}) + O(\nicefrac{1}{\sqrt{NT}})$\\
+\hline
+\citet{li2019convergence} & BOBD & SCVX; BLGV; BLGN & - & $O(\nicefrac{K}{T})$\\
+\hline
+% Note: Due to errors in the paper, we have removed references to \cite{haddadpour2019convergence}.
+% \multirow{2}{\linewidth}{\citet{haddadpour2019convergence}} & \multirow{2}{\linewidth}{OBD}  & \multirow{2}{\linewidth}{PLI} & AC & $O(e^{-T}) + O(\Gamma)$\\
+% \cline{4-5}
+% &&& - & $O(\nicefrac{1}{TKM}) + O(\nicefrac{|\Gamma|}{T})+ O(|\Gamma|) $
+% \\
+% \hline
+FedProx \citep{li2018federated} & BGV & BNCVX & Prox &$O(\nicefrac{1}{\sqrt{T}})$\\
+\hline
+SCAFFOLD \citep{karimireddy2019scaffold} & - & SCVX; BLGV & VR & $O(\nicefrac{1}{TKM})+O(e^{-T})$
+\\
+\bottomrule
+\end{tabularx}
+\caption{Convergence rates for a (non-comprehensive) set of federated optimization methods in non-IID settings. We summarize the key assumptions for non-IID data, local functions on each client, and other assumptions. We also present the variant of the algorithm comparing to Federated Averaging and the convergence rates that eliminate constant.
+%\sketch{Zheng: the rate of \citep{li2018federated} is based on my guess. \citep{haddadpour2019convergence} has a table comparing rates in the paper, and also rates donot depend on non-IID assumptions, which I did not get the inuition.}
+}
+\label{tab:non-iid-convergence}
+\end{center}
+\end{table}
+
+
+\subsubsection{Optimization Algorithms and Convergence Rates for Non-IID Datasets}\label{sec:non-iid-algs}
+%\sketch{Different notions of non-IID?} 
+% Primary authors: Zheng Xu, Zhouyuan Huo, Hang Qi, Tara Javidi, Phil Gibbons, contribute_and_add_your_name
+
+% Hang Qi:
+In contrast to well-shuffled mini-batches consisting of independent and identically distributed (IID) examples in centralized learning, federated learning uses local data from end user devices, leading to many varieties of non-IID data (Section~\ref{sec:noniid}).
+
+In this setting, each of $N$ clients has a local data distribution $\mathcal{P}_i$ and a local objective function
+$$f_i(x) = \E_{z \sim \mathcal{P}_i}[ f(x ; z)]$$
+where we recall that $f(x ; z)$ is the loss of a model $x$ at an example $z$. We typically wish to minimize
+\begin{equation}
+F(x) = \frac{1}{N}\sum_{i=1}^N f_i(x) \,.
+\end{equation}
+Note that we recover the IID setting when each $\mathcal{P}_i$ is identical. We will let $F^*$ denote the minimum value of $F$, obtained the point $x^*$. Analogously, we will let $f_i^*$ denote the minimum value of $f_i$.
+
+As in the IID setting, we assume an intermittent communication model (e.g.\ \citet[Sec. 4.4]{woodworth18graphoracle}), where $M$ stateless clients participate in each of $T$ rounds, and during each round, each client can compute gradients for $K$ samples (e.g. minibatches). The difference here is that the samples $z_{i, 1}, \ldots, z_{i, K}$ sampled at client $i$ are drawn from the client's local distribution $\mathcal{P}_i$. Unlike the IID setting, we cannot necessarily assume $M = N$, as the client distributions are not all equal. In the following, if an algorithm relies on $M = N$, we will omit $M$ and simply write $N$. We note that while such an assumption may be compatible with the cross-silo federated setting in Table \ref{tab:characteristics}, it is generally infeasible in the cross-device setting.
+
+%Zheng Xu, Jianyu Wang
+While \citep{stich2018local,yu2018parallel,wang2018cooperative,stich2019error} mainly focused on the IID case, the analysis technique can be extended to the non-IID case by adding an assumption on data dissimilarities, for example by constraining the difference between client gradients and the global gradient \citep{Lian2017b,li2018federated,li2019communication,wang2019matcha,wang2020tackling} or the difference between client and global optimum values \citep{li2019convergence,khaled2019analysis}. Under this assumption, \citet{yu2019linear} showed that the error bound of local SGD in the non-IID case becomes worse. In order to achieve the rate of $1/\sqrt{TKN}$ (under non-convex objectives), the number of local updates $K$ should be smaller than $T^{1/3}/N$, instead of $T/N^3$
+%\sketch{Seb: see comments above; whilst the bound $K \leq (TK/M^3)^{1/2}$ is technically correct, I find it more intuitive to solve for $K$, i.e.\ $K \leq T/M^3$ in this case?} 
+as in the IID case \cite{wang2018cooperative}. \citet{li2018federated} proposed to add a proximal term in each local objective function so as to make the algorithm be more robust to the heterogeneity across local objectives. The proposed FedProx algorithm empirically improves the performance of federated averaging. 
+%Recently, a detailed analysis of FedProx was provided in~\cite{wang2020tackling}.
+%\citet{haddadpour2019local} further showed that under a Polyak-Lojasiewicz condition, the error bound of local SGD improves and this enables the use of a larger number of local updates $\sqrt{T/M^3}$.
+\citet{khaled2019analysis}  assumes all clients participate, and uses batch gradient descent on clients, which can potentially converge faster than stochastic gradients on clients.  
+
+Recently, a number of works have made progress in relaxing the assumptions necessary for analysis so as to better apply to practical uses of Federated Averaging. For example, \citet{li2019convergence} studied the convergence of Federated Averaging in a more realistic setting where only a subset of clients are involved in each round. In order to guarantee the convergence, they assumed that the clients are selected either uniformly at random or with probabilities that are in proportion to the sizes of local datasets. % Jianyu: It isn't very clear what insights they provide regarding the number of selected clients.
+Nonetheless, in practice the server may not be able to sample clients in these idealized ways --- in particular, in cross-device settings only devices that meet strict eligibility requirements (e.g. charging, idle, free WiFi) will be selected to participate in the computation. At different times within a day, the clients characteristics can vary significantly. \citet{eichner19semicyclic} formulated this problem and studied the convergence of semi-cyclic SGD, where multiple blocks of clients with different characteristics are sampled from following a regular cyclic pattern (e.g. diurnal). Clients can perform different local steps because of heterogeneity in their computing capacities. \citet{wang2020tackling} proves that FedAvg and many other federated learning algorithms will converge to the stationary points of a mismatched objective function in the presence of heterogeneous local steps. They refer to this problem as \emph{objective inconsistency} and propose a simple technique to eliminate the inconsistency problem from federated learning algorithms.
+
+最近，许多工作在放宽分析所需的假设方面取得了进展，以便更好地应用于联邦平均的实际应用。例如，\citet{li2019convergence} 在更现实的环境中研究了联合平均的收敛性，其中每轮只涉及一部分客户端。为了保证收敛，他们假设客户端是随机均匀地选择的，或者与本地数据集的大小成正比的概率。 % 建宇：目前还不清楚他们对选定客户的数量提供了哪些见解。
+尽管如此，在实践中，服务器可能无法以这些理想化的方式对客户端进行采样——特别是，在跨设备设置中，只有满足严格资格要求（例如充电、空闲、免费 WiFi）的设备才会被选择参与计算。在一天内的不同时间，客户特征可能会有很大差异。 \citet{eichner19semicyclic} 制定了这个问题并研究了半循环 SGD 的收敛性，其中从遵循规则循环模式（例如昼夜）中采样具有不同特征的多个客户端块。由于计算能力的异构性，客户端可以执行不同的本地步骤。 \citet{wang2020tackling} 证明 FedAvg 和许多其他联邦学习算法将在存在异构局部步骤的情况下收敛到不匹配目标函数的驻点。他们将这个问题称为 \emph {objective inconsistency} 并提出了一种简单的技术来消除联邦学习算法中的不一致问题。
+
+We summarize recent theoretical results in Table~\ref{tab:non-iid-convergence}. All the methods in \cref{tab:non-iid-convergence} assume smoothness or Lipschitz gradients for the local functions on clients. 
+The error bound is measured by optimal objective \eqref{eq:convergence_rate_term} for convex functions and norm of gradient for nonconvex functions. 
+For each method, we present the key non-IID assumption, assumptions on each client function $f_i(x)$, and other auxiliary assumptions. We also briefly describe each method as a variant of the federated averaging algorithm, and show the simplified convergence rate eliminating constants.
+ Assuming the client functions are strongly convex could help the convergence rate \citep{li2019convergence,karimireddy2019scaffold}.
+ Bounded gradient variance, which is a widely used assumption to analyze stochastic gradient methods, is often used when clients use stochastic local updates \citep{Lian2017b,li2019convergence,li2019communication,wang2019matcha,karimireddy2019scaffold}. 
+ \citet{li2019convergence} directly analyzes the Federated Averaging algorithm, which applies $K$ steps of local updates on randomly sampled $M$ clients in each round, and presents a rate that suggests local updates $(K > 1)$ could slow down the convergence. Clarifying the regimes where $K > 1$ may hurt or help convergence is an important open problem.
+
+\paragraph{Connections to decentralized optimization} The objective function of federated optimization has been studied for many years in the decentralized optimization community. 
+% Jianyu: maybe several sentences here to introduce decentralized SGD and stochastic gradient push
+As first shown in \citet{wang2018cooperative}, the convergence analysis of decentralized SGD can be applied to or combined with local SGD with a proper setting of the network topology matrix (mixing matrix). In order to reduce the communication overhead, \citet{wang2018cooperative} proposed periodic decentralized SGD (PD-SGD) which allows decentralized SGD to have multiple local updates as Federated Averaging. This algorithm is  extended by \citet{li2019communication} to the non-IID case. MATCHA~\citep{wang2019matcha} further improves the performance of PD-SGD by randomly sampling clients for computation and communication, and provides a convergence analysis showing that local updates can accelerate convergence. 
+
+% All the methods in \cref{tab:non-iid-convergence} assume smoothness or Lipschitz gradients for the local functions on clients. 
+% Assuming the client functions are strongly convex or the generalized nonconvex form (Polyak-Lojasiewic inequality) could help the convergence rate \citep{li2019convergence,karimireddy2019scaffold}. 
+% Bounded gradient variance, which is a widely used assumption to analyze stochastic gradient methods, is often used when clients use stochastic local updates \citep{Lian2017b,li2019convergence,li2019communication,wang2019matcha,karimireddy2019scaffold}. 
+% Only \citet{li2019convergence} and \citet{haddadpour2019convergence} directly analyze federated averaging algorithm, which applies $K$ steps of local updates on randomly sampled $M$ clients in each round.  \citet{li2019convergence} presents a rate that suggests local updates could slow down the convergence. \citet{haddadpour2019convergence} presents convergence to a neighborhood of optimal defined by the difference between local optimal on clients and the global optimal. 
+% When all clients locally update once before communication in a decentralized network, \citet{Lian2017b} provides convergence rate that is comparable with minibatch SGD.
+% PD-SGD~\citep{li2019convergence} reduces communication frequency by switching between local SGD and decentralized SGD~\citep{Lian2017b} in each round. 
+% MATCHA~\citep{wang2019matcha} further improves the efficiency of decentralized SGD by randomly sampling clients for computation and communication. Moreover, MATCHA~\citep{wang2019matcha} provides convergence analysis where local updates can accelerate convergence. 
+
+\paragraph{Acceleration, variance reduction and adaptivity}
+Momentum, variance-reduction, and adaptive learning rates are all promising techniques to improve convergence and generalization of first-order methods. However, there is no single manner in which to incorporate these techniques into FedAvg. SCAFFOLD \citep{karimireddy2019scaffold} models the difference in client updates using control variates to perform variance reduction. Notably, this allows convergence results not relying on bounding the amount of heterogeneity among clients. As for momentum, \citet{yu2019linear} propose allowing each client to maintain a local momentum buffer and average the local buffers and the local model parameters at each communication round. Although this method empirically improves the final accuracy of local SGD, this doubles the per-round communication cost. A similar scheme is used by \citet{xie2019local} to design a variant of local SGD in which clients locally perform Adagrad~\citep{mcmahan2010adaptive, duchi2011adaptive}. \citet{reddi2020adaptive} instead proposes using adaptive learning rates at the server-level, developing federated versions of adaptive optimization methods with the same communication cost as FedAvg. This framework generalizes the server momentum framework proposed by \citet{hsu2019measuring,wang2019slowmo}, which allows momentum without increasing communication costs. While both \citep{yu2019linear,wang2019slowmo} showed that the momentum variants of local SGD can converge to stationary points of non-convex objective functions at the same rate as synchronous mini-batch SGD, it is challenging to prove momentum accelerates the convergence rate in the federated learning setting. Recently, \citet{karimireddy2020mime} proposed a general approach for adapting centralized optimization algorithms to the heterogeneous federated setting (MIME framework and algorithms).
+
+
+% TODO(mcmahan): Add a concluding statement about the importance of the relevant FL assumptions.
+
+
+\subsection{Multi-Task Learning, Personalization, and Meta-Learning}
+\label{sec:multimodel}
+
+In this section we consider a variety of ``multi-model'' approaches --- techniques that result in effectively using different models for different clients at inference time. These techniques are particularly relevant when faced with non-IID data (Section~\ref{sec:noniid}), since they may outperform even the best possible shared global model. We note that personalization has also been studied in the fully decentralized setting \citep{Vanhaesebrouck2017,Bellet2018a,Zantedeschi2019,Almeida2018}, where training individual models is particularly natural.
+
+
+在本节中, 我们考虑各种“多模型”方法——在推理时为不同客户端有效使用不同模型的技术。这些技术在面对非 IID 数据时尤其重要(Section~\ref{sec:noniid}), 因为它们甚至可能胜过最好的共享全局模型。我们注意到, 在完全去中心化的设置 \citep{Vanhaesebrouck2017,Bellet2018a,Zantedeschi2019,Almeida2018} 中也研究了个性化, 其中训练单个模型特别自然。
+
+
+
+
+\subsubsection{Personalization via Featurization}
+The remainder of this section specifically considers techniques that result in different users running inference with different model parameters (weights). However, in some applications similar benefits can be achieved by simply adding user and context features to the model. For example, consider a language model for next-word-prediction in a mobile keyboard as in \citet{hard18gboard}. Different clients are likely to use language differently, and in fact on-device personalization of model parameters has yielded significant improvements for this problem \citep{wang2019federated}. However, a complimentary approach may be to train a federated model that takes as input not only the words the user has typed so far, but a variety of other user and context features---What words does this user frequently use? What app are they currently using? If they are chatting, what messages have they sent to this person before? Suitably featurized, such inputs can allow a shared global model to produce highly personalized predictions. However, largely because few public datasets contain such auxiliary features, developing model architectures that can effectively incorporate context information for different tasks remains an important open problem with the potential to greatly increase the utility of FL-trained models.  
+
+\subsubsection*{通过特征化进行个性化}
+本节的其余部分专门考虑导致不同用户使用不同模型参数(权重)运行推理的技术。但是, 在某些应用程序中, 只需向模型添加用户和上下文特征即可获得类似的好处。例如, 考虑在移动键盘中用于下一个词预测的语言模型, 如 \citet{hard18gboard}。不同的客户端可能使用不同的语言, 事实上, 模型参数的设备上个性化已经对这个问题产生了显着的改进 \citep{wang2019federated}。然而, 一个免费的方法可能是训练一个联邦模型, 该模型不仅将用户迄今为止输入的单词作为输入, 而且将各种其他用户和上下文特征作为输入——该用户经常使用哪些单词？他们目前使用什么应用程序？如果他们在聊天, 他们之前给这个人发过什么信息？适当地特征化, 这样的输入可以允许共享的全局模型产生高度个性化的预测。然而, 主要是因为很少有公共数据集包含这样的辅助特征, 开发可以有效地结合不同任务的上下文信息的模型架构仍然是一个重要的开放问题, 有可能大大提高 FL 训练模型的效用。
+
+% Comments from Phil, made earlier. I think I've captured this point in the multi-task learning section below.
+% Moved from above and commented out, see below.
+%Multi-task learning approaches have been proposed for jointly training local models for each partition, but a global model is essential whenever a local model is unavailable or ineffective. A hybrid approach would be to train a ``base'' global model that can be quickly ``specialized'' to local data via a modest amount of further training on that local data.
+%This approach would be useful for differences across space and time. For example, a global model trained under normal circumstances could be quickly adapted to natural disaster settings such as hurricanes, flash floods and forest fires.
+
+%As one proceeds down the path towards more local/specialized models, it may make sense to cluster partitions that hold similar data, with one model for each cluster. The goal is to avoid a proliferation of too many models that must be trained, stored, and maintained over time.
+%Perhaps even some sort of hierarchical grouping is in order, to reflect large geo-region similarities (e.g., U.S.-wide) yet retain separate models for smaller subregions (e.g., southwest U.S., New England).
+%Determining the clustering and how to effectively train when considering such clustering would be some of the challenges.
+
+%Finally, another alternative for handling non-IID data partitions is to use multi-modal training that combines DNNs with key attributes about the data partition pertaining to its geo-location. A challenge with this approach is determining what the attributes should be, in order to have an accurate yet reasonably compact model (otherwise, in the extreme, the model could devolve into local models for each geo-location).
+
+
+\subsubsection{Multi-Task Learning}
+\label{sss:multitask-learning}
+If one considers each client's local problem (the learning problem on the local dataset) as a separate task (rather than as a shard of a single partitioned dataset), then techniques from multi-task learning \citep{DBLP:journals/corr/ZhangY17aa} immediately become relevant. Notably, \citet{Smith2017} introduced the MOCHA algorithm for multi-task federated learning, directly tackling challenges of communication efficiency, stragglers, and fault tolerance. In multi-task learning, the result of the training process is one model per task. Thus, most multi-task learning algorithms assume all clients (tasks) participate in each training round, and also require stateful clients since each client is training an individual model. This makes such techniques relevant for cross-silo FL applications, but harder to apply in cross-device scenarios.
+
+
+\subsubsection*{多任务学习}
+如果将每个客户的本地问题(本地数据集上的学习问题)视为一项单独的任务(而不是单个分区数据集的分片), 那么来自多任务学习的技术 \citep{DBLP:journals/corr/ZhangY17aa} 立即变得相关。值得注意的是, \citet{Smith2017} 引入了用于多任务联邦学习的 MOCHA 算法, 直接解决了通信效率、落后者和容错方面的挑战。在多任务学习中, 训练过程的结果是每个任务一个模型。因此, 大多数多任务学习算法假设所有客户端(任务)都参与每轮训练, 并且还需要有状态的客户端, 因为每个客户端都在训练一个单独的模型。这使得此类技术与跨孤岛 FL 应用程序相关, 但更难应用于跨设备场景。
+
+
+Another approach is to reconsider the relationship between clients (local datasets) and learning tasks (models to be trained), observing that there are points on a spectrum between a single global model and different models for every client. For example, it may be possible to apply techniques from multi-task learning (as well as other approaches like personalization, discussed next), where we take the ``task'' to be a subset of the clients, perhaps chosen explicitly (e.g. based on geographic region, or characteristics of the device or user), or perhaps based on clustering \citep{mansour2020three} or the connected components of a learned graph over the clients \citep{Zantedeschi2019}. The development of such algorithms is an important open problem.  See \cref{sssec:training_submodels} for a discussion of how sparse federated learning problems, such as those arising naturally in this type of multi-task problem, might be approached without revealing to which client subset (task) each client belongs.
+
+另一种方法是重新考虑客户端(本地数据集)和学习任务(要训练的模型)之间的关系, 观察单个全局模型和每个客户端的不同模型之间的范围。例如, 有可能应用多任务学习的技术(以及其他方法, 如个性化, 接下来讨论), 我们将“任务”作为客户的一个子集, 可能是明确选择的(例如基于地理区域或设备或用户的特征), 或者可能基于聚类 \citep{mansour2020three} 或客户端 \citep{Zantedeschi2019} 上的学习图的连接组件。此类算法的开发是一个重要的开放性问题。请参阅 \cref{sssec:training_submodels} 以讨论如何在不透露每个客户端属于哪个客户端子集(任务)的情况下处理稀疏联邦学习问题, 例如在此类多任务问题中自然出现的问题。
+
+
+% mcmahan: Pooling datasets from multiple clients is core to the 
+% personalization approach in this work, so not sure it's super relevant.
+% \citet{Blum2017} provides one step in this direction, providing bounds for learning under feature distribution skew (covariate shift) via both centralized and personalized models, with what we term cross-silo FL applications as motivation.
+
+
+\subsubsection{Local Fine Tuning and Meta-Learning}
+% Primary authors: Mehryar Mohri, Ananda Theertha Suresh, Brendan McMahan
+\subsubsection*{局部微调和元学习}
+% 主要作者：Mehryar Mohri、Ananda Theertha Suresh、Brendan McMahan
+
+By local fine tuning, we refer to techniques which begin with the federated training of a single model, and then deploy that model to all clients, where it is personalized by additional training on the local dataset before use in inference. This approach integrates naturally into the typical lifecycle of a model in federated learning (Section~\ref{sec:lifecycle}). Training of the global model can still proceed using only small samples of clients on each round (e.g. 100s); the broadcast of the global model to all clients (e.g. many millions) only happens once, when the model is deployed. The only difference is that before the model is used to make live predictions on the client, a final training process occurs, personalizing the model to the local dataset.
+
+通过局部微调, 我们指的是从单个模型的联邦训练开始, 然后将该模型部署到所有客户端的技术, 在用于推理之前, 通过对本地数据集的额外训练对其进行个性化。这种方法很自然地融入了联邦学习中模型的典型生命周期(Section~\ref{sec:lifecycle})。全局模型的训练仍然可以在每一轮中仅使用少量客户样本(例如 100s)进行；全局模型向所有客户端(例如数百万)的广播仅在部署模型时发生一次。唯一的区别是, 在使用模型对客户端进行实时预测之前, 会进行最后的训练过程, 将模型个性化为本地数据集。
+
+Given a global model that performs reasonably well, what is the best way to personalize it?  In non-federated learning, researchers often use fine-tuning, transfer learning, domain adaptation \cite{mansour2009domain,cortes2014domain,ben2010theory, mansour2020theory, cortes2020multiple}, or interpolation with a personal local model. Of course, the precise technique used for such interpolations is key and it is important to determine its corresponding learning guarantees in the context of federated learning. Further, these techniques often assume only a pair of domains (source and target), and so some of the richer structure of federated learning may be lost.
+
+给定一个性能相当不错的全局模型, 个性化它的最佳方法是什么？在非联邦学习中, 研究人员经常使用微调、迁移学习、领域适应 \cite{mansour2009domain,cortes2014domain,ben2010theory, mansour2020theory, cortes2020multiple}, 或者使用个人局部模型进行插值。当然, 用于这种插值的精确技术是关键, 在联邦学习的背景下确定其相应的学习保证很重要。此外, 这些技术通常只假设一对域(源和目标), 因此联邦学习的一些更丰富的结构可能会丢失。
+
+
+%\paragraph{Meta-Learning}
+% Primary author: Mikhail Khodak; Jakub
+One approach for studying personalization and non-IID data is via a connection to {\em meta-learning}, which has emerged as a popular setting for model adaptation.
+%
+In the standard learning-to-learn (LTL) setup \citep{baxter00model}, one has a meta-distribution over tasks, samples from which are used to learn a learning algorithm, for example by finding a good restriction of the hypothesis space. This is in fact a good match for the statistical setting discussed in Section~\ref{sec:noniid}, where we sample a client (task) $i \sim \Pcli$, and then sample data for that client (task) from $\Ploc_i$.
+
+ 
+%\paragraph{元学习}
+% 主要作者：Mikhail Khodak；雅库布
+研究个性化和非 IID 数据的一种方法是通过与 {\em 元学习} 的连接, 这已成为模型适应的流行设置。
+%
+在标准的learning-to-learn(LTL) 设置 \citep{baxter00model} 中, 任务具有元分布, 其中的样本用于学习学习算法, 例如通过找到假设空间的良好限制。这实际上与 Section~\ref{sec:noniid} 中讨论的统计设置非常匹配, 我们对客户端(任务)$i \sim \Pcli$ 进行采样, 然后从$\Ploc_i$。
+
+
+Recently, a class of algorithms referred to as \emph{model-agnostic meta-learning} (MAML) have been developed that meta-learn a global model, which can be used as a starting point for learning a good model adapted to a given task, using only a few local gradient steps \citep{finn17maml}. Most notably, the training phase of the popular Reptile algorithm \citep{nichol18reptile} is closely related to Federated Averaging \citep{mcmahan17fedavg} --- Reptile allows for a server learning rate and assumes all clients have the same amount of data, but is otherwise the same. \citet{khodak19adaptive} and \citet{jiang2019improving} explore the connection between FL and MAML, and show how the MAML setting is a relevant framework to model the personalization objectives for FL. \citet{chai2019personalization} applied local fine tuning to personalize speech recognition models in federated learning. \citet{fallah2020personalized} developed a new algorithm called Personalized FedAvg by connecting MAML instead of Reptile to federated learning. Additional connections with differential privacy were studied in \citep{li19dpmeta}.
+
+最近, 已经开发了一类被称为 \emph{model-agnostic meta-learning} (MAML) 的算法, 该算法可以元学习全局模型, 该模型可以用作学习适合给定模型的良好模型的起点。任务, 仅使用几个局部梯度步骤 \citep{finn17maml}。最值得注意的是, 流行的 Reptile 算法 \citep{nichol18reptile} 的训练阶段与联邦平均 \citep{mcmahan17fedavg} 密切相关——Reptile 允许服务器学习率并假设所有客户端具有相同数量的数据, 但是否则相同。 \citet{khodak19adaptive} 和 \citet{jiang2019improving} 探索了 FL 和 MAML 之间的联系, 并展示了 MAML 设置如何成为为 FL 的个性化目标建模的相关框架。 \citet{chai2019personalization} 在联邦学习中应用局部微调来个性化语音识别模型。 \citet{fallah2020personalized} 通过将 MAML 而不是 Reptile 连接到联邦学习, 开发了一种名为 Personalized FedAvg 的新算法。在 \citep{li19dpmeta} 中研究了与差分隐私的其他联系。
+
+
+The general direction of combining ideas from FL and MAML is relatively new, with many open questions:
+\begin{itemize}
+	\item The evaluation of MAML algorithms for supervised tasks is largely focused on synthetic image classification problems \citep{lake11omniglot,ravi17miniimagenet} in which infinite artificial tasks can be constructed by subsampling from classes of images. FL problems, modeled by existing datasets used for simulated FL experiments (Appendix~\ref{sec:datasets-and-software}), can serve as realistic benchmark problems for MAML algorithms.
+	\item In addition to an empirical study, or optimization results, it would be useful to analyze the theoretical guarantees of MAML-type techniques and study under what assumptions they can be successful, as this will further elucidate the set of FL domains to which they may apply.
+	\item The observed gap between the global and personalized acccuracy \citep{jiang2019improving} creates a good argument that personalization should be of central importance to FL. However, none of the existing works clearly formulates what would be comprehensive metrics for measuring personalized performance; for instance, is a small improvement for every client preferable to a larger improvement for a subset of clients? See Section~\ref{sec:fairness} for a related discussion.
+	\item \citet{jiang2019improving} highlighted the fact that models of the same structure and performance, but trained differently, can have very different capacity to personalize. In particular, it appears that training models with the goal of maximizing global performance might actually hurt the model's capacity for subsequent personalization. Understanding the underlying reasons for this is a question relevant for both FL and the broader ML community.
+	\item Several challenging FL topics including personalization and privacy have begun to be studied in this multi-task/LTL framework \cite{khodak19adaptive,jiang2019improving,li19dpmeta}. Is it possible for other issues such as concept drift to also be analyzed in this way, for example as a problem in lifelong learning \citep{silver13lifelong}?
+	\item Can non-parameter transfer LTL algorithms, such as ProtoNets \citep{snell17protonets}, be of use for FL?
+\end{itemize}
+
+
+结合 FL 和 MAML 思想的总体方向相对较新, 有许多悬而未决的问题：
+\begin{itemize}
+\item 用于监督任务的 MAML 算法的评估主要集中在合成图像分类问题 \citep{lake11omniglot,ravi17miniimagenet} 中, 可以通过从图像类别中进行二次采样来构建无限人工任务。 FL 问题由用于模拟 FL 实验的现有数据集(附录~\ref{sec:datasets-and-software})建模, 可以作为 MAML 算法的现实基准问题。
+\item 除了实证研究或优化结果之外, 分析 MAML 类型技术的理论保证并研究它们在哪些假设下可以成功也是有用的, 因为这将进一步阐明它们所针对的 FL 域集可申请。
+\item 观察到的全局和个性化准确性之间的差距 \citep{jiang2019improving} 提出了一个很好的论点, 即个性化应该对 FL 至关重要。然而, 现有的作品都没有明确制定衡量个性化绩效的综合指标。例如, 对于每个客户的小改进是否比对客户子集的更大改进更可取？有关相关讨论, 请参阅 Section~\ref{sec:fairness} 。
+\item \citet{jiang2019improving} 强调了一个事实, 即结构和性能相同但训练不同的模型可能具有非常不同的个性化能力。特别是, 以最大化全局性能为目标的训练模型实际上可能会损害模型后续个性化的能力。了解其根本原因是一个与 FL 和更广泛的 ML 社区相关的问题。
+\item 在这个多任务/LTL 框架\cite{khodak19adaptive,jiang2019improving,li19dpmeta}中已经开始研究包括个性化和隐私在内的几个具有挑战性的FL主题。是否有可能以这种方式分析概念漂移等其他问题, 例如作为终身学习\citep{silver13lifelong} 中的问题？
+\item 非参数传输 LTL 算法, 例如 ProtoNets \citep{snell17protonets} 可以用于 FL 吗？
+\end{itemize}
+
+\newcommand{\hFL}{h_{\text{FL}}}
+\subsubsection{When is a Global FL-trained Model Better?}
+% Primary authors: Mehryar Mohri, Ananda Theertha Suresh, Brendan McMahan
+% Edits by Richard -- Put record linkage in the global picture
+% Edits by Daniel Ramage -- added context to first theory question
+What can federated learning do for you that local training on one device cannot? When local datasets are small and the data is IID, FL clearly has an edge, and indeed, real-world applications of federated learning \cite{yang18gboardquery, hard18gboard, chen19oov} benefit from training a single model across devices. On the other hand, given pathologically non-IID distributions (e.g. $\Ploc_i(y \gvn x)$ directly disagree across clients), local models will do much better. Thus, a natural theoretical question is to determine under what conditions the shared global model is better than independent per-device models. Suppose we train a model $h_k$ for each client $k$, using the sample of size $m_k$ available from that client. Can we guarantee that the model $\hFL$ learned via federated learning is at least as accurate as $h_k$ when used for client $k$?
+% mcmahan: Does this imply using a single users model for other users? I don't think that's something we'd want to do for privacy reasons, so commenting out for now.
+%When can we guarantee that $\hFL$ is better than any one of the single models $h_k$?  
+Can we quantify how much improvement can be expected via federated leaning?
+% Question from McMahan: Rather than training $h_k$ from scratch, it seems almost always preferable to initial $h_k$ to $\hFL$ (and/or regularize toward $\hFL$)? It's not quite clear if that is in scope here? A related question I'd like to work in (here or above) is simply answering the question of whether $h_k$ is better or worse is hard when $m_k$ is very small. The estimates of the accuracy of any model on a particular client will be extremely noisy, and so appropriate statistical techniques are needed.
+And can we develop personalization strategies with theoretical guarantees that at least match the performance of both natural baselines ($h_k$ and $\hFL$)?
+
+\subsubsection*{什么时候全局 FL 训练模型更好？}
+% 主要作者：Mehryar Mohri、Ananda Theertha Suresh、Brendan McMahan
+% 理查德编辑 - 将记录链接放在全局图片中
+Daniel Ramage 的 % 编辑 - 为第一个理论问题添加了上下文
+联邦学习可以为您做什么, 而在一台设备上进行本地培训则无法做到？当本地数据集较小且数据为 IID 时, FL 显然具有优势, 事实上, 联邦学习的实际应用 \cite{yang18gboardquery, hard18gboard, chen19oov} 受益于跨设备训练单个模型。另一方面, 给定病态的非 IID 分布(例如 $\Ploc_i(y \gvn x)$ 在客户端之间直接不一致), 本地模型会做得更好。因此, 一个自然的理论问题是确定在什么条件下共享全局模型比独立的每设备模型更好。假设我们为每个客户 $k$ 训练一个模型 $h_k$, 使用该客户提供的大小为 $m_k$ 的样本。我们能否保证通过联邦学习学习的模型 $\hFL$ 在用于客户端 $k$ 时至少与 $h_k$ 一样准确？
+% mcmahan：这是否意味着对其他用户使用单一用户模型？我不认为这是出于隐私原因我们想做的事情, 所以现在发表评论。
+%我们什么时候可以保证 $\hFL$ 比任何一个单模型 $h_k$ 都好？
+我们能否量化通过联邦学习可以预期的改进程度？
+% McMahan 提出的问题：与其从头开始训练 $h_k$, 似乎总是比初始 $h_k$ 到 $\hFL$(和/或正则化为 $\hFL$)更可取？不太清楚这是否在此处的范围内？我想解决的一个相关问题(此处或以上)只是在 $m_k$ 非常小时时回答 $h_k$ 是更好还是更坏的问题很难。对特定客户端上的任何模型的准确性的估计将非常嘈杂, 因此需要适当的统计技术。
+我们能否在理论上保证至少匹配两个自然基线($h_k$ 和 $\hFL$)的性能的个性化策略？
+
+
+Several of these problems relate to previous work on multiple-source adaptation and agnostic federated learning \citep{mansour2009domain,mansour2009domainb,hoffman2018algorithms,Mohri2019}. The hardness of these questions depends on how the data is distributed among parties. For example, if data is vertically partitioned, each party  maintaining private records of different feature sets about common entities, these problems may require addressing record linkage \cite{christen12} within the federated learning task. Independently of the eventual technical levy of carrying out record linkage privately \cite{schnell11}, the task itself happens to be substantially noise prone in the real world \cite{sEP} and only sparse results have addressed its impact on training models \cite{Hardy2017-da}. Techniques for robustness and privacy can make local models relatively stronger, particularly for non-typical clients \citep{yu2020salvaging}. Loss factorization tricks can be used in supervised learning to alleviate up to the vertical partition assumption itself, but the practical benefits depend on the distribution of data and the number of parties \cite{pnhcFL}.
+
+其中一些问题与之前关于多源适应和不可知联邦学习 \citep{mansour2009domain,mansour2009domainb,hoffman2018algorithms,Mohri2019} 的工作有关。这些问题的难易程度取决于数据在各方之间的分布方式。例如, 如果数据是垂直分区的, 每一方都维护关于公共实体的不同特征集的私人记录, 这些问题可能需要解决联邦学习任务中的记录链接 \cite{christen12}。独立于私下执行记录链接的最终技术征费 \cite{schnell11}, 任务本身恰好在现实世界中很容易产生噪音 \cite{sEP} 并且只有稀疏结果解决了它对训练模型的影响 \cite{ Hardy2017-da}。稳健性和隐私技术可以使本地模型相对更强大, 特别是对于非典型客户 \citep{yu2020salvaging}。可以在监督学习中使用损失分解技巧来减轻垂直分区假设本身, 但实际好处取决于数据的分布和参与方的数量 \cite{pnhcFL}。
+
+
+% Primary author: Chaoyang He, Brendan McMahan
+\subsection{Adapting ML Workflows for Federated Learning}
+\label{sec:workflows}
+
+%\sketch{AutoML for FL: How to do Automatic Machine Learning (AutoML) in the FL setting? E.g. On-Device automatic feature engineering, neural architecture search for a personalized worker in FL.}
+
+Many challenges arise when adapting standard machine learning workflows and pipelines (including data augmentation, feature engineering, neural architecture design, model selection, hyperparameter optimization, and debugging) to decentralized datasets and resource-constrained mobile devices. We discuss several of these challenges below.
+
+
+% 主要作者：何朝阳、Brendan McMahan
+\subsection*{为联邦学习调整 ML 工作流}
+%\sketch{AutoML for FL：如何在 FL 设置中进行自动机器学习 (AutoML)？例如。设备上自动特征工程, 神经架构搜索 FL 中的个性化工作者。}
+
+在将标准机器学习工作流程和管道(包括数据增强、特征工程、神经架构设计、模型选择、超参数优化和调试)应用于分散数据集和资源受限的移动设备时, 会出现许多挑战。我们将在下面讨论其中的几个挑战。
+
+\subsubsection{Hyperparameter Tuning}
+Running many rounds of training with different hyperparameters on resource-constrained mobile devices may be restrictive. For small device populations, this might result in the over-use of limited communication and compute resources. %frequent communication and local computing performed on devices should be avoided; otherwise, it may largely hurt the user-experience and hinder the popularity of federated learning.
+%
+However, recent deep neural networks crucially depend on a wide range of hyperparameter choices regarding the neural network’s architecture, regularization, and optimization. Evaluations can be  expensive for large models and large-scale on-device datasets. Hyperparameter optimization (HPO) has a long history under the framework of AutoML \cite{ripley1993statistical,king1995statlog,kohavi1995automatic}, but it mainly concerns how to improve the model accuracy \cite{bergstra2011algorithms,snoek2015scalable,pedregosa2016hyperparameter,falkner2018bohb} rather than communication and computing efficacy for mobile devices. Therefore, we expect that further research should consider developing solutions for efficient hyperparameter optimization in the context of federated learning.
+
+
+
+\subsubsection*{超参数调整}
+在资源受限的移动设备上使用不同的超参数运行多轮训练可能会受到限制。对于小型设备群体, 这可能会导致过度使用有限的通信和计算资源。应避免在设备上进行频繁的通信和本地计算；否则, 它可能会在很大程度上损害用户体验并阻碍联邦学习的普及。
+%
+然而, 最近的深度神经网络在很大程度上取决于关于神经网络架构、正则化和优化的各种超参数选择。对于大型模型和大规模设备上数据集, 评估可能很昂贵。超参数优化(HPO)在AutoML框架下历史悠久移动设备的功效。因此, 我们希望进一步的研究应该考虑在联邦学习的背景下开发有效的超参数优化解决方案。
+
+
+% mcmahan added:
+In addition to general-purpose approaches to the hyperparameter optimization problem, in the training space specifically the development of easy-to-tune optimization algorithms is a major open area. Centralized training already requires tuning parameters like learning rate, momentum, batch size, and regularization. Federated learning adds potentially more hyperparameters --- separate tuning of the aggregation / global model update rule and local client optimizer, number of clients selected per round, number of local steps per round, configuration of update compression algorithms, and more. Such hyperparameters can be crucial to obtaining a good trade-off between accuracy and convergence, and may actually impact the quality of the learned model~\citep{charles2020outsized}. In addition to a higher-dimensional search space, federated learning often also requires longer wall-clock training times and limited compute resources. These challenges could be addressed by optimization algorithms that are robust to hyperparameter settings (the same hyperparameter values work for many different real world datasets and architectures), as well as adaptive or self-tuning algorithms~\cite{thakkar2019differentially,bonawitz2019autotune}.
+
+% 麦克马汉补充说：
+除了超参数优化问题的通用方法外, 在训练领域, 特别是易于调整的优化算法的开发是一个主要的开放领域。集中训练已经需要调整学习率、动量、批量大小和正则化等参数。联邦学习可能会增加更多的超参数——聚合/全局模型更新规则和本地客户端优化器的单独调整、每轮选择的客户端数量、每轮本地步骤的数量、更新压缩算法的配置等。这样的超参数对于在准确性和收敛性之间取得良好的权衡至关重要, 实际上可能会影响学习模型的质量~\citep{charles2020outsized}。除了更高维的搜索空间, 联邦学习通常还需要更长的挂钟训练时间和有限的计算资源。这些挑战可以通过对超参数设置稳健的优化算法(相同的超参数值适用于许多不同的现实世界数据集和架构)以及自适应或自调整算法来解决~\cite{thakkar2019differentially,bonawitz2019autotune}。
+
+
+\subsubsection{Neural Architecture Design}
+Neural architecture search (NAS) in the federated learning setting is motivated by the drawbacks of the current practice of applying predefined deep learning models: the predefined architecture of a deep learning model may not be the optimal design choice when the data generated by users are invisible to model developers. For example, the neural architecture may have some redundant component for a specific dataset, which may lead to unnecessary computing on devices; there may be a better architectural design for the non-IID data distribution. The approaches to personalization discussed in \cref{sec:multimodel} still share the same model architecture among all clients.
+The recent progress in NAS \cite{MiLeNAS2020,real2017large,elsken2018efficient,real2019regularized,Bello2016Neural,pham2018efficient,liu2018darts,xie2018snas,elsken2018efficient,luo2018neural} provides a potential way to address these drawbacks. There are three major methods for NAS, which utilize evolutionary algorithms, reinforcement learning, or gradient descent to search for optimal architectures for a specific task on a specific dataset. Among these, the gradient-based method leverages efficient gradient back-propagation with weight sharing, reducing the architecture search process from over 3000 GPU days to only 1 GPU day. 
+Another interesting paper recently published, involving Weight Agnostic Neural Networks \cite{gaier2019weight}, claims that neural network architectures alone, without learning any weight parameters, may encode solutions for a given task. If this technique further develops and reaches widespread use, it may be applied to the federated learning without collaborative training among devices.
+Although these methods have not been developed for distributed settings such as federated learning, they are all feasible to be transferred to the federated setting. Neural Architecture Search (NAS) for a global or personalized model in the federated learning setting is promising, and early exploration has been made in \citep{he2020fednas}.
+
+联邦学习环境中的神经体系结构搜索(NAS)是由当前应用预定义深度学习模型的实践的缺点所驱动的：当用户生成的数据对模型开发人员不可见时, 深度学习模型的预定义体系结构可能不是最佳设计选择。例如, 对于特定数据集, 神经架构可能具有一些冗余组件, 这可能导致在设备上进行不必要的计算；对于非IID数据分布, 可能有更好的体系结构设计。在\cref{sec:multimodel}中讨论的个性化方法在所有客户端之间仍然共享相同的模型体系结构。
+NAS的最新进展 \cite{MiLeNAS2020,real2017large,elsken2018efficient,real2019regularized,Bello2016Neural,pham2018efficient,liu2018darts,xie2018snas,elsken2018efficient,luo2018neural}提供了解决这些缺陷的潜在方法。NAS有三种主要方法, 它们利用进化算法、强化学习或梯度下降来搜索特定数据集上特定任务的最佳体系结构。其中, 基于梯度的方法利用有效的梯度反向传播和权重共享, 将架构搜索过程从3000多GPU天减少到仅1 GPU天。
+最近发表的另一篇有趣的论文, 涉及重量不可知的神经网络, 引用{gaier2019weight}, 声称神经网络结构本身, 没有学习任何重量参数, 可以为给定任务编码解决方案。如果这项技术进一步发展并得到广泛应用, 它可以应用于联邦学习, 而无需设备间的协作训练。
+尽管这些方法尚未针对分布式环境(如联邦学习)开发, 但它们都可以转移到联邦环境。在联邦学习环境中, 对全局或个性化模型的神经架构搜索(NAS)是有希望的, 并且在\citep{he2020fednas}中已经进行了早期探索。
+
+%We tentatively call the above-unsolved problems as Automated Federated Learning (AutoFL) or AutoML for Federated Learning.
+
+
+\subsubsection{Debugging and Interpretability for FL}
+\label{subsec:debugging-and-interpretability-for-fl}
+While substantial progress has been made on the federated training of models, this is only part of a complete ML workflow. Experienced modelers often directly inspect subsets of the data for tasks including basic sanity checking, debugging misclassifications, discovering outliers, manually labeling examples, or detecting bias in the training set. Developing privacy-preserving techniques to answer such questions on decentralized data is a major open problem. Recently, \citet{augenstein2019generative} proposed the use of differentially private generative models (including GANs), trained with federated learning, to answer some questions of this type. However, many open questions remain (see discussion in \citep{augenstein2019generative}), in particular the development of algorithms that improve the fidelity of FL DP generative models. 
+
+
+
+\subsubsection*{FL 的调试和可解释性}
+虽然在模型的联邦训练方面取得了实质性进展, 但这只是完整 ML 工作流程的一部分。经验丰富的建模人员通常会直接检查数据子集以执行任务, 包括基本健全性检查、调试错误分类、发现异常值、手动标记示例或检测训练集中的偏差。开发隐私保护技术来回答有关分散数据的此类问题是一个主要的开放性问题。最近, \citet{augenstein2019generative} 提出使用经过联邦学习训练的差分私有生成模型(包括 GAN)来回答此类问题。然而, 许多悬而未决的问题仍然存在(参见 \citep{augenstein2019generative} 中的讨论), 特别是提高 FL DP 生成模型保真度的算法的开发。
+
+
+
+\subsection{Communication and Compression}\label{sec:compr}
+%\sketch{What is the role of FL in emerging IoT and 5G technologies?}
+
+% Ayfer Ozgur
+It is now well-understood that communication can be a primary bottleneck for federated learning since wireless links and other end-user internet connections typically operate at lower rates than intra- or inter-datacenter links and can be potentially expensive and unreliable. This has led to significant recent interest in reducing the communication bandwidth of federated learning. Methods combining Federated Averaging with sparsification and/or quantization of model updates to a small number of bits have demonstrated significant reductions in communication cost with minimal impact on training accuracy \citep{konevcny2016federated}. However, it remains unclear if communication cost can be further reduced, and whether any of these methods or their combinations can come close to providing optimal trade-offs between communication and accuracy in federated learning. Characterizing such fundamental trade-offs between accuracy and communication has been of recent interest in theoretical statistics \citep{duchi2013,braverman2016, han2018,  acharya2018, barnes2019, tang2019texttt, Barnes2020rtopk}. These works characterize the optimal minimax rates for distributed statistical estimation and learning under communication constraints. However, it is difficult to deduce  concrete insights from these theoretical works for communication bandwidth reduction in practice as they typically ignore the impact of the optimization algorithm. It remains an open direction to leverage such statistical approaches to inform practical training methods.
+
+
+\subsection*{通信和压缩}
+%\sketch{FL 在新兴物联网和 5G 技术中的作用是什么？}
+
+% 艾弗·奥兹古尔
+现在众所周知, 通信可能是联邦学习的主要瓶颈, 因为无线链接和其他最终用户互联网连接的运行速率通常低于数据中心内或数据中心间链接, 并且可能成本高昂且不可靠。这导致最近人们对减少联邦学习的通信带宽产生了浓厚的兴趣。将联邦平均与稀疏化和/或将模型更新量化为少量比特相结合的方法已证明通信成本显着降低, 对训练精度的影响最小\citep{konevcny2016federated}。然而, 目前尚不清楚是否可以进一步降低通信成本, 以及这些方法中的任何一种或它们的组合是否可以接近在联邦学习中的通信和准确性之间提供最佳权衡。描述准确性和通信之间的这种基本权衡最近引起了理论统计\citep{duchi2013,braverman2016,han2018,acharya2018,barnes2019,tang2019texttt,Barnes2020rtopk}的兴趣。这些工作描述了通信约束下分布式统计估计和学习的最佳极小极大速率。然而, 很难从这些理论工作中推断出实际中通信带宽减少的具体见解, 因为它们通常会忽略优化算法的影响。利用此类统计方法为实际培训方法提供信息仍然是一个开放的方向。
+
+% Felix Yu, Ananda Theertha Suresh, edits by Martin Jaggi, Brendan McMahan, Jakub
+\paragraph{Compression objectives} Motivated by the limited resources of current devices in terms of compute, memory and communication, there are several different compression objectives of practical value.
+\begin{enumerate}[(a)]
+    \item \emph{Gradient compression\footnote{In this section, we use ``gradient compression'' to include compression applied to any model update, such as the updates produced by Federated Averaging when clients take multiple gradient steps.}} -- reduce the size of the object communicated from clients to server, which is used to update the global model.
+    \item \emph{Model broadcast compression} -- reduce the size of the model broadcast from server to clients, from which the clients start local training.
+    \item \emph{Local computation reduction} -- any modification to the overall training algorithm such that the local training procedure is computationally more efficient.
+\end{enumerate}
+
+
+% Felix Yu、Ananda Theertha Suresh, Martin Jaggi、Brendan McMahan、Jakub 编辑
+\paragraph{压缩目标} 由于当前设备在计算、内存和通信方面的资源有限, 有几种不同的具有实用价值的压缩目标。
+\begin{enumerate}[(a)]
+    \item \emph{梯度压缩\footnote{在本节中, 我们使用“梯度压缩”来包括应用于任何模型更新的压缩, 例如当客户端采取多个梯度步骤时由联邦平均产生的更新。}} --减少从客户端到服务器通信的对象的大小, 用于更新全局模型。
+    \item \emph{模型广播压缩}——减少从服务器到客户端的模型广播的大小, 客户端从这里开始本地训练。
+    \item \emph{局部计算减少}——对整体训练算法的任何修改, 使得局部训练过程在计算上更有效。
+\end{enumerate}
+
+These objectives are in most cases complementary. Among them, (a) has the potential for the most significant practical impact in terms of total runtime. This is both because clients' connections generally have slower upload than download bandwidth\footnote{See for instance \url{https://www.speedtest.net/reports/}} -- and thus there is more to be gained, compared to (b) -- and because the effects of averaging across many clients can enable more aggressive lossy compression schemes. Usually, (c) could be realized jointly with (a) and (b) by specific methods. 
+
+这些目标在大多数情况下是互补的。其中, 就总运行时间而言, (a) 有可能产生最显着的实际影响。这是因为客户端的连接通常比下载带宽的上传速度慢\footnote{参见例如 \url{https://www.speedtest.net/reports/}} -- 因此, 与(b) -- 并且因为跨多个客户端进行平均的效果可以启用更积极的有损压缩方案。通常, (c)可以通过特定的方法与(a)和(b)共同实现。
+
+
+
+Much of the existing literature applies to the objective (a) \citep{konevcny2016federated, suresh2017distributed, konevcny2018randomized, alistarh2017qsgd, horvath2019natural, basu2020qsparse}. The impact of (b) on convergence in general has not been studied until very recently; an analysis is presented in \citep{chraibi2019distributed}. Very few methods intend to address all of (a), (b) and (c) jointly. \citet{caldas2018expanding} proposed a practical method by constraining the desired model update such that only particular submatrices of model variables are necessary to be available on clients; \citet{hamer2020fedboost} proposed a communication-efficient federated algorithm for learning mixture weights on an ensemble of pre-trained models, based on communicating only a subset of the models to any one device; \citet{FedGKT2020} utilizes bidirectional and alternative knowledge distillation method to transfer knowledge from many compact DNNs to a dense server DNN, which can reduce the local computational burden at the edge devices.
+
+许多现有文献都适用于目标 (a) \citep{konevcny2016federated,suresh2017distributed, konevcny2018randomized, alistarh2017qsgd, horvath2019natural, basu2020qsparse}。 (b) 对一般收敛的影响直到最近才被研究； \citep{chraibi2019distributed} 中给出了分析。很少有方法打算联邦解决所有 (a)、(b) 和 (c)。 \citet{caldas2018expanding} 提出了一种实用的方法, 通过约束所需的模型更新, 使得只有特定的模型变量子矩阵需要在客户端上可用； \citet{hamer2020fedboost} 提出了一种通信高效的联邦算法, 用于在预训练模型的集合上学习混合权重, 基于仅将模型的一个子集传达给任何一个设备； \citet{FedGKT2020} 利用双向和替代知识蒸馏方法将知识从许多紧凑的 DNN 转移到密集的服务器 DNN, 这可以减少边缘设备的本地计算负担。
+
+
+In cross-device FL, algorithms generally cannot assume any state is preserved on the clients (Table~\ref{tab:characteristics}). However, this constraint would typically not be present in the cross-silo FL setting, where the same clients participate repeatedly. Consequently, a wider set of ideas related to error-correction such as \citep{lin2017deep, sattler2019robust, vogels2019powersgd, tang2019texttt, karimireddy2019ef, stich2019error} are relevant in this setting, many of which could address both (a) and (b).
+
+在跨设备 FL 中, 算法通常不能假设客户端上保留任何状态(Table~\ref{tab:characteristics})。但是, 这种约束通常不会出现在跨孤岛 FL 设置中, 其中相同的客户端重复参与。因此, 更广泛的与纠错相关的想法, 例如 \citep{lin2017deep, sattler2019robust, vogels2019powersgd, tang2019texttt, karimireddy2019ef, stich2019error} 与此设置相关, 其中许多可以同时解决 (a) 和 (b)。
+
+An additional objective is to modify the training procedure such that the \emph{final} model is more compact, or efficient for inference. This topic has received a lot of attention in the broader ML community \citep{han2015deep, courbariaux2015binaryconnect, zhu2017prune, lin2016fixed, oktay2019model, blalock2020state}, but these methods either do not have a straightforward mapping to federated learning, or make the training process more complex which makes it difficult to adopt. Research that simultaneously yields a compact final model, while also addressing the three objectives above, has significant potential for practical impact.
+
+另一个目标是修改训练过程, 使 \emph{final} 模型更紧凑, 或者推理效率更高。这个话题在更广泛的 ML 社区受到了很多关注\citep{han2015deep, courbariaux2015binaryconnect, zhu2017prune, lin2016fixed, oktay2019model, blalock2020state}, 但是这些方法要么没有直接映射到联邦学习, 要么使训练过程变得更加复杂这使得难以采用。同时产生一个紧凑的最终模型, 同时也解决上述三个目标的研究具有巨大的实际影响潜力。
+
+
+For gradient compression, some existing works \cite{suresh2017distributed} are developed in the minimax sense to characterize the worst case scenario. However usually in information theory, the compression guarantees are instance specific and depend on the \emph{entropy} of the underlying distribution \cite{cover2012elements}. In other words, if the data is easily compressible, they are provably compressed heavily. It would be interesting to see if similar instance specific results can be obtained for gradient compression. Similarly, recent works show that learning a compression scheme in a data-dependent fashion can lead to significantly better compression ratio for the case of data compression \cite{wu2017multiscale} as well as gradient compression. It is therefore worthwhile to evaluate these data-dependent compression schemes in the federated settings~\cite{gandikota2019vqsgd}.
+
+
+对于梯度压缩, 一些现有作品 \cite{suresh2017distributed} 是在极小极大意义上开发的, 以表征最坏的情况。然而, 通常在信息论中, 压缩保证是特定于实例的, 并且取决于基础分布 \cite{cover2012elements} 的 \emph{entropy}。换句话说, 如果数据很容易压缩, 则可以证明它们被严重压缩。看看是否可以为梯度压缩获得类似的特定于实例的结果会很有趣。类似地, 最近的工作表明, 对于数据压缩 \cite{wu2017multiscale} 以及梯度压缩, 以数据相关的方式学习压缩方案可以显着提高压缩率。因此, 值得在联邦设置中评估这些依赖于数据的压缩方案~\cite{gandikota2019vqsgd}。
+
+
+\paragraph{Compatibility with differential privacy and secure aggregation} Many algorithms used in federated learning such as Secure Aggregation \citep{bonawitz2016practical} and mechanisms of adding noise to achieve differential privacy \citep{abadi2016deep,mcmahan18dplm} are not designed to work with compressed or quantized communications. For example, straightforward application of the Secure Aggregation protocol of \citet{bonawitz17secagg,bell20secagg} requires an additional $O(\log M)$ bits of communication for each scalar, where $M$ is the number of clients being summed over, and this may render ineffective the aggressive quantization of updates when $M$ is large (though see~\cite{bonawitz2019autotune} for a more efficient approach). Existing noise addition mechanisms assume adding real-valued Gaussian or Laplacian noise on each client, and this is not compatible with standard quantization methods used to reduce communication. We note that several recent works  allow biased estimators and would work nicely with Laplacian noise \cite{stich2019error}, however those would not give differential privacy, as they break independence between rounds. There is some work on adding discrete noise \cite{agarwal2018cpsgd}, but there is no notion whether such methods are optimal. Joint design of compression methods that are compatible with Secure Aggregation, or for which differential privacy guarantees can be obtained, is thus a valuable open problem.
+
+\paragraph*{与差分隐私和安全聚合的兼容性}联邦学习中使用的许多算法, 如安全聚合 \citep{bonawitz2016practical} 和添加噪声以实现差分隐私的机制 \citep{abadi2016deep,mcmahan18dplm} 并非设计用于压缩或量化通信。例如, 直接应用 \citet{bonawitz17secagg,bell20secagg} 的安全聚合协议需要每个标量额外的 $O(\log M)$ 位通信, 其中 $M$ 是求和的客户端数量, 并且当 $M$ 很大时, 这可能会使更新的激进量化无效(尽管参见~\cite{bonawitz2019autotune} 以获得更有效的方法)。现有的噪声添加机制假设在每个客户端上添加实值高斯或拉普拉斯噪声, 这与用于减少通信的标准量化方法不兼容。我们注意到最近的一些工作允许有偏差的估计器, 并且可以很好地处理拉普拉斯噪声 \cite{stich2019error}, 但是这些不会提供差分隐私, 因为它们打破了轮次之间的独立性。有一些关于添加离散噪声 \cite{agarwal2018cpsgd} 的工作, 但不知道这些方法是否是最佳的。因此, 与安全聚合兼容的压缩方法的联邦设计, 或可以获得差分隐私保证的压缩方法, 因此是一个有价值的开放问题。
+
+%Other trade-offs - when privacy, fairness, utility, energy/bandwidth etc may or may not be in conflict
+%Incentives for FL
+
+\paragraph{Wireless-FL co-design}
+% Primary author: Mehdi Bennis
+
+The existing literature in federated learning usually neglects the impact of wireless channel dynamics during model training, which potentially undermines both training latency and thus reliability of the entire production system. In particular, wireless interference, noisy channels and channel fluctuations can significantly hinder the information exchange between the server and clients (or directly between individual clients, as in the fully decentralized case, see Section~\ref{sec:decentralized}). This represents a major challenge for mission-critical applications, rooted in latency reduction and reliability enhancements. Potential solutions to address this challenge include federated distillation (FD), in which workers exchange their model output parameters (logits) as opposed to the model parameters (gradients and/weights),  and optimizing workers' scheduling policy with appropriate communication and computing resources \citep{FD, EdgeML, FL5G}. Another solution is to leverage the unique characteristics of wireless channels (e.g. broadcast and superposition) as natural data aggregators, in which the simultaneously transmitted  analog-waves  by different workers are  superposed at the server and weighed by the wireless channel coefficients \citep{AbariRK16}. This yields faster model aggregation at the server, and faster training by a factor up to the number of workers. This is in sharp contrast with the traditional orthogonal frequency division  multiplexing (OFDM) paradigm, whereby workers upload their models over orthogonal frequencies whose performance degrades with increasing number of workers \cite{elgabli2020harnessing}.
+
+%其他权衡——当隐私、公平、效用、能源/带宽等可能或可能不会发生冲突时
+% FL 的激励措施
+
+\paragraph*{无线-FL 协同设计}
+% 主要作者：Mehdi Bennis
+
+联邦学习中的现有文献通常忽略模型训练过程中无线信道动态的影响, 这可能会破坏整个生产系统的训练延迟和可靠性。特别是, 无线干扰、嘈杂的信道和信道波动会显着阻碍服务器和客户端之间的信息交换(或直接在单个客户端之间, 如在完全去中心化的情况下, 参见部分~\ref{sec:decentralized})。这代表了任务关键型应用程序的主要挑战, 其根源在于延迟减少和可靠性增强。解决这一挑战的潜在解决方案包括联邦蒸馏 (FD), 其中工作人员交换他们的模型输出参数 (logits) 而不是模型参数(梯度和/权重), 并通过适当的通信和计算资源优化工作人员的调度策略\citep{FD, EdgeML, FL5G}。另一种解决方案是利用无线信道的独特特性(例如广播和叠加)作为自然数据聚合器, 其中不同工作人员同时传输的模拟波在服务器上叠加并由无线信道系数加权 \citep{AbariRK16} .这会在服务器上产生更快的模型聚合, 以及更快的训练, 最多可达工作人员的数量。这与传统的正交频分复用 (OFDM) 范式形成鲜明对比, 其中工作人员通过正交频率上传他们的模型, 其性能随着工作人员数量的增加而降低\cite{elgabli2020harnessing}。
+
+
+
+\subsection{Application To More Types of Machine Learning Problems and Models}\label{sec:more_types_ml}
+To date, federated learning has primarily considered supervised learning tasks where labels are naturally available on each client. Extending FL to other ML paradigms, including reinforcement learning, semi-supervised and unsupervised learning, active learning, and online learning \citep{he2019central,zhao2019decentralized} all present interesting and open challenges.
+%[ZH]
+%Federated learning for other machine learning and reinforcement learning methods than supervised prediction of binary or real (or structured) labels can be potentially challenging. Indeed, in reinforcement learning for instance, the right quantities to aggregate in federated learning are unclear. The right classes of failures and attacks are also unclear. All the more interesting venues for future research.
+
+
+\subsection*{应用于更多类型的机器学习问题和模型} 
+迄今为止, 联邦学习主要考虑监督学习任务, 其中标签在每个客户端上自然可用。将 FL 扩展到其他 ML 范式, 包括强化学习、半监督和无监督学习、主动学习和在线学习 \citep{he2019central,zhao2019decentralized} 都提出了有趣和开放的挑战。
+
+%Tara Javidi: Bayesian FL
+Another important class of models, highly relevant to FL, are those that can characterize the uncertainty in their predictions. Most modern deep learning models cannot represent their uncertainty nor allow for a probability interpretation of parametric learning. This has motivated recent developments of tools and techniques combining Bayesian models with deep learning. From a probability theory perspective, it is unjustifiable to use single point-estimates for classification. Bayesian neural networks \citep{BL-overview} have been proposed and shown to be far more robust to over-fitting, and can easily learn from small datasets. The Bayesian approach further offers uncertainty estimates via its parameters in form of probability distributions, thus preventing over-fitting. Moreover, appealing to probabilistic reasoning, one can predict how the uncertainty can decrease, allowing the decisions made by the network to become more deterministic as the data size grows. 
+
+%Tara Javidi：贝叶斯 FL
+与 FL 高度相关的另一类重要模型是那些可以表征预测中的不确定性的模型。大多数现代深度学习模型不能表示它们的不确定性, 也不能对参数学习进行概率解释。这推动了最近将贝叶斯模型与深度学习相结合的工具和技术的发展。从概率论的角度来看, 使用单点估计进行分类是不合理的。贝叶斯神经网络 \citep{BL-overview} 已经被提出并被证明对过拟合更加鲁棒, 并且可以很容易地从小数据集中学习。贝叶斯方法通过其概率分布形式的参数进一步提供不确定性估计, 从而防止过度拟合。此外, 借助概率推理, 人们可以预测不确定性如何降低, 随着数据规模的增长, 网络做出的决策变得更具确定性。
+
+Since Bayesian methods gave us tools to reason about deep models’ confidence and also achieve state-of-the-art performance on many tasks, one expects Bayesian methods to provide a conceptual improvement to the classical federated learning. In fact, preliminary work from \citet{BayesFL} shows that incorporating Bayesian methods allows for model aggregation across non-IID data and heterogeneous platforms. However, many questions regarding scalability and computational feasibility have to be addressed.
+
+
+由于贝叶斯方法为我们提供了推理深度模型置信度的工具, 并在许多任务上实现了最先进的性能, 因此人们期望贝叶斯方法能够为经典联邦学习提供概念上的改进。事实上, \citet{BayesFL} 的初步工作表明, 结合贝叶斯方法允许跨非 IID 数据和异构平台进行模型聚合。然而, 必须解决许多关于可扩展性和计算可行性的问题。
+
+
+\subsection{Executive summary}
+% Zheng Xu
+Efficient and effective federated learning algorithms face different challenges compared to centralized training in a datacenter. 
+
+ 
+与数据中心的集中训练相比, 高效的联邦学习算法面临着不同的挑战。
+\begin{itemize}
+
+\item Non-IID data due to non-identical client distributions, violation of independence, and dataset drift (\cref{sec:noniid}) pose a key challenge. Though various methods have been surveyed and discussed in this section, defining and dealing with non-IID data remains an open problem and one of the most active research topics in federated learning.
+
+\item Optimization algorithms for federated learning are analyzed in \cref{sec:optimization} under different settings, e.g., convex and nonconvex functions, IID and non-IID data. Theoretical analysis has proven difficult for the parallel local updates commonly used in federated optimization, and often strict assumptions have to be made to constrain the client heterogeneity. Currently, known convergence rates do not fully explain the empirically-observed effectiveness of the Federated Averaging algorithm over methods such as mini-batch SGD~\citep{woodworth2020local}.
+
+\item Client-side personalization and ``multi-model’’ approaches (\cref{sec:multimodel}) can address data heterogeneity and give hope of surpassing the performance of the best fixed global model. Simple personalization methods like fine-tuning can be effective, and offer intrinsic privacy advantages. However, many theoretical and empirical questions remain open: when is a global model better? How many models are necessary? Which federated optimization algorithms combine best with local fine-tuning?
+
+\item Adapting centralized training workflows such as hyper-parameter tuning, neural architecture design, debugging, and interpretability tasks to the federated learning setting (\cref{sec:workflows}) present roadblocks to the widespread adoption of FL in practical settings, and hence constitute important open problems. 
+
+\item While there has been significant work on communication efficiency and compression for FL (\cref{sec:compr}), it remains an important and active area. In particular, fully automating the process of enabling compression without impacting convergence for a wide class of models is an important practical goal. Relatively new directions on the theoretical study of communication, compatibility with privacy methods, and co-design with wireless infrastructure are discussed.
+
+\item There are many open questions in extending federated learning from supervised tasks to other machine learning paradigms including reinforcement learning, semi-supervised and unsupervised learning, active learning, and online learning (\cref{sec:more_types_ml}).
+
+\end{itemize}
+
+\begin{itemize}
+  \item 
+ 由于客户端分布不一致、违反独立性和数据集漂移(\cref{sec:noniid})而导致的项非IID数据是一个关键挑战。尽管本节对各种方法进行了调查和讨论, 但定义和处理非IID数据仍然是一个开放的问题, 也是联邦学习中最活跃的研究课题之一。
+ \item 在不同的设置下, 例如凸函数和非凸函数、IID和非IID数据, 在\cref{sec:optimization}中分析联邦学习的项目优化算法。对于联邦优化中常用的并行局部更新, 理论分析已被证明是困难的, 并且通常必须做出严格的假设来约束客户端的异构性。目前, 已知的收敛速度不能完全解释联邦平均算法相对于小型批量SGD ~\citep{woodworth2020local}等方法的经验观察有效性。
+ \item 客户端个性化和“多模型”方法(\cref{sec:multimodel})可以解决数据异构性问题, 并有望超越最佳固定全局模型的性能。简单的个性化方法(如微调)可能是有效的, 并提供固有的隐私优势。然而, 许多理论和实证问题仍然悬而未决：什么时候全局模型更好？需要多少型号？哪些联邦优化算法与局部微调结合得最好？
+\item 将集中式培训工作流程(如超参数调整、神经结构设计、调试和解释性任务)调整到联邦学习环境(\cref{sec:workflows})的项目为FL在实际环境中的广泛采用提供了障碍, 因此构成了重要的开放性问题。
+\item  虽然在FL(\cref{sec:compr})的通信效率和压缩方面进行了大量工作, 但它仍然是一个重要和活跃的领域。特别是, 实现压缩过程的完全自动化, 而不影响一大类模型的收敛性, 这是一个重要的实际目标。讨论了通信理论研究、与隐私方法的兼容性以及与无线基础设施的协同设计等方面相对较新的方向。
+\item 将联邦学习从有监督的任务扩展到其他机器学习模式, 包括强化学习、半监督和无监督学习、主动学习和在线学习(\cref{sec:more_types_ml}), 还有许多悬而未决的问题。
+\end{itemize}
+
+% \pagebreak
+
+
+
+
+ 

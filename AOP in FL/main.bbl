@@ -1,0 +1,3569 @@
+\begin{thebibliography}{511}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[lat(2020)]{lattigo}
+Lattigo 2.0.0.
+\newblock Online: \url{http://github.com/ldsec/lattigo}, October 2020.
+\newblock EPFL-LDS.
+
+\bibitem[Abadi et~al.(2015)Abadi, Agarwal, Barham, Brevdo, Chen, Citro,
+  Corrado, Davis, Dean, Devin, Ghemawat, Goodfellow, Harp, Irving, Isard, Jia,
+  Jozefowicz, Kaiser, Kudlur, Levenberg, Man\'{e}, Monga, Moore, Murray, Olah,
+  Schuster, Shlens, Steiner, Sutskever, Talwar, Tucker, Vanhoucke, Vasudevan,
+  Vi\'{e}gas, Vinyals, Warden, Wattenberg, Wicke, Yu, and
+  Zheng]{tensorflow2015-whitepaper}
+Mart\'{\i}n Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo, Zhifeng Chen,
+  Craig Citro, Greg~S. Corrado, Andy Davis, Jeffrey Dean, Matthieu Devin,
+  Sanjay Ghemawat, Ian Goodfellow, Andrew Harp, Geoffrey Irving, Michael Isard,
+  Yangqing Jia, Rafal Jozefowicz, Lukasz Kaiser, Manjunath Kudlur, Josh
+  Levenberg, Dandelion Man\'{e}, Rajat Monga, Sherry Moore, Derek Murray, Chris
+  Olah, Mike Schuster, Jonathon Shlens, Benoit Steiner, Ilya Sutskever, Kunal
+  Talwar, Paul Tucker, Vincent Vanhoucke, Vijay Vasudevan, Fernanda Vi\'{e}gas,
+  Oriol Vinyals, Pete Warden, Martin Wattenberg, Martin Wicke, Yuan Yu, and
+  Xiaoqiang Zheng.
+\newblock {TensorFlow}: Large-scale machine learning on heterogeneous systems,
+  2015.
+\newblock URL \url{https://www.tensorflow.org/}.
+\newblock Software available from tensorflow.org.
+
+\bibitem[Abadi et~al.(2016)Abadi, Chu, Goodfellow, McMahan, Mironov, Talwar,
+  and Zhang]{abadi2016deep}
+Martin Abadi, Andy Chu, Ian Goodfellow, H~Brendan McMahan, Ilya Mironov, Kunal
+  Talwar, and Li~Zhang.
+\newblock Deep learning with differential privacy.
+\newblock In \emph{Proceedings of the 2016 ACM SIGSAC Conference on Computer
+  and Communications Security}, pages 308--318. ACM, 2016.
+
+\bibitem[Abari et~al.(2016)Abari, Rahul, and Katabi]{AbariRK16}
+Omid Abari, Hariharan Rahul, and Dina Katabi.
+\newblock Over-the-air function computation in sensor networks.
+\newblock \emph{CoRR}, abs/1612.02307, 2016.
+\newblock URL \url{http://arxiv.org/abs/1612.02307}.
+
+\bibitem[Abay et~al.(2018)Abay, Zhou, Kantarcioglu, Thuraisingham, and
+  Sweeney]{abay2018privacy}
+Nazmiye~Ceren Abay, Yan Zhou, Murat Kantarcioglu, Bhavani Thuraisingham, and
+  Latanya Sweeney.
+\newblock Privacy preserving synthetic data release using deep learning.
+\newblock In \emph{Joint European Conference on Machine Learning and Knowledge
+  Discovery in Databases}, pages 510--526. Springer, 2018.
+
+\bibitem[Abowd and Schmutte(2019)]{AS19}
+John~M Abowd and Ian~M Schmutte.
+\newblock An economic analysis of privacy protection and statistical accuracy
+  as social choices.
+\newblock \emph{American Economic Review}, 109\penalty0 (1):\penalty0 171--202,
+  2019.
+
+\bibitem[Acharya et~al.(2020)Acharya, Canonne, and Tyagi]{acharya2018}
+Jayadev Acharya, Cl{\'e}ment~L Canonne, and Himanshu Tyagi.
+\newblock Inference under information constraints i: Lower bounds from
+  chi-square contraction.
+\newblock \emph{IEEE Transactions on Information Theory}, 66\penalty0
+  (12):\penalty0 7835--7855, 2020.
+
+\bibitem[\'{A}cs and Castelluccia(2011)]{Acs:2011:IDD:2042445.2042457}
+Gergely \'{A}cs and Claude Castelluccia.
+\newblock I have a {DREAM}!: {DI}fferentially {P}rivat{E} smart {M}etering.
+\newblock In \emph{Proceedings of the 13th International Conference on
+  Information Hiding}, IH'11, pages 118--132, Berlin, Heidelberg, 2011.
+  Springer-Verlag.
+\newblock ISBN 978-3-642-24177-2.
+\newblock URL \url{http://dl.acm.org/citation.cfm?id=2042445.2042457}.
+
+\bibitem[Agarwal et~al.(2018)Agarwal, Suresh, Yu, Kumar, and
+  McMahan]{agarwal2018cpsgd}
+Naman Agarwal, Ananda~Theertha Suresh, Felix~X. Yu, Sanjiv Kumar, and Brendan
+  McMahan.
+\newblock cp{SGD}: Communication-efficient and differentially-private
+  distributed {SGD}.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  7564--7575, 2018.
+
+\bibitem[Agrawal et~al.(2019)Agrawal, Shamsabadi, Kusner, and
+  Gasc{\'{o}}n]{quotient}
+Nitin Agrawal, Ali~Shahin Shamsabadi, Matt~J. Kusner, and Adri{\`{a}}
+  Gasc{\'{o}}n.
+\newblock {QUOTIENT:} two-party secure neural network training and prediction.
+\newblock In \emph{In Proceedings of the {ACM} Conference on Computer and
+  Communication Security (CCS)}, 2019.
+
+\bibitem[Agrawal and Srikant(2000)]{agrawal2000}
+Rakesh Agrawal and Ramakrishnan Srikant.
+\newblock Privacy-preserving data mining.
+\newblock In \emph{ACM SIGMOD International Conference on Management of Data},
+  2000.
+
+\bibitem[Aguilar-Melchor and Gaborit(2007)]{aguilar2007lattice}
+Carlos Aguilar-Melchor and Philippe Gaborit.
+\newblock A lattice-based computationally-efficient private information
+  retrieval protocol.
+\newblock \emph{Cryptol. ePrint Arch., Report}, 446, 2007.
+
+\bibitem[Aguilar-Melchor et~al.(2016)Aguilar-Melchor, Barrier, Fousse, and
+  Killijian]{aguilar2016xpir}
+Carlos Aguilar-Melchor, Joris Barrier, Laurent Fousse, and Marc-Olivier
+  Killijian.
+\newblock {XPIR}: Private information retrieval for everyone.
+\newblock \emph{Proceedings on Privacy Enhancing Technologies}, 2016\penalty0
+  (2):\penalty0 155--174, 2016.
+
+\bibitem[{ai.google}(2018)]{googleai18settingssearch}
+{ai.google}.
+\newblock Under the hood of the {P}ixel 2: How {AI} is supercharging hardware,
+  2018.
+\newblock URL \url{https://ai.google/stories/ai-in-hardware/}.
+\newblock Retrieved Nov 2018.
+
+\bibitem[{ai.intel}(2019)]{intel19medicalimaging}
+{ai.intel}.
+\newblock Federated learning for medical imaging, 2019.
+\newblock URL
+  \url{https://www.intel.ai/federated-learning-for-medical-imaging/}.
+\newblock Retrieved Aug 2019.
+
+\bibitem[Ali et~al.(2019)Ali, Lepoint, Patel, Raykova, Schoppmann, Seth, and
+  Yeo]{DBLP:journals/iacr/AliLP0SSY19}
+Asra Ali, Tancr{\`{e}}de Lepoint, Sarvar Patel, Mariana Raykova, Phillipp
+  Schoppmann, Karn Seth, and Kevin Yeo.
+\newblock Communication-computation trade-offs in {PIR}.
+\newblock \emph{{IACR} Cryptol. ePrint Arch.}, 2019:\penalty0 1483, 2019.
+
+\bibitem[Alistarh et~al.(2017)Alistarh, Grubic, Li, Tomioka, and
+  Vojnovic]{alistarh2017qsgd}
+Dan Alistarh, Demjan Grubic, Jerry Li, Ryota Tomioka, and Milan Vojnovic.
+\newblock {QSGD}: Communication-efficient {SGD} via gradient quantization and
+  encoding.
+\newblock In \emph{NIPS - Advances in Neural Information Processing Systems},
+  pages 1709--1720, 2017.
+
+\bibitem[Alistarh et~al.(2018)Alistarh, Allen-Zhu, and
+  Li]{alistarh2018byzantine}
+Dan Alistarh, Zeyuan Allen-Zhu, and Jerry Li.
+\newblock Byzantine stochastic gradient descent.
+\newblock In \emph{NIPS}, 2018.
+
+\bibitem[Almeida and Xavier(2018)]{Almeida2018}
+Inês Almeida and João Xavier.
+\newblock {DJAM: Distributed Jacobi Asynchronous Method for Learning Personal
+  Models}.
+\newblock \emph{IEEE Signal Processing Letters}, 25\penalty0 (9):\penalty0
+  1389--1392, 2018.
+
+\bibitem[Ames et~al.(2017)Ames, Hazay, Ishai, and
+  Venkitasubramaniam]{Ames:2017:LLS:3133956.3134104}
+Scott Ames, Carmit Hazay, Yuval Ishai, and Muthuramakrishnan
+  Venkitasubramaniam.
+\newblock Ligero: Lightweight sublinear arguments without a trusted setup.
+\newblock In \emph{Proceedings of the 2017 ACM SIGSAC Conference on Computer
+  and Communications Security}, CCS '17, 2017.
+
+\bibitem[Amin et~al.(2019)Amin, Kulesza, Munoz, and
+  Vassilvtiskii]{amin2019bounding}
+Kareem Amin, Alex Kulesza, Andres Munoz, and Sergei Vassilvtiskii.
+\newblock Bounding user contributions: A bias-variance trade-off in
+  differential privacy.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  263--271, 2019.
+
+\bibitem[androidtrusty()]{AndroidTrusty}
+androidtrusty.
+\newblock {Android Trusty TEE}.
+\newblock \url{https://source.android.com/security/trusty}, 2019.
+\newblock Accessed: 2019-12-05.
+
+\bibitem[Angel et~al.(2018)Angel, Chen, Laine, and
+  Setty]{DBLP:conf/sp/AngelCLS18}
+Sebastian Angel, Hao Chen, Kim Laine, and Srinath T.~V. Setty.
+\newblock {PIR} with compressed queries and amortized query processing.
+\newblock In \emph{{IEEE} Symposium on Security and Privacy}, pages 962--979.
+  {IEEE} Computer Society, 2018.
+
+\bibitem[Annas(2003)]{annas2003hipaa}
+George~J Annas.
+\newblock {HIPAA} regulations-a new era of medical-record privacy?
+\newblock \emph{New England Journal of Medicine}, 348\penalty0 (15):\penalty0
+  1486--1490, 2003.
+
+\bibitem[Apple(2019{\natexlab{a}})]{apple19neurips}
+Apple.
+\newblock {Private Federated Learning (NeurIPS 2019 Expo Talk Abstract)}.
+\newblock \url{https://nips.cc/ExpoConferences/2019/schedule?talk_id=40},
+  2019{\natexlab{a}}.
+
+\bibitem[Apple(2019{\natexlab{b}})]{apple19wwdc}
+Apple.
+\newblock Designing for privacy (video and slide deck).
+\newblock Apple WWDC,
+  \url{https://developer.apple.com/videos/play/wwdc2019/708},
+  2019{\natexlab{b}}.
+
+\bibitem[Araki et~al.(2016)Araki, Furukawa, Lindell, Nof, and
+  Ohara]{araki2016high}
+Toshinori Araki, Jun Furukawa, Yehuda Lindell, Ariel Nof, and Kazuma Ohara.
+\newblock High-throughput semi-honest secure three-party computation with an
+  honest majority.
+\newblock In \emph{Proceedings of the 2016 ACM SIGSAC Conference on Computer
+  and Communications Security}, pages 805--817. ACM, 2016.
+
+\bibitem[armtrustzone()]{ArmTrustzone}
+armtrustzone.
+\newblock {Arm TrustZone Technology}.
+\newblock \url{https://developer.arm.com/ip-products/security-ip/trustzone},
+  2019.
+\newblock Accessed: 2019-12-05.
+
+\bibitem[Assran et~al.(2019)Assran, Loizou, Ballas, and
+  Rabbat]{assran2019stochastic}
+Mahmoud Assran, Nicolas Loizou, Nicolas Ballas, and Michael Rabbat.
+\newblock Stochastic gradient push for distributed deep learning.
+\newblock In \emph{ICML}, 2019.
+
+\bibitem[Athalye et~al.(2018)Athalye, Carlini, and
+  Wagner]{athalye2018obfuscated}
+Anish Athalye, Nicholas Carlini, and David Wagner.
+\newblock Obfuscated gradients give a false sense of security: Circumventing
+  defenses to adversarial examples.
+\newblock \emph{ICML}, 2018.
+
+\bibitem[Augenstein et~al.(2019)Augenstein, McMahan, Ramage, Ramaswamy,
+  Kairouz, Chen, Mathews, and y~Arcas]{augenstein2019generative}
+Sean Augenstein, H.~Brendan McMahan, Daniel Ramage, Swaroop Ramaswamy, Peter
+  Kairouz, Mingqing Chen, Rajiv Mathews, and Blaise~Aguera y~Arcas.
+\newblock Generative models for effective {ML} on private, decentralized
+  datasets, 2019.
+\newblock URL \url{https://arxiv.org/abs/1911.06679}.
+
+\bibitem[Authors(2020{\natexlab{a}})]{PyVertical}
+PyVertical Authors.
+\newblock Pyvertical, 2020{\natexlab{a}}.
+\newblock URL \url{https://github.com.cnpmjs.org/OpenMined/PyVertical}.
+
+\bibitem[Authors(2019{\natexlab{a}})]{FATE}
+The~FATE Authors.
+\newblock Federated {AI} technology enabler, 2019{\natexlab{a}}.
+\newblock URL \url{https://www.fedai.org/}.
+
+\bibitem[Authors(2020{\natexlab{b}})]{Fedlearner}
+The~Fedlearner Authors.
+\newblock Fedlearner, 2020{\natexlab{b}}.
+\newblock URL \url{https://github.com/bytedance/fedlearner}.
+
+\bibitem[Authors(2019{\natexlab{b}})]{Leaf}
+The~Leaf Authors.
+\newblock Leaf, 2019{\natexlab{b}}.
+\newblock URL \url{https://leaf.cmu.edu/}.
+
+\bibitem[Authors(2019{\natexlab{c}})]{PaddleFL}
+The~PaddleFL Authors.
+\newblock Paddle{FL}, 2019{\natexlab{c}}.
+\newblock URL \url{https://github.com/PaddlePaddle/PaddleFL}.
+
+\bibitem[Authors(2019{\natexlab{d}})]{PaddlePaddle}
+The~PaddlePaddle Authors.
+\newblock Paddle{P}addle, 2019{\natexlab{d}}.
+\newblock URL \url{http://www.paddlepaddle.org/}.
+
+\bibitem[Authors(2019{\natexlab{e}})]{tff}
+The~TFF Authors.
+\newblock Tensor{F}low {F}ederated, 2019{\natexlab{e}}.
+\newblock URL \url{https://www.tensorflow.org/federated}.
+
+\bibitem[Avent et~al.(01 Oct. 2020)Avent, Dubey, and Korolova]{dubey2018hybrid}
+Brendan Avent, Yatharth Dubey, and Aleksandra Korolova.
+\newblock The power of the hybrid model for mean estimation.
+\newblock \emph{Proceedings on Privacy Enhancing Technologies (PETS)},
+  2020\penalty0 (4):\penalty0 48 -- 68, 01 Oct. 2020.
+\newblock \doi{https://doi.org/10.2478/popets-2020-0062}.
+\newblock URL
+  \url{https://content.sciendo.com/view/journals/popets/2020/4/article-p48.xml}.
+
+\bibitem[Avent et~al.(2017)Avent, Korolova, Zeber, Hovden, and
+  Livshits]{avent2017blender}
+Brendan Avent, Aleksandra Korolova, David Zeber, Torgeir Hovden, and Benjamin
+  Livshits.
+\newblock {BLENDER}: Enabling local search with a hybrid differential privacy
+  model.
+\newblock In \emph{26th {USENIX} Security Symposium ({USENIX} Security 17)},
+  pages 747--764, Vancouver, BC, August 2017. {USENIX} Association.
+\newblock ISBN 978-1-931971-40-9.
+\newblock URL
+  \url{https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/avent}.
+
+\bibitem[Awasthi et~al.(2020)Awasthi, Cortes, Mansour, and
+  Mohri]{AwasthiCortesMansourMohri2020}
+Pranjal Awasthi, Corinna Cortes, Yishay Mansour, and Mehryar Mohri.
+\newblock Beyond individual and group fairness.
+\newblock \emph{CoRR}, abs/2008.09490, 2020.
+
+\bibitem[Babai et~al.(1991)Babai, Fortnow, Levin, and
+  Szegedy]{DBLP:conf/stoc/BabaiFLS91}
+L{\'{a}}szl{\'{o}} Babai, Lance Fortnow, Leonid~A. Levin, and Mario Szegedy.
+\newblock Checking computations in polylogarithmic time.
+\newblock In \emph{{STOC}}, pages 21--31. {ACM}, 1991.
+
+\bibitem[Bagdasaryan and Shmatikov(2019)]{bagdasaryan2019disparate}
+Eugene Bagdasaryan and Vitaly Shmatikov.
+\newblock Differential privacy has disparate impact on model accuracy.
+\newblock \emph{CoRR}, abs/1905.12101, 2019.
+\newblock URL \url{http://arxiv.org/abs/1905.12101}.
+
+\bibitem[Bagdasaryan et~al.(2018)Bagdasaryan, Veit, Hua, Estrin, and
+  Shmatikov]{bagdasaryan18backdoor}
+Eugene Bagdasaryan, Andreas Veit, Yiqing Hua, Deborah Estrin, and Vitaly
+  Shmatikov.
+\newblock How to backdoor federated learning.
+\newblock \emph{arXiv preprint arXiv:1807.00459}, 2018.
+
+\bibitem[Balle et~al.(2019)Balle, Bell, Gasc{\'{o}}n, and Nissim]{BalleBGN19}
+Borja Balle, James Bell, Adri{\`{a}} Gasc{\'{o}}n, and Kobbi Nissim.
+\newblock The privacy blanket of the shuffle model.
+\newblock In \emph{Advances in Cryptology - {CRYPTO} 2019 - 39th Annual
+  International Cryptology Conference, Santa Barbara, CA, USA, August 18-22,
+  2019, Proceedings, Part {II}}, pages 638--667, 2019.
+\newblock \doi{10.1007/978-3-030-26951-7\_22}.
+\newblock URL \url{https://doi.org/10.1007/978-3-030-26951-7\_22}.
+
+\bibitem[Balle et~al.(2020{\natexlab{a}})Balle, Bell, Gasc\'{o}n, and
+  Nissim]{balle2020}
+Borja Balle, James Bell, Adri\`{a} Gasc\'{o}n, and Kobbi Nissim.
+\newblock Private summation in the multi-message shuffle model.
+\newblock In \emph{Proceedings of the 2020 ACM SIGSAC Conference on Computer
+  and Communications Security}, page 657–676. ACM, 2020{\natexlab{a}}.
+
+\bibitem[Balle et~al.(2020{\natexlab{b}})Balle, Kairouz, McMahan, Thakkar, and
+  Thakurta]{balle2020privacy}
+Borja Balle, Peter Kairouz, H.~Brendan McMahan, Om~Thakkar, and Abhradeep
+  Thakurta.
+\newblock Privacy amplification via random check-ins, 2020{\natexlab{b}}.
+
+\bibitem[Barak et~al.(2019)Barak, Escudero, Dalskov, and Keller]{bedkSE}
+Assi Barak, Daniel Escudero, Anders P.~K. Dalskov, and Marcel Keller.
+\newblock Secure evaluation of quantized neural networks.
+\newblock \emph{{IACR} Cryptology ePrint Archive}, 2019:\penalty0 131, 2019.
+\newblock URL \url{https://eprint.iacr.org/2019/131}.
+
+\bibitem[Barnes et~al.(2020{\natexlab{a}})Barnes, Han, and Ozgur]{barnes2019}
+Leighton~Pate Barnes, Yanjun Han, and Ayfer Ozgur.
+\newblock Lower bounds for learning distributions under communication
+  constraints via fisher information.
+\newblock \emph{Journal of Machine Learning Research}, 21\penalty0
+  (236):\penalty0 1--30, 2020{\natexlab{a}}.
+\newblock URL \url{http://jmlr.org/papers/v21/19-737.html}.
+
+\bibitem[Barnes et~al.(2020{\natexlab{b}})Barnes, Inan, Isik, and
+  Ozgur]{Barnes2020rtopk}
+Leighton~Pate Barnes, Huseyin~A. Inan, Berivan Isik, and Ayfer Ozgur.
+\newblock rtop-k: A statistical estimation approach to distributed sgd.
+\newblock \emph{arXiv preprint arXiv:2005.10761}, 2020{\natexlab{b}}.
+
+\bibitem[Barocas et~al.(2019)Barocas, Hardt, and Narayanan]{barocasfairness}
+Solon Barocas, Moritz Hardt, and Arvind Narayanan.
+\newblock \emph{Fairness and Machine Learning}.
+\newblock fairmlbook.org, 2019.
+\newblock \url{http://www.fairmlbook.org}.
+
+\bibitem[Baruch et~al.(2019)Baruch, Baruch, and Goldberg]{baruch2019little}
+Moran Baruch, Gilad Baruch, and Yoav Goldberg.
+\newblock A little is enough: Circumventing defenses for distributed learning.
+\newblock \emph{arXiv preprint arXiv:1902.06156}, 2019.
+
+\bibitem[Bassily and Smith(2015)]{bassily2015local}
+Raef Bassily and Adam Smith.
+\newblock Local, private, efficient protocols for succinct histograms.
+\newblock In \emph{STOC}, pages 127--135, 2015.
+
+\bibitem[Bassily et~al.(2017)Bassily, Stemmer, Thakurta,
+  et~al.]{bassily2017practical}
+Raef Bassily, Uri Stemmer, Abhradeep~Guha Thakurta, et~al.
+\newblock Practical locally private heavy hitters.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  2288--2296, 2017.
+
+\bibitem[Basu et~al.(2020)Basu, Data, Karakus, and Diggavi]{basu2020qsparse}
+Debraj Basu, Deepesh Data, Can Karakus, and Suhas~N Diggavi.
+\newblock Qsparse-local-sgd: Distributed sgd with quantization, sparsification,
+  and local computations.
+\newblock \emph{IEEE Journal on Selected Areas in Information Theory},
+  1\penalty0 (1):\penalty0 217--226, 2020.
+
+\bibitem[Baxter(2000)]{baxter00model}
+Jonathan Baxter.
+\newblock A model of inductive bias learning.
+\newblock \emph{Journal of Artificial Intelligence Research}, 12:\penalty0
+  149--198, 2000.
+
+\bibitem[Beimel et~al.(2020)Beimel, Korolova, Nissim, Sheffet, and
+  Stemmer]{beimel2019power}
+Amos Beimel, Aleksandra Korolova, Kobbi Nissim, Or~Sheffet, and Uri Stemmer.
+\newblock The power of synergy in differential privacy: Combining a small
+  curator with local randomizers.
+\newblock In \emph{Conference on Information-Theoretic Cryptography (ITC)},
+  2020.
+\newblock URL \url{https://arxiv.org/abs/1912.08951}.
+
+\bibitem[Bell et~al.(2020)Bell, Bonawitz, Gasc\'{o}n, Lepoint, and
+  Raykova]{bell20secagg}
+James~Henry Bell, Kallista~A. Bonawitz, Adri\`{a} Gasc\'{o}n, Tancr\`{e}de
+  Lepoint, and Mariana Raykova.
+\newblock Secure single-server aggregation with (poly)logarithmic overhead.
+\newblock In \emph{Proceedings of the 2020 ACM SIGSAC Conference on Computer
+  and Communications Security}, page 1253–1269. ACM, 2020.
+
+\bibitem[Bellet et~al.(2018)Bellet, Guerraoui, Taziki, and
+  Tommasi]{Bellet2018a}
+Aur\'elien Bellet, Rachid Guerraoui, Mahsa Taziki, and Marc Tommasi.
+\newblock {P}ersonalized and {P}rivate {P}eer-to-{P}eer {M}achine {L}earning.
+\newblock In \emph{{AISTATS}}, 2018.
+
+\bibitem[Bello et~al.(2017)Bello, Zoph, Vasudevan, and Le]{Bello2016Neural}
+Irwan Bello, Barret Zoph, Vijay Vasudevan, and Quoc~V Le.
+\newblock Neural optimizer search with reinforcement learning.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning-Volume 70}, pages 459--468. JMLR. org, 2017.
+
+\bibitem[Ben-David et~al.(2010)Ben-David, Blitzer, Crammer, Kulesza, Pereira,
+  and Vaughan]{ben2010theory}
+Shai Ben-David, John Blitzer, Koby Crammer, Alex Kulesza, Fernando Pereira, and
+  Jennifer~Wortman Vaughan.
+\newblock A theory of learning from different domains.
+\newblock \emph{Machine learning}, 79\penalty0 (1-2):\penalty0 151--175, 2010.
+
+\bibitem[Ben{-}Sasson et~al.(2014)Ben{-}Sasson, Chiesa, Garman, Green, Miers,
+  Tromer, and Virza]{DBLP:conf/sp/Ben-SassonCG0MTV14}
+Eli Ben{-}Sasson, Alessandro Chiesa, Christina Garman, Matthew Green, Ian
+  Miers, Eran Tromer, and Madars Virza.
+\newblock Zerocash: Decentralized anonymous payments from bitcoin.
+\newblock In \emph{{IEEE} Symposium on Security and Privacy}, pages 459--474.
+  {IEEE} Computer Society, 2014.
+
+\bibitem[Ben{-}Sasson et~al.(2019)Ben{-}Sasson, Bentov, Horesh, and
+  Riabzev]{DBLP:conf/crypto/Ben-SassonBHR19}
+Eli Ben{-}Sasson, Iddo Bentov, Yinon Horesh, and Michael Riabzev.
+\newblock Scalable zero knowledge with no trusted setup.
+\newblock In \emph{{CRYPTO} {(3)}}, volume 11694 of \emph{Lecture Notes in
+  Computer Science}, pages 701--732. Springer, 2019.
+
+\bibitem[Bergstra et~al.(2011)Bergstra, Bardenet, Bengio, and
+  K{\'e}gl]{bergstra2011algorithms}
+James~S Bergstra, R{\'e}mi Bardenet, Yoshua Bengio, and Bal{\'a}zs K{\'e}gl.
+\newblock Algorithms for hyper-parameter optimization.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  2546--2554, 2011.
+
+\bibitem[Bertrán et~al.(2019)Bertrán, Martínez, Papadaki, Qiu, Rodrigues,
+  Reeves, and Sapiro]{Bertran2019}
+Martín Bertrán, Natalia Martínez, Afroditi Papadaki, Qiang Qiu, Miguel R.~D.
+  Rodrigues, Galen Reeves, and Guillermo Sapiro.
+\newblock Learning adversarially fair and transferable representations.
+\newblock In \emph{ICML}, 2019.
+
+\bibitem[Beutel et~al.(2020)Beutel, Topal, Mathur, Qiu, Parcollet, and
+  Lane]{beutel2020flower}
+Daniel~J. Beutel, Taner Topal, Akhil Mathur, Xinchi Qiu, Titouan Parcollet, and
+  Nicholas~D. Lane.
+\newblock Flower: A friendly federated learning research framework, 2020.
+
+\bibitem[Bhagoji et~al.(2019)Bhagoji, Chakraborty, Mittal, and
+  Calo]{pmlr-v97-bhagoji19a}
+Arjun~Nitin Bhagoji, Supriyo Chakraborty, Prateek Mittal, and Seraphin Calo.
+\newblock Analyzing federated learning through an adversarial lens.
+\newblock In \emph{Proceedings of the 36th International Conference on Machine
+  Learning}, pages 634--643, 2019.
+
+\bibitem[Bhowmick et~al.(2018)Bhowmick, Duchi, Freudiger, Kapoor, and
+  Rogers]{bhowmick2018protection}
+Abhishek Bhowmick, John Duchi, Julien Freudiger, Gaurav Kapoor, and Ryan
+  Rogers.
+\newblock Protection against reconstruction and its applications in private
+  federated learning.
+\newblock \emph{arXiv preprint arXiv:1812.00984}, 2018.
+
+\bibitem[Biggio et~al.(2012)Biggio, Nelson, and
+  Laskov]{Biggio:2012:PAA:3042573.3042761}
+Battista Biggio, Blaine Nelson, and Pavel Laskov.
+\newblock Poisoning attacks against support vector machines.
+\newblock In \emph{Proceedings of the 29th International Coference on
+  International Conference on Machine Learning}, ICML'12, pages 1467--1474,
+  USA, 2012. Omnipress.
+\newblock ISBN 978-1-4503-1285-1.
+\newblock URL \url{http://dl.acm.org/citation.cfm?id=3042573.3042761}.
+
+\bibitem[Biggio et~al.(2013)Biggio, Corona, Maiorca, Nelson, {\v{S}}rndi{\'c},
+  Laskov, Giacinto, and Roli]{biggio2013evasion}
+Battista Biggio, Igino Corona, Davide Maiorca, Blaine Nelson, Nedim
+  {\v{S}}rndi{\'c}, Pavel Laskov, Giorgio Giacinto, and Fabio Roli.
+\newblock Evasion attacks against machine learning at test time.
+\newblock In \emph{ECML-PKDD}, pages 387--402. Springer, 2013.
+
+\bibitem[Bitansky et~al.(2012)Bitansky, Canetti, Chiesa, and
+  Tromer]{Bitansky:2012:ECR:2090236.2090263}
+Nir Bitansky, Ran Canetti, Alessandro Chiesa, and Eran Tromer.
+\newblock From extractable collision resistance to succinct non-interactive
+  arguments of knowledge, and back again.
+\newblock In \emph{Proceedings of the 3rd Innovations in Theoretical Computer
+  Science Conference}, ITCS '12, 2012.
+
+\bibitem[{Bitar} and {Rouayheb}(2018)]{staircasepir}
+R.~{Bitar} and S.~E. {Rouayheb}.
+\newblock Staircase-{PIR}: Universally robust private information retrieval.
+\newblock In \emph{2018 IEEE Information Theory Workshop (ITW)}, pages 1--5,
+  Nov 2018.
+\newblock \doi{10.1109/ITW.2018.8613532}.
+
+\bibitem[Bittau et~al.(2017)Bittau, Erlingsson, Maniatis, Mironov, Raghunathan,
+  Lie, Rudominer, Kode, Tinnes, and Seefeld]{prochlo}
+Andrea Bittau, \'{U}lfar Erlingsson, Petros Maniatis, Ilya Mironov, Ananth
+  Raghunathan, David Lie, Mitch Rudominer, Ushasree Kode, Julien Tinnes, and
+  Bernhard Seefeld.
+\newblock Prochlo: Strong privacy for analytics in the crowd.
+\newblock In \emph{Proceedings of the 26th Symposium on Operating Systems
+  Principles}, SOSP '17, pages 441--459, New York, NY, USA, 2017. ACM.
+\newblock ISBN 978-1-4503-5085-3.
+\newblock \doi{10.1145/3132747.3132769}.
+\newblock URL \url{http://doi.acm.org/10.1145/3132747.3132769}.
+
+\bibitem[Blalock et~al.(2020)Blalock, Ortiz, Frankle, and
+  Guttag]{blalock2020state}
+Davis Blalock, Jose Javier~Gonzalez Ortiz, Jonathan Frankle, and John Guttag.
+\newblock What is the state of neural network pruning?
+\newblock \emph{arXiv preprint arXiv:2003.03033}, 2020.
+
+\bibitem[Blanchard et~al.(2017{\natexlab{a}})Blanchard, El~Mhamdi, Guerraoui,
+  and Stainer]{peva17}
+Peva Blanchard, El~Mahdi El~Mhamdi, Rachid Guerraoui, and Julien Stainer.
+\newblock Machine learning with adversaries: {B}yzantine tolerant gradient
+  descent.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  2017{\natexlab{a}}.
+
+\bibitem[Blanchard et~al.(2017{\natexlab{b}})Blanchard, Guerraoui, Stainer,
+  et~al.]{blanchard2017machine}
+Peva Blanchard, Rachid Guerraoui, Julien Stainer, et~al.
+\newblock {Machine Learning with Adversaries: {B}yzantine Tolerant Gradient
+  Descent}.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  118--128, 2017{\natexlab{b}}.
+
+\bibitem[Bogdanov et~al.(2012)Bogdanov, Talviste, and
+  Willemson]{DBLP:conf/fc/BogdanovTW12}
+Dan Bogdanov, Riivo Talviste, and Jan Willemson.
+\newblock Deploying secure multi-party computation for financial data analysis
+  - (short paper).
+\newblock In \emph{Financial Cryptography}, volume 7397 of \emph{Lecture Notes
+  in Computer Science}, pages 57--64. Springer, 2012.
+
+\bibitem[Bogetoft et~al.(2009)Bogetoft, Christensen, Damg{\aa}rd, Geisler,
+  Jakobsen, Kr{\o}igaard, Nielsen, Nielsen, Nielsen, Pagter, Schwartzbach, and
+  Toft]{DBLP:conf/fc/BogetoftCDGJKNNNPST09}
+Peter Bogetoft, Dan~Lund Christensen, Ivan Damg{\aa}rd, Martin Geisler,
+  Thomas~P. Jakobsen, Mikkel Kr{\o}igaard, Janus~Dam Nielsen, Jesper~Buus
+  Nielsen, Kurt Nielsen, Jakob Pagter, Michael~I. Schwartzbach, and Tomas Toft.
+\newblock Secure multiparty computation goes live.
+\newblock In \emph{Financial Cryptography}, volume 5628 of \emph{Lecture Notes
+  in Computer Science}, pages 325--343. Springer, 2009.
+
+\bibitem[Bonawitz et~al.(2016)Bonawitz, Ivanov, Kreuter, Marcedone, McMahan,
+  Patel, Ramage, Segal, and Seth]{bonawitz2016practical}
+K.~A. Bonawitz, Vladimir Ivanov, Ben Kreuter, Antonio Marcedone, H.~Brendan
+  McMahan, Sarvar Patel, Daniel Ramage, Aaron Segal, and Karn Seth.
+\newblock Practical secure aggregation for federated learning on user-held
+  data.
+\newblock \emph{arXiv preprint arXiv:1611.04482}, 2016.
+
+\bibitem[Bonawitz et~al.(2017)Bonawitz, Ivanov, Kreuter, Marcedone, McMahan,
+  Patel, Ramage, Segal, and Seth]{bonawitz17secagg}
+K.~A. Bonawitz, Vladimir Ivanov, Ben Kreuter, Antonio Marcedone, H~Brendan
+  McMahan, Sarvar Patel, Daniel Ramage, Aaron Segal, and Karn Seth.
+\newblock Practical secure aggregation for privacy-preserving machine learning.
+\newblock In \emph{Proceedings of the 2017 ACM SIGSAC Conference on Computer
+  and Communications Security}, pages 1175--1191. ACM, 2017.
+
+\bibitem[Bonawitz et~al.(2019{\natexlab{a}})Bonawitz, Eichner, Grieskamp, Huba,
+  Ingerman, Ivanov, Kiddon, Kone{\v{c}}n{\'y}, Mazzocchi, McMahan, Overveldt,
+  Petrou, Ramage, and Roselander]{bonawitz19sysml}
+K.~A. Bonawitz, Hubert Eichner, Wolfgang Grieskamp, Dzmitry Huba, Alex
+  Ingerman, Vladimir Ivanov, Chloé~M Kiddon, Jakub Kone{\v{c}}n{\'y}, Stefano
+  Mazzocchi, Brendan McMahan, Timon~Van Overveldt, David Petrou, Daniel Ramage,
+  and Jason Roselander.
+\newblock Towards federated learning at scale: System design.
+\newblock In \emph{SysML 2019}, 2019{\natexlab{a}}.
+\newblock URL \url{https://arxiv.org/abs/1902.01046}.
+
+\bibitem[Bonawitz et~al.(2019{\natexlab{b}})Bonawitz, Salehi,
+  Kone{\v{c}}n{\'y}, McMahan, and Gruteser]{bonawitz2019autotune}
+K.~A. Bonawitz, Fariborz Salehi, Jakub Kone{\v{c}}n{\'y}, Brendan McMahan, and
+  Marco Gruteser.
+\newblock Federated learning with autotuned communication-efficient secure
+  aggregation.
+\newblock In \emph{2019 53nd Asilomar Conference on Signals, Systems, and
+  Computers}. IEEE, 2019{\natexlab{b}}.
+
+\bibitem[Boneh et~al.(2019)Boneh, Boyle, Corrigan{-}Gibbs, Gilboa, and
+  Ishai]{DBLP:conf/crypto/BonehBCGI19}
+Dan Boneh, Elette Boyle, Henry Corrigan{-}Gibbs, Niv Gilboa, and Yuval Ishai.
+\newblock Zero-knowledge proofs on secret-shared data via fully linear {PCP}s.
+\newblock In \emph{{CRYPTO} {(3)}}, volume 11694 of \emph{Lecture Notes in
+  Computer Science}, pages 67--97. Springer, 2019.
+
+\bibitem[Bourse et~al.(2018)Bourse, Minelli, Minihold, and
+  Paillier]{DBLP:conf/crypto/BourseMMP18}
+Florian Bourse, Michele Minelli, Matthias Minihold, and Pascal Paillier.
+\newblock Fast homomorphic evaluation of deep discretized neural networks.
+\newblock In \emph{{CRYPTO} {(3)}}, volume 10993 of \emph{Lecture Notes in
+  Computer Science}, pages 483--512. Springer, 2018.
+
+\bibitem[Boyd et~al.(2006)Boyd, Ghosh, Prabhakar, and Shah]{Boyd2006}
+Stephen Boyd, Arpita Ghosh, Balaji Prabhakar, and Devavrat Shah.
+\newblock Randomized gossip algorithms.
+\newblock \emph{IEEE Transactions on Information Theory}, 52\penalty0
+  (6):\penalty0 2508--2530, 2006.
+
+\bibitem[Bradbury et~al.(2018)Bradbury, Frostig, Hawkins, Johnson, Leary,
+  Maclaurin, Necula, Paszke, Vander{P}las, Wanderman-{M}ilne, and
+  Zhang]{jax2018github}
+James Bradbury, Roy Frostig, Peter Hawkins, Matthew~James Johnson, Chris Leary,
+  Dougal Maclaurin, George Necula, Adam Paszke, Jake Vander{P}las, Skye
+  Wanderman-{M}ilne, and Qiao Zhang.
+\newblock {JAX}: composable transformations of {P}ython+{N}um{P}y programs,
+  2018.
+\newblock URL \url{http://github.com/google/jax}.
+
+\bibitem[Brakerski(2012)]{BFV1}
+Zvika Brakerski.
+\newblock Fully homomorphic encryption without modulus switching from classical
+  gapsvp.
+\newblock In \emph{{CRYPTO}}, volume 7417 of \emph{Lecture Notes in Computer
+  Science}, pages 868--886. Springer, 2012.
+
+\bibitem[Brakerski et~al.(2012)Brakerski, Gentry, and Vaikuntanathan]{BGV}
+Zvika Brakerski, Craig Gentry, and Vinod Vaikuntanathan.
+\newblock (leveled) fully homomorphic encryption without bootstrapping.
+\newblock In \emph{{ITCS}}, pages 309--325. {ACM}, 2012.
+
+\bibitem[Braverman et~al.(2016)Braverman, Garg, Ma, Nguyen, and
+  Woodruff]{braverman2016}
+Mark Braverman, Ankit Garg, Tengyu Ma, Huy~L. Nguyen, and David~P. Woodruff.
+\newblock Communication lower bounds for statistical estimation problems via a
+  distributed data processing inequality.
+\newblock In \emph{Proceedings of the forty-eighth annual ACM symposium on
+  Theory of Computing}, page 1011–1020. ACM, 2016.
+
+\bibitem[Brendel et~al.(2017)Brendel, Rauber, and Bethge]{brendel2017decision}
+Wieland Brendel, Jonas Rauber, and Matthias Bethge.
+\newblock Decision-based adversarial attacks: Reliable attacks against
+  black-box machine learning models.
+\newblock \emph{arXiv preprint arXiv:1712.04248}, 2017.
+
+\bibitem[Brisimi et~al.(2018)Brisimi, Chen, Mela, Olshevsky, Paschalidis, and
+  Shi]{brisimi2018federated}
+Theodora~S Brisimi, Ruidi Chen, Theofanie Mela, Alex Olshevsky, Ioannis~Ch
+  Paschalidis, and Wei Shi.
+\newblock Federated learning of predictive models from federated electronic
+  health records.
+\newblock \emph{International journal of medical informatics}, 112:\penalty0
+  59--67, 2018.
+
+\bibitem[B{\"{u}}nz et~al.(2018)B{\"{u}}nz, Bootle, Boneh, Poelstra, Wuille,
+  and Maxwell]{DBLP:conf/sp/BunzBBPWM18}
+Benedikt B{\"{u}}nz, Jonathan Bootle, Dan Boneh, Andrew Poelstra, Pieter
+  Wuille, and Gregory Maxwell.
+\newblock Bulletproofs: Short proofs for confidential transactions and more.
+\newblock In \emph{2018 {IEEE} Symposium on Security and Privacy, {SP} 2018,
+  Proceedings, 21-23 May 2018, San Francisco, California, {USA}}, 2018.
+
+\bibitem[Buolamwini and Gebru(2018)]{buolamwini2018gender}
+Joy Buolamwini and Timnit Gebru.
+\newblock Gender shades: Intersectional accuracy disparities in commercial
+  gender classification.
+\newblock In \emph{Conference on fairness, accountability and transparency},
+  pages 77--91, 2018.
+
+\bibitem[Burkhart et~al.(2010)Burkhart, Strasser, Many, and
+  Dimitropoulos]{burkhart2010sepia}
+Martin Burkhart, Mario Strasser, Dilip Many, and Xenofontas Dimitropoulos.
+\newblock {SEPIA}: Privacy-preserving aggregation of multi-domain network
+  events and statistics.
+\newblock \emph{Network}, 1\penalty0 (101101), 2010.
+
+\bibitem[Caldas et~al.(2018{\natexlab{a}})Caldas, Kone{\v{c}}n{\'y}, McMahan,
+  and Talwalkar]{caldas2018expanding}
+Sebastian Caldas, Jakub Kone{\v{c}}n{\'y}, H~Brendan McMahan, and Ameet
+  Talwalkar.
+\newblock Expanding the reach of federated learning by reducing client resource
+  requirements.
+\newblock \emph{arXiv preprint arXiv:1812.07210}, 2018{\natexlab{a}}.
+
+\bibitem[Caldas et~al.(2018{\natexlab{b}})Caldas, Wu, Li, Kone{\v{c}}n{\'y},
+  McMahan, Smith, and Talwalkar]{caldas2018leaf}
+Sebastian Caldas, Peter Wu, Tian Li, Jakub Kone{\v{c}}n{\'y}, H~Brendan
+  McMahan, Virginia Smith, and Ameet Talwalkar.
+\newblock {LEAF}: A benchmark for federated settings.
+\newblock \emph{arXiv preprint arXiv:1812.01097}, 2018{\natexlab{b}}.
+
+\bibitem[Canonne et~al.(2019)Canonne, Kamath, McMillan, Smith, and
+  Ullman]{CKM+18b}
+Clément~L Canonne, Gautam Kamath, Audra McMillan, Adam Smith, and Jonathan
+  Ullman.
+\newblock The structure of optimal private tests for simple hypotheses.
+\newblock \emph{AarXiv preprint arXiv:1811.11148}, 2019.
+
+\bibitem[Carlini and Wagner(2017)]{carlini2017towards}
+Nicholas Carlini and David Wagner.
+\newblock Towards evaluating the robustness of neural networks.
+\newblock In \emph{2017 IEEE Symposium on Security and Privacy (SP)}, pages
+  39--57. IEEE, 2017.
+
+\bibitem[Carlini et~al.(2018)Carlini, Liu, Kos, Erlingsson, and
+  Song]{carlini2018secret}
+Nicholas Carlini, Chang Liu, Jernej Kos, {\'U}lfar Erlingsson, and Dawn Song.
+\newblock The secret sharer: Measuring unintended neural network memorization
+  \& extracting secrets.
+\newblock \emph{arXiv preprint arXiv:1802.08232}, 2018.
+
+\bibitem[Carlini et~al.(2020)Carlini, Tram{\`{e}}r, Wallace, Jagielski,
+  Herbert-Voss, Lee, Roberts, Brown, Song, Erlingsson,
+  et~al.]{carlini2020extracting}
+Nicholas Carlini, Florian Tram{\`{e}}r, Eric Wallace, Matthew Jagielski, Ariel
+  Herbert-Voss, Katherine Lee, Adam Roberts, Tom Brown, Dawn Song, Ulfar
+  Erlingsson, et~al.
+\newblock Extracting training data from large language models.
+\newblock \emph{arXiv preprint arXiv:2012.07805}, 2020.
+
+\bibitem[Ceballos et~al.(2018)Ceballos, Sharma, Mugica, Singh, Roman,
+  Vepakomma, and Raskar]{splitVertical}
+Iker Ceballos, Vivek Sharma, Eduardo Mugica, Abhishek Singh, Albert Roman,
+  Praneeth Vepakomma, and Ramesh Raskar.
+\newblock Split{NN}-driven vertical partitioning.
+\newblock \emph{arXiv preprint arXiv:2008.04137}, 2018.
+
+\bibitem[Chai~Sim et~al.(2019)Chai~Sim, Beaufays, Benard, Guliani, Kabel,
+  Khare, Lucassen, Zadrazil, Zhang, Johnson, et~al.]{chai2019personalization}
+Khe Chai~Sim, Fran{\c{c}}oise Beaufays, Arnaud Benard, Dhruv Guliani, Andreas
+  Kabel, Nikhil Khare, Tamar Lucassen, Petr Zadrazil, Harry Zhang, Leif
+  Johnson, et~al.
+\newblock Personalization of end-to-end speech recognition on mobile devices
+  for named entities.
+\newblock \emph{arXiv}, pages arXiv--1912, 2019.
+
+\bibitem[Chan et~al.(2012)Chan, Shi, and Song]{chan2012privacy}
+T-H~Hubert Chan, Elaine Shi, and Dawn Song.
+\newblock Privacy-preserving stream aggregation with fault tolerance.
+\newblock In \emph{International Conference on Financial Cryptography and Data
+  Security}, pages 200--214. Springer, 2012.
+
+\bibitem[Chang et~al.(2018)Chang, Balachandar, Lam, Yi, Brown, Beers, Rosen,
+  Rubin, and Kalpathy-Cramer]{chang2018distributed}
+Ken Chang, Niranjan Balachandar, Carson Lam, Darvin Yi, James Brown, Andrew
+  Beers, Bruce Rosen, Daniel~L Rubin, and Jayashree Kalpathy-Cramer.
+\newblock Distributed deep learning networks among institutions for medical
+  imaging.
+\newblock \emph{Journal of the American Medical Informatics Association},
+  25\penalty0 (8):\penalty0 945--954, 2018.
+
+\bibitem[Chang and Tandon(2019)]{Chang2019OnTU}
+Wei-Ting Chang and Ravi Tandon.
+\newblock On the upload versus download cost for secure and private matrix
+  multiplication.
+\newblock \emph{ArXiv}, abs/1906.10684, 2019.
+
+\bibitem[Charles and Kone{\v{c}}n{\`y}(2020)]{charles2020outsized}
+Zachary Charles and Jakub Kone{\v{c}}n{\`y}.
+\newblock On the outsized importance of learning rates in local update methods.
+\newblock \emph{arXiv preprint arXiv:2007.00878}, 2020.
+
+\bibitem[Chaum(1981)]{chaum1981untraceable}
+David Chaum.
+\newblock Untraceable electronic mail, return addresses, and digital
+  pseudonyms.
+\newblock \emph{Communications of the ACM}, 24\penalty0 (2), 1981.
+
+\bibitem[Chen et~al.(2018{\natexlab{a}})Chen, Carvalho, Baracaldo, Ludwig,
+  Edwards, Lee, Molloy, and Srivastava]{chen2018detecting}
+Bryant Chen, Wilka Carvalho, Nathalie Baracaldo, Heiko Ludwig, Benjamin
+  Edwards, Taesung Lee, Ian Molloy, and Biplav Srivastava.
+\newblock Detecting backdoor attacks on deep neural networks by activation
+  clustering.
+\newblock \emph{arXiv preprint arXiv:1811.03728}, 2018{\natexlab{a}}.
+
+\bibitem[Chen et~al.(2020{\natexlab{a}})Chen, Golubchik, and
+  Paolieri]{chen2020backdoor}
+Chien-Lun Chen, Leana Golubchik, and Marco Paolieri.
+\newblock Backdoor attacks on federated meta-learning.
+\newblock \emph{arXiv preprint arXiv:2006.07026}, 2020{\natexlab{a}}.
+
+\bibitem[Chen et~al.(2021)Chen, Ghazi, Kumar, and
+  Manurangsi]{chen2020distributed}
+Lijie Chen, Badih Ghazi, Ravi Kumar, and Pasin Manurangsi.
+\newblock On distributed differential privacy and counting distinct elements.
+\newblock In \emph{Innovations in Theoretical Computer Science (ITCS)}, 2021.
+
+\bibitem[Chen et~al.(2018{\natexlab{b}})Chen, Wang, Charles, and
+  Papailiopoulos]{chen18draco}
+Lingjiao Chen, Hongyi Wang, Zachary~B. Charles, and Dimitris~S. Papailiopoulos.
+\newblock {DRACO:} {B}yzantine-resilient distributed training via redundant
+  gradients.
+\newblock In \emph{Proceedings of the 35th International Conference on Machine
+  Learning, {ICML}}, 2018{\natexlab{b}}.
+
+\bibitem[Chen et~al.(2019)Chen, Mathews, Ouyang, and Beaufays]{chen19oov}
+Mingqing Chen, Rajiv Mathews, Tom Ouyang, and Fran{\c{c}}oise Beaufays.
+\newblock Federated learning of out-of-vocabulary words.
+\newblock \emph{arXiv preprint 1903.10635}, 2019.
+\newblock URL \url{http://arxiv.org/abs/1903.10635}.
+
+\bibitem[Chen et~al.(2017{\natexlab{a}})Chen, Zhang, Sharma, Yi, and
+  Hsieh]{chen2017zoo}
+Pin-Yu Chen, Huan Zhang, Yash Sharma, Jinfeng Yi, and Cho-Jui Hsieh.
+\newblock Z{OO}: Zeroth order optimization based black-box attacks to deep
+  neural networks without training substitute models.
+\newblock In \emph{Proceedings of the 10th ACM Workshop on Artificial
+  Intelligence and Security}, pages 15--26. ACM, 2017{\natexlab{a}}.
+
+\bibitem[Chen et~al.(2020{\natexlab{b}})Chen, Kairouz, and Ozgur]{ChenKO2020}
+Wei-Ning Chen, Peter Kairouz, and Ayfer Ozgur.
+\newblock Breaking the communication-privacy-accuracy trilemma.
+\newblock \emph{Advances in Neural Information Processing Systems}, 33,
+  2020{\natexlab{b}}.
+
+\bibitem[Chen et~al.(2017{\natexlab{b}})Chen, Liu, Li, Lu, and
+  Song]{chen2017targeted}
+Xinyun Chen, Chang Liu, Bo~Li, Kimberly Lu, and Dawn Song.
+\newblock Targeted backdoor attacks on deep learning systems using data
+  poisoning.
+\newblock \emph{arXiv preprint arXiv:1712.05526}, 2017{\natexlab{b}}.
+
+\bibitem[Chen et~al.(2017{\natexlab{c}})Chen, Su, and
+  Xu]{Chen2017DistributedSM}
+Yudong Chen, Lili Su, and Jiaming Xu.
+\newblock {Distributed Statistical Machine Learning in Adversarial Settings:
+  {B}yzantine Gradient Descent}.
+\newblock \emph{POMACS}, 1:\penalty0 44:1--44:25, 2017{\natexlab{c}}.
+
+\bibitem[Chenal and Tang(2014)]{DBLP:conf/latincrypt/ChenalT14}
+Massimo Chenal and Qiang Tang.
+\newblock On key recovery attacks against existing somewhat homomorphic
+  encryption schemes.
+\newblock In \emph{{LATINCRYPT}}, volume 8895 of \emph{Lecture Notes in
+  Computer Science}, pages 239--258. Springer, 2014.
+
+\bibitem[Cheng et~al.(2019{\natexlab{a}})Cheng, Fan, Jin, Liu, Chen, and
+  Yang]{DBLP:journals/corr/abs-1901-08755}
+Kewei Cheng, Tao Fan, Yilun Jin, Yang Liu, Tianjian Chen, and Qiang Yang.
+\newblock Secure{B}oost: {A} lossless federated learning framework.
+\newblock \emph{CoRR}, abs/1901.08755, 2019{\natexlab{a}}.
+\newblock URL \url{http://arxiv.org/abs/1901.08755}.
+
+\bibitem[Cheng et~al.(2019{\natexlab{b}})Cheng, Zhang, Kos, He, Hynes, Johnson,
+  Juels, Miller, and Song]{cheng2019ekiden}
+Raymond Cheng, Fan Zhang, Jernej Kos, Warren He, Nicholas Hynes, Noah Johnson,
+  Ari Juels, Andrew Miller, and Dawn Song.
+\newblock Ekiden: A platform for confidentiality-preserving, trustworthy, and
+  performant smart contracts.
+\newblock In \emph{2019 IEEE European Symposium on Security and Privacy
+  (EuroS\&P)}, pages 185--200. IEEE, 2019{\natexlab{b}}.
+
+\bibitem[Cheu et~al.(2019)Cheu, Smith, Ullman, Zeber, and
+  Zhilyaev]{cheu2019distributed}
+Albert Cheu, Adam Smith, Jonathan Ullman, David Zeber, and Maxim Zhilyaev.
+\newblock Distributed differential privacy via shuffling.
+\newblock In \emph{Annual International Conference on the Theory and
+  Applications of Cryptographic Techniques}, pages 375--403. Springer, 2019.
+
+\bibitem[Chor et~al.(1998)Chor, Kushilevitz, Goldreich, and Sudan]{Chor98PIR}
+Benny Chor, Eyal Kushilevitz, Oded Goldreich, and Madhu Sudan.
+\newblock Private information retrieval.
+\newblock \emph{J. ACM}, 45\penalty0 (6):\penalty0 965--981, November 1998.
+\newblock ISSN 0004-5411.
+\newblock \doi{10.1145/293347.293350}.
+\newblock URL \url{http://doi.acm.org/10.1145/293347.293350}.
+
+\bibitem[Chou et~al.(2018)Chou, Tram{\`e}r, and Pellegrino]{chou2018sentinet}
+Edward Chou, Florian Tram{\`e}r, and Giancarlo Pellegrino.
+\newblock Senti{N}et: Detecting physical attacks against deep learning systems.
+\newblock \emph{arXiv preprint arXiv:1812.00292}, 2018.
+
+\bibitem[Chraibi et~al.(2019)Chraibi, Khaled, Kovalev, Richt{\'a}rik, Salim,
+  and Tak{\'a}{\v{c}}]{chraibi2019distributed}
+S{\'e}lim Chraibi, Ahmed Khaled, Dmitry Kovalev, Peter Richt{\'a}rik, Adil
+  Salim, and Martin Tak{\'a}{\v{c}}.
+\newblock Distributed fixed point methods with compressed iterates.
+\newblock \emph{arXiv preprint arXiv:1912.09925}, 2019.
+
+\bibitem[Christen(2012)]{christen12}
+P.~Christen.
+\newblock \emph{Data matching: concepts and techniques for record linkage,
+  entity resolution, and duplicate detection}.
+\newblock Springer Science \& Business Media, 2012.
+
+\bibitem[{C}lara(2019)]{ClaraTraining}
+{NVIDIA} {C}lara.
+\newblock The clara training framework authors, 2019.
+\newblock URL \url{https://developer.nvidia.com/clara}.
+
+\bibitem[Cohen et~al.(2017)Cohen, Afshar, Tapson, and van
+  Schaik]{cohen2017emnist}
+Gregory Cohen, Saeed Afshar, Jonathan Tapson, and Andr{\'e} van Schaik.
+\newblock {EMNIST}: an extension of {MNIST} to handwritten letters.
+\newblock \emph{arXiv preprint arXiv:1702.05373}, 2017.
+
+\bibitem[Colin et~al.(2016)Colin, Bellet, Salmon, and
+  Cl{\'e}men{\c{c}}on]{Colin2016}
+Igor Colin, Aur{\'e}lien Bellet, Joseph Salmon, and St{\'e}phan
+  Cl{\'e}men{\c{c}}on.
+\newblock Gossip dual averaging for decentralized optimization of pairwise
+  functions.
+\newblock In \emph{ICML}, 2016.
+
+\bibitem[Cormode et~al.(2018)Cormode, Kulkarni, and
+  Srivastava]{cormode2018marginal}
+Graham Cormode, Tejas Kulkarni, and Divesh Srivastava.
+\newblock Marginal release under local differential privacy.
+\newblock In \emph{Proceedings of the 2018 International Conference on
+  Management of Data}, pages 131--146. ACM, 2018.
+
+\bibitem[Coron et~al.(2014)Coron, Lepoint, and
+  Tibouchi]{DBLP:conf/pkc/CoronLT14}
+Jean{-}S{\'{e}}bastien Coron, Tancr{\`{e}}de Lepoint, and Mehdi Tibouchi.
+\newblock Scale-invariant fully homomorphic encryption over the integers.
+\newblock In \emph{Public Key Cryptography}, volume 8383 of \emph{Lecture Notes
+  in Computer Science}, pages 311--328. Springer, 2014.
+
+\bibitem[Corrigan-Gibbs and Boneh(2017)]{corrigan2017prio}
+Henry Corrigan-Gibbs and Dan Boneh.
+\newblock Prio: Private, robust, and scalable computation of aggregate
+  statistics.
+\newblock In \emph{14th $\{$USENIX$\}$ Symposium on Networked Systems Design
+  and Implementation ($\{$NSDI$\}$ 17)}, pages 259--282, 2017.
+
+\bibitem[Corrigan{-}Gibbs and
+  Kogan(2019)]{DBLP:journals/iacr/Corrigan-GibbsK19a}
+Henry Corrigan{-}Gibbs and Dmitry Kogan.
+\newblock Private information retrieval with sublinear online time.
+\newblock \emph{{IACR} Cryptology ePrint Archive}, 2019:\penalty0 1075, 2019.
+
+\bibitem[Cortes and Mohri(2014)]{cortes2014domain}
+Corinna Cortes and Mehryar Mohri.
+\newblock Domain adaptation and sample bias correction theory and algorithm for
+  regression.
+\newblock \emph{Theoretical Computer Science}, 519:\penalty0 103--126, 2014.
+
+\bibitem[Cortes et~al.(2020)Cortes, Mohri, Suresh, and
+  Zhang]{cortes2020multiple}
+Corinna Cortes, Mehryar Mohri, Ananda~Theertha Suresh, and Ningshan Zhang.
+\newblock Multiple-source adaptation with domain classifiers.
+\newblock \emph{arXiv preprint arXiv:2008.11036}, 2020.
+
+\bibitem[Costan and Devadas(2016)]{costan2016intel}
+Victor Costan and Srinivas Devadas.
+\newblock Intel {SGX} explained.
+\newblock \emph{IACR Cryptology ePrint Archive}, 2016\penalty0 (086):\penalty0
+  1--118, 2016.
+
+\bibitem[Costan et~al.(2016)Costan, Lebedev, and Devadas]{costan2016sanctum}
+Victor Costan, Ilia Lebedev, and Srinivas Devadas.
+\newblock Sanctum: Minimal hardware extensions for strong software isolation.
+\newblock In \emph{25th $\{$USENIX$\}$ Security Symposium ($\{$USENIX$\}$
+  Security 16)}, pages 857--874, 2016.
+
+\bibitem[Costello et~al.(2015)Costello, Fournet, Howell, Kohlweiss, Kreuter,
+  Naehrig, Parno, and Zahur]{DBLP:conf/sp/CostelloFHKKNPZ15}
+Craig Costello, C{\'{e}}dric Fournet, Jon Howell, Markulf Kohlweiss, Benjamin
+  Kreuter, Michael Naehrig, Bryan Parno, and Samee Zahur.
+\newblock Geppetto: Versatile verifiable computation.
+\newblock In \emph{{IEEE} Symposium on Security and Privacy}, pages 253--270.
+  {IEEE} Computer Society, 2015.
+
+\bibitem[Cotter et~al.(2011)Cotter, Shamir, Srebro, and
+  Sridharan]{cotter2011acmb}
+Andrew Cotter, Ohad Shamir, Nati Srebro, and Karthik Sridharan.
+\newblock Better mini-batch algorithms via accelerated gradient methods.
+\newblock In J.~Shawe-Taylor, R.~Zemel, P.~Bartlett, F.~Pereira, and K.~Q.
+  Weinberger, editors, \emph{Advances in Neural Information Processing
+  Systems}, volume~24, pages 1647--1655. Curran Associates, Inc., 2011.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2011/file/b55ec28c52d5f6205684a473a2193564-Paper.pdf}.
+
+\bibitem[Courbariaux et~al.(2015)Courbariaux, Bengio, and
+  David]{courbariaux2015binaryconnect}
+Matthieu Courbariaux, Yoshua Bengio, and Jean-Pierre David.
+\newblock Binary{C}onnect: Training deep neural networks with binary weights
+  during propagations.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  3123--3131, 2015.
+
+\bibitem[Courtiol et~al.(2019)Courtiol, Maussion, Moarii, Pronier, Pilcer,
+  Sefta, Manceron, Toldo, Zaslavskiy, Le~Stang, et~al.]{courtiol2019deep}
+Pierre Courtiol, Charles Maussion, Matahi Moarii, Elodie Pronier, Samuel
+  Pilcer, Meriem Sefta, Pierre Manceron, Sylvain Toldo, Mikhail Zaslavskiy,
+  Nolwenn Le~Stang, et~al.
+\newblock Deep learning-based classification of mesothelioma improves
+  prediction of patient outcome.
+\newblock \emph{Nature medicine}, pages 1--7, 2019.
+
+\bibitem[Cover and Thomas(2012)]{cover2012elements}
+Thomas~M Cover and Joy~A Thomas.
+\newblock \emph{Elements of information theory}.
+\newblock John Wiley \& Sons, 2012.
+
+\bibitem[Cretu et~al.(2008)Cretu, Stavrou, Locasto, Stolfo, and
+  Keromytis]{cretu2008casting}
+Gabriela~F Cretu, Angelos Stavrou, Michael~E Locasto, Salvatore~J Stolfo, and
+  Angelos~D Keromytis.
+\newblock Casting out demons: Sanitizing training data for anomaly sensors.
+\newblock In \emph{2008 IEEE Symposium on Security and Privacy (sp 2008)},
+  pages 81--95. IEEE, 2008.
+
+\bibitem[Cummings et~al.(2018{\natexlab{a}})Cummings, Krehbiel, Lai, and
+  Tantitongpipat]{CKLT18}
+Rachel Cummings, Sara Krehbiel, Kevin Lai, and Uthaipon Tantitongpipat.
+\newblock Differential privacy for growing databases.
+\newblock In \emph{Advances in Neural Information Processing Systems 31},
+  NeurIPS '18, pages 8864--8873, 2018{\natexlab{a}}.
+
+\bibitem[Cummings et~al.(2018{\natexlab{b}})Cummings, Krehbiel, Mei, Tuo, and
+  Zhang]{CKM+18}
+Rachel Cummings, Sara Krehbiel, Yajun Mei, Rui Tuo, and Wanrong Zhang.
+\newblock Differentially private change-point detection.
+\newblock In \emph{Advances in Neural Information Processing Systems 31},
+  NeurIPS '18, pages 10825--10834, 2018{\natexlab{b}}.
+
+\bibitem[Cummings et~al.(2019{\natexlab{a}})Cummings, Dekel, Heffetz, and
+  Ligett]{CDHL19}
+Rachel Cummings, Inbal Dekel, Ori Heffetz, and Katrina Ligett.
+\newblock Bringing differential privacy into the experimental economics lab:
+  Theory and an application to a public-good game.
+\newblock Working paper, 2019{\natexlab{a}}.
+
+\bibitem[Cummings et~al.(2019{\natexlab{b}})Cummings, Gupta, Kimpara, and
+  Morgenstern]{CGKM19}
+Rachel Cummings, Varun Gupta, Dhamma Kimpara, and Jamie Morgenstern.
+\newblock On the compatibility of privacy and fairness.
+\newblock In \emph{Proceedings of Fairness in User Modeling, Adaptation and
+  Personalization}, FairUMAP, 2019{\natexlab{b}}.
+
+\bibitem[Cyffers and Bellet(2020)]{privacy_amp_by_decentralization}
+Edwige Cyffers and Aur\'elien Bellet.
+\newblock Privacy amplification by decentralization.
+\newblock \emph{arXiv preprint arXiv:2012.05326}, 2020.
+
+\bibitem[Damg\r{a}rd(2010)]{DamgaardSigma}
+Damg\r{a}rd.
+\newblock On $\sigma$ protocols.
+\newblock \url{http://www.cs.au.dk/~ivan/Sigma.pdf}, 2010.
+
+\bibitem[Data et~al.(2020)Data, Song, and Diggavi]{data2019data}
+Deepesh Data, Linqi Song, and Suhas Diggavi.
+\newblock Data encoding for byzantine-resilient distributed optimization.
+\newblock \emph{IEEE Transactions on Information Theory}, 2020.
+
+\bibitem[de~Brouwer(2019)]{docai}
+Walter de~Brouwer.
+\newblock The federated future is ready for shipping.
+\newblock \url{https://doc.ai/blog/federated-future-ready-shipping/}, March
+  2019.
+
+\bibitem[Dean et~al.(2012)Dean, Corrado, Monga, Chen, Devin, Le, Mao, Ranzato,
+  Senior, Tucker, Yang, and Ng]{dean2012large}
+Jeffrey Dean, Greg~S. Corrado, Rajat Monga, Kai Chen, Matthieu Devin, Quoc~V.
+  Le, Mark~Z. Mao, Marc'Aurelio Ranzato, Andrew Senior, Paul Tucker, Ke~Yang,
+  and Andrew~Y. Ng.
+\newblock Large scale distributed deep networks.
+\newblock In \emph{Proceedings of the International Conference on Neural
+  Information Processing Systems}, pages 1223--1231, 2012.
+
+\bibitem[Dekel et~al.(2012)Dekel, Gilad-Bachrach, Shamir, and
+  Xiao]{dekel12optimal}
+Ofer Dekel, Ran Gilad-Bachrach, Ohad Shamir, and Lin Xiao.
+\newblock Optimal distributed online prediction using mini-batches.
+\newblock \emph{J. Mach. Learn. Res.}, 13\penalty0 (1), January 2012.
+
+\bibitem[Diakonikolas et~al.(2019)Diakonikolas, Kamath, Kane, Li, Steinhardt,
+  and Stewart]{pmlr-v97-diakonikolas19a}
+Ilias Diakonikolas, Gautam Kamath, Daniel Kane, Jerry Li, Jacob Steinhardt, and
+  Alistair Stewart.
+\newblock Sever: A robust meta-algorithm for stochastic optimization.
+\newblock In Kamalika Chaudhuri and Ruslan Salakhutdinov, editors,
+  \emph{Proceedings of the 36th International Conference on Machine Learning},
+  volume~97 of \emph{Proceedings of Machine Learning Research}, pages
+  1596--1606, Long Beach, California, USA, 09--15 Jun 2019. PMLR.
+\newblock URL \url{http://proceedings.mlr.press/v97/diakonikolas19a.html}.
+
+\bibitem[Diaz et~al.(2019)Diaz, Kairouz, Liao, and Sankar]{diaz2019theoretical}
+Mario Diaz, Peter Kairouz, Jiachun Liao, and Lalitha Sankar.
+\newblock Theoretical guarantees for model auditing with finite adversaries.
+\newblock \emph{arXiv preprint arXiv:1911.03405}, 2019.
+
+\bibitem[{Differential Privacy Team}(2017)]{applewhitepaper:17}
+{Differential Privacy Team}.
+\newblock Learning with privacy at scale.
+\newblock \emph{Apple Machine Learning Journal}, 1\penalty0 (8), 2017.
+\newblock URL
+  \url{https://machinelearning.apple.com/2017/12/06/learning-with-privacy-at-scale.html}.
+
+\bibitem[Ding et~al.(2017)Ding, Kulkarni, and
+  Yekhanin]{collecting-telemetry-data-privately}
+Bolin Ding, Janardhan Kulkarni, and Sergey Yekhanin.
+\newblock Collecting telemetry data privately.
+\newblock In \emph{Advances in Neural Information Processing Systems 30},
+  December 2017.
+\newblock URL
+  \url{https://www.microsoft.com/en-us/research/publication/collecting-telemetry-data-privately/}.
+
+\bibitem[Ding et~al.(2018)Ding, Wang, Wang, Zhang, and
+  Kifer]{ding2019detecting}
+Zeyu Ding, Yuxin Wang, Guanhong Wang, Danfeng Zhang, and Daniel Kifer.
+\newblock Detecting violations of differential privacy.
+\newblock In \emph{Proceedings of the 2018 ACM SIGSAC Conference on Computer
+  and Communications Security}, CCS '18, pages 475--489, New York, NY, USA,
+  2018. ACM.
+\newblock ISBN 978-1-4503-5693-0.
+\newblock \doi{10.1145/3243734.3243818}.
+\newblock URL \url{http://doi.acm.org/10.1145/3243734.3243818}.
+
+\bibitem[Dingledine et~al.(2004)Dingledine, Mathewson, and
+  Syverson]{dingledine2004tor}
+Roger Dingledine, Nick Mathewson, and Paul Syverson.
+\newblock Tor: The second-generation onion router.
+\newblock Technical report, Naval Research Lab Washington DC, 2004.
+
+\bibitem[Dinh et~al.(2020)Dinh, Tran, and Nguyen]{moreau}
+Canh~T. Dinh, Nguyen~H. Tran, and Tuan~Dung Nguyen.
+\newblock {Personalized Federated Learning with Moreau Envelopes}.
+\newblock In \emph{NeurIPS}, 2020.
+
+\bibitem[{D'Oliveira} and {Rouayheb}(2018)]{dolift}
+Rafael G.~L. {D'Oliveira} and S.~E. {Rouayheb}.
+\newblock Lifting private information retrieval from two to any number of
+  messages.
+\newblock In \emph{2018 IEEE International Symposium on Information Theory
+  (ISIT)}, pages 1744--1748, June 2018.
+\newblock \doi{10.1109/ISIT.2018.8437805}.
+
+\bibitem[Douceur(2002)]{sybil-attack}
+John~R. Douceur.
+\newblock The sybil attack.
+\newblock In \emph{Revised Papers from the First International Workshop on
+  Peer-to-Peer Systems}, IPTPS '01, pages 251--260, London, UK, UK, 2002.
+  Springer-Verlag.
+\newblock ISBN 3-540-44179-4.
+\newblock URL \url{http://dl.acm.org/citation.cfm?id=646334.687813}.
+
+\bibitem[Duchi et~al.(2011)Duchi, Hazan, and Singer]{duchi2011adaptive}
+John Duchi, Elad Hazan, and Yoram Singer.
+\newblock Adaptive subgradient methods for online learning and stochastic
+  optimization.
+\newblock \emph{Journal of machine learning research}, 12\penalty0 (7), 2011.
+
+\bibitem[Duchi et~al.(2013)Duchi, Jordan, and Wainwright]{duchi2013local}
+John~C Duchi, Michael~I Jordan, and Martin~J Wainwright.
+\newblock Local privacy and statistical minimax rates.
+\newblock In \emph{Foundations of Computer Science (FOCS), 2013 IEEE 54th
+  Annual Symposium on}, pages 429--438. IEEE, 2013.
+
+\bibitem[Dutta et~al.(2018)Dutta, Joshi, Ghosh, Dube, and
+  Nagpurkar]{dutta2018slow}
+Sanghamitra Dutta, Gauri Joshi, Soumyadip Ghosh, Parijat Dube, and Priya
+  Nagpurkar.
+\newblock {Slow and Stale Gradients Can Win the Race: Error-Runtime Trade-offs
+  in Distributed {SGD}}.
+\newblock \emph{International Conference on Artificial Intelligence and
+  Statistics (AISTATS)}, April 2018.
+\newblock URL \url{https://arxiv.org/abs/1803.01113}.
+
+\bibitem[Dwork(2008)]{dwork2008differential}
+Cynthia Dwork.
+\newblock Differential privacy: A survey of results.
+\newblock In \emph{International Conference on Theory and Applications of
+  Models of Computation}, pages 1--19. Springer, 2008.
+
+\bibitem[Dwork and Roth(2014)]{dwork2014algorithmic}
+Cynthia Dwork and Aaron Roth.
+\newblock The algorithmic foundations of differential privacy.
+\newblock \emph{Foundations and Trends in Theoretical Computer Science},
+  9\penalty0 (3--4):\penalty0 211--407, 2014.
+
+\bibitem[Dwork et~al.(2006{\natexlab{a}})Dwork, Kenthapadi, McSherry, Mironov,
+  and Naor]{dwork2006our}
+Cynthia Dwork, Krishnaram Kenthapadi, Frank McSherry, Ilya Mironov, and Moni
+  Naor.
+\newblock Our data, ourselves: Privacy via distributed noise generation.
+\newblock In \emph{Annual International Conference on the Theory and
+  Applications of Cryptographic Techniques}, pages 486--503. Springer,
+  2006{\natexlab{a}}.
+
+\bibitem[Dwork et~al.(2006{\natexlab{b}})Dwork, {McSherry}, Nissim, and
+  Smith]{DMNS06}
+Cynthia Dwork, Frank {McSherry}, Kobbi Nissim, and Adam~D. Smith.
+\newblock Calibrating noise to sensitivity in private data analysis.
+\newblock In \emph{{IACR} {T}heory of {C}ryptography {C}onference (TCC), New
+  York, New York}, volume 3876 of \emph{Lecture Notes in Computer Science},
+  pages 265--284. Springer-Verlag, 2006{\natexlab{b}}.
+\newblock \doi{10.1007/11681878_14}.
+
+\bibitem[Dwork et~al.(2010)Dwork, Rothblum, and Vadhan]{DRV10}
+Cynthia Dwork, Guy~N. Rothblum, and Salil Vadhan.
+\newblock Boosting and differential privacy.
+\newblock In \emph{Proceedings of the IEEE 51st Annual Symposium on Foundations
+  of Computer Science}, FOCS '10, pages 51--60, 2010.
+
+\bibitem[Dwork et~al.(2012)Dwork, Hardt, Pitassi, Reingold, and
+  Zemel]{dwork2012fairness}
+Cynthia Dwork, Moritz Hardt, Toniann Pitassi, Omer Reingold, and Richard Zemel.
+\newblock Fairness through awareness.
+\newblock In \emph{Proceedings of the 3rd innovations in theoretical computer
+  science conference}, pages 214--226. ACM, 2012.
+
+\bibitem[Eckhouse et~al.(2019)Eckhouse, Lum, Conti-Cook, and
+  Ciccolini]{eckhouse2019layers}
+Laurel Eckhouse, Kristian Lum, Cynthia Conti-Cook, and Julie Ciccolini.
+\newblock Layers of bias: A unified approach for understanding problems with
+  risk assessment.
+\newblock \emph{Criminal Justice and Behavior}, 46\penalty0 (2):\penalty0
+  185--209, 2019.
+
+\bibitem[Eichner et~al.(2019)Eichner, Koren, McMahan, Srebro, and
+  Talwar]{eichner19semicyclic}
+Hubert Eichner, Tomer Koren, H.~Brendan McMahan, Nathan Srebro, and Kunal
+  Talwar.
+\newblock Semi-cyclic stochastic gradient descent.
+\newblock In \emph{Accepted to ICML 2019.}, 2019.
+\newblock URL \url{https://arxiv.org/abs/1904.10120}.
+
+\bibitem[Eldefrawy et~al.(2012)Eldefrawy, Tsudik, Francillon, and
+  Perito]{DBLP:conf/ndss/EldefrawyTFP12}
+Karim Eldefrawy, Gene Tsudik, Aur{\'{e}}lien Francillon, and Daniele Perito.
+\newblock {SMART:} secure and minimal architecture for (establishing dynamic)
+  root of trust.
+\newblock In \emph{{NDSS}}. The Internet Society, 2012.
+
+\bibitem[Elgabli et~al.(2019)Elgabli, Park, Bedi, Bennis, and
+  Aggarwal]{elgabligadmm}
+Anis Elgabli, Jihong Park, Amrit~S Bedi, Mehdi Bennis, and Vaneet Aggarwal.
+\newblock {GADMM}: Fast and communication efficient framework for distributed
+  machine learning.
+\newblock \emph{arXiv preprint arXiv:1909.00047}, 2019.
+
+\bibitem[Elgabli et~al.(2020)Elgabli, Park, Issaid, and
+  Bennis]{elgabli2020harnessing}
+Anis Elgabli, Jihong Park, Chaouki~Ben Issaid, and Mehdi Bennis.
+\newblock Harnessing wireless channels for scalable and privacy-preserving
+  federated learning, 2020.
+
+\bibitem[Elsken et~al.(2018)Elsken, Hendrik~Metzen, and
+  Hutter]{elsken2018efficient}
+Thomas Elsken, Jan Hendrik~Metzen, and Frank Hutter.
+\newblock Efficient multi-objective neural architecture search via {L}amarckian
+  evolution.
+\newblock \emph{arXiv preprint arXiv:1804.09081}, 2018.
+
+\bibitem[Engstrom et~al.(2017)Engstrom, Tran, Tsipras, Schmidt, and
+  Madry]{engstrom2017rotation}
+Logan Engstrom, Brandon Tran, Dimitris Tsipras, Ludwig Schmidt, and Aleksander
+  Madry.
+\newblock A rotation and a translation suffice: Fooling {CNN}s with simple
+  transformations.
+\newblock \emph{arXiv preprint arXiv:1712.02779}, 2017.
+
+\bibitem[Erlingsson et~al.(2014)Erlingsson, Pihur, and Korolova]{rappor:15}
+\'{U}lfar Erlingsson, Vasyl Pihur, and Aleksandra Korolova.
+\newblock {RAPPOR}: Randomized aggregatable privacy-preserving ordinal
+  response.
+\newblock In \emph{{ACM CCS}}, 2014.
+\newblock ISBN 978-1-4503-2957-6.
+\newblock \doi{10.1145/2660267.2660348}.
+\newblock URL \url{http://doi.acm.org/10.1145/2660267.2660348}.
+
+\bibitem[Erlingsson et~al.(2019)Erlingsson, Feldman, Mironov, Raghunathan,
+  Talwar, and Thakurta]{erlingsson2019amplification}
+{\'U}lfar Erlingsson, Vitaly Feldman, Ilya Mironov, Ananth Raghunathan, Kunal
+  Talwar, and Abhradeep Thakurta.
+\newblock Amplification by shuffling: From local to central differential
+  privacy via anonymity.
+\newblock In \emph{SODA}, pages 2468--2479, 2019.
+
+\bibitem[{EU CORDIS}(2019)]{melloddy19pharma}
+{EU CORDIS}.
+\newblock Machine learning ledger orchestration for drug discovery, 2019.
+\newblock URL
+  \url{https://cordis.europa.eu/project/rcn/223634/factsheet/en?WT.mc_id=RSS-Feed&WT.rss_f=project&WT.rss_a=223634&WT.rss_ev=a}.
+\newblock Retrieved Aug 2019.
+
+\bibitem[Falkner et~al.(2018)Falkner, Klein, and Hutter]{falkner2018bohb}
+Stefan Falkner, Aaron Klein, and Frank Hutter.
+\newblock {BOHB}: Robust and efficient hyperparameter optimization at scale.
+\newblock \emph{arXiv preprint arXiv:1807.01774}, 2018.
+
+\bibitem[Fallah et~al.(2020)Fallah, Mokhtari, and
+  Ozdaglar]{fallah2020personalized}
+Alireza Fallah, Aryan Mokhtari, and Asuman Ozdaglar.
+\newblock Personalized federated learning: A meta-learning approach.
+\newblock \emph{arXiv preprint arXiv:2002.07948}, 2020.
+
+\bibitem[Fan and Vercauteren(2012)]{BFV2}
+Junfeng Fan and Frederik Vercauteren.
+\newblock Somewhat practical fully homomorphic encryption.
+\newblock \emph{{IACR} Cryptology ePrint Archive}, 2012:\penalty0 144, 2012.
+
+\bibitem[Fang et~al.(2019)Fang, Cao, Jia, and Gong]{fang2019local}
+Minghong Fang, Xiaoyu Cao, Jinyuan Jia, and Neil~Zhenqiang Gong.
+\newblock Local model poisoning attacks to {B}yzantine-robust federated
+  learning.
+\newblock \emph{arXiv preprint arXiv:1911.11815}, 2019.
+
+\bibitem[{FeatureCloud}(2019)]{featurecloud19ehr}
+{FeatureCloud}.
+\newblock Feature{C}loud: Our vision, 2019.
+\newblock URL \url{https://featurecloud.eu/about/our-vision/}.
+\newblock Retrieved Aug 2019.
+
+\bibitem[Feldman et~al.(2018)Feldman, Mironov, Talwar, and
+  Thakurta]{feldman2018privacy}
+Vitaly Feldman, Ilya Mironov, Kunal Talwar, and Abhradeep Thakurta.
+\newblock Privacy amplification by iteration.
+\newblock In \emph{2018 IEEE 59th Annual Symposium on Foundations of Computer
+  Science (FOCS)}, pages 521--532. IEEE, 2018.
+
+\bibitem[Feutry et~al.(2018)Feutry, Piantanida, Bengio, and
+  Duhamel]{DBLP:journals/corr/abs-1802-09386}
+Cl{\'{e}}ment Feutry, Pablo Piantanida, Yoshua Bengio, and Pierre Duhamel.
+\newblock Learning anonymized representations with adversarial neural networks.
+\newblock \emph{CoRR}, abs/1802.09386, 2018.
+\newblock URL \url{http://arxiv.org/abs/1802.09386}.
+
+\bibitem[Finn et~al.(2017)Finn, Abbeel, and Levine]{finn17maml}
+Chelsea Finn, Pieter Abbeel, and Sergey Levine.
+\newblock Model-agnostic meta-learning for fast adaptation of deep networks.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning}, 2017.
+
+\bibitem[Francillon et~al.(2014)Francillon, Nguyen, Rasmussen, and
+  Tsudik]{DBLP:conf/date/FrancillonNRT14}
+Aur{\'{e}}lien Francillon, Quan Nguyen, Kasper~Bonne Rasmussen, and Gene
+  Tsudik.
+\newblock A minimalist approach to remote attestation.
+\newblock In \emph{{DATE}}, pages 1--6. European Design and Automation
+  Association, 2014.
+
+\bibitem[Fredrikson et~al.(2015)Fredrikson, Jha, and
+  Ristenpart]{fredrikson2015model}
+Matt Fredrikson, Somesh Jha, and Thomas Ristenpart.
+\newblock Model inversion attacks that exploit confidence information and basic
+  countermeasures.
+\newblock In \emph{Proceedings of the 22nd ACM SIGSAC Conference on Computer
+  and Communications Security}, pages 1322--1333. ACM, 2015.
+
+\bibitem[Fung et~al.(2018)Fung, Yoon, and Beschastnikh]{fung2018mitigating}
+Clement Fung, Chris~JM Yoon, and Ivan Beschastnikh.
+\newblock Mitigating sybils in federated learning poisoning.
+\newblock \emph{arXiv preprint arXiv:1808.04866}, 2018.
+
+\bibitem[Furukawa et~al.(2017)Furukawa, Lindell, Nof, and
+  Weinstein]{DBLP:conf/eurocrypt/FurukawaLNW17}
+Jun Furukawa, Yehuda Lindell, Ariel Nof, and Or~Weinstein.
+\newblock High-throughput secure three-party computation for malicious
+  adversaries and an honest majority.
+\newblock In \emph{{EUROCRYPT} {(2)}}, volume 10211 of \emph{Lecture Notes in
+  Computer Science}, pages 225--255, 2017.
+
+\bibitem[Gaier and Ha(2019)]{gaier2019weight}
+Adam Gaier and David Ha.
+\newblock Weight agnostic neural networks.
+\newblock \emph{arXiv preprint arXiv:1906.04358}, 2019.
+
+\bibitem[Gandikota et~al.(2019)Gandikota, Maity, and
+  Mazumdar]{gandikota2019vqsgd}
+Venkata Gandikota, Raj~Kumar Maity, and Arya Mazumdar.
+\newblock vq{SGD}: Vector quantized stochastic gradient descent.
+\newblock \emph{arXiv preprint arXiv:1911.07971}, 2019.
+
+\bibitem[Gasc{\'{o}}n et~al.(2017)Gasc{\'{o}}n, Schoppmann, Balle, Raykova,
+  Doerner, Zahur, and Evans]{GasconSB0DZE17}
+Adri{\`{a}} Gasc{\'{o}}n, Phillipp Schoppmann, Borja Balle, Mariana Raykova,
+  Jack Doerner, Samee Zahur, and David Evans.
+\newblock Privacy-preserving distributed linear regression on high-dimensional
+  data.
+\newblock \emph{PoPETs}, 2017\penalty0 (4):\penalty0 345--364, 2017.
+
+\bibitem[Gennaro et~al.(2010)Gennaro, Gentry, and
+  Parno]{DBLP:conf/crypto/GennaroGP10}
+Rosario Gennaro, Craig Gentry, and Bryan Parno.
+\newblock Non-interactive verifiable computing: Outsourcing computation to
+  untrusted workers.
+\newblock In \emph{{CRYPTO}}, volume 6223 of \emph{Lecture Notes in Computer
+  Science}, pages 465--482. Springer, 2010.
+
+\bibitem[Gennaro et~al.(2013)Gennaro, Gentry, Parno, and
+  Raykova]{DBLP:conf/eurocrypt/GennaroGP013}
+Rosario Gennaro, Craig Gentry, Bryan Parno, and Mariana Raykova.
+\newblock Quadratic span programs and succinct {NIZK}s without {PCP}s.
+\newblock In \emph{{EUROCRYPT}}, volume 7881 of \emph{Lecture Notes in Computer
+  Science}, pages 626--645. Springer, 2013.
+
+\bibitem[Gentry(2009)]{gentry2009fully}
+Craig Gentry.
+\newblock Fully homomorphic encryption using ideal lattices.
+\newblock In \emph{Proceedings of the forty-first annual ACM symposium on
+  Theory of computing}, pages 169--178, 2009.
+
+\bibitem[Gentry and Halevi(2019)]{DBLP:conf/tcc/GentryH19}
+Craig Gentry and Shai Halevi.
+\newblock Compressible {FHE} with applications to {PIR}.
+\newblock In \emph{{TCC} {(2)}}, volume 11892 of \emph{Lecture Notes in
+  Computer Science}, pages 438--464. Springer, 2019.
+
+\bibitem[Geyer et~al.(2017)Geyer, Klein, and Nabi]{geyer2017differentiallyyer}
+Robin~C. Geyer, Tassilo Klein, and Moin Nabi.
+\newblock Differentially private federated learning: {A} client level
+  perspective.
+\newblock \emph{CoRR}, abs/1712.07557, 2017.
+\newblock URL \url{http://arxiv.org/abs/1712.07557}.
+
+\bibitem[Ghazi et~al.(2019{\natexlab{a}})Ghazi, Golowich, Kumar, Pagh, and
+  Velingker]{ghazi2019private}
+Badih Ghazi, Noah Golowich, Ravi Kumar, Rasmus Pagh, and Ameya Velingker.
+\newblock On the power of multiple anonymous messages.
+\newblock \emph{arXiv:1908.11358}, 2019{\natexlab{a}}.
+
+\bibitem[Ghazi et~al.(2019{\natexlab{b}})Ghazi, Pagh, and
+  Velingker]{ghazi2019scalable_1}
+Badih Ghazi, Rasmus Pagh, and Ameya Velingker.
+\newblock Scalable and differentially private distributed aggregation in the
+  shuffled model.
+\newblock \emph{arXiv preprint arXiv:1906.08320}, 2019{\natexlab{b}}.
+
+\bibitem[Ghazi et~al.(2020{\natexlab{a}})Ghazi, Golowich, Kumar, Manurangsi,
+  Pagh, and Velingker]{pure-dp-shuffled}
+Badih Ghazi, Noah Golowich, Ravi Kumar, Pasin Manurangsi, Rasmus Pagh, and
+  Ameya Velingker.
+\newblock Pure differentially private summation from anonymous messages.
+\newblock In \emph{ITC}, pages 15:1--15:23, 2020{\natexlab{a}}.
+
+\bibitem[Ghazi et~al.(2020{\natexlab{b}})Ghazi, Kumar, Manurangsi, and
+  Pagh]{counting_shuffle_ICML}
+Badih Ghazi, Ravi Kumar, Pasin Manurangsi, and Rasmus Pagh.
+\newblock Private counting from anonymous messages: Near-optimal accuracy with
+  vanishing communication overhead.
+\newblock In \emph{ICML}, 2020{\natexlab{b}}.
+
+\bibitem[Ghazi et~al.(2020{\natexlab{c}})Ghazi, Manurangsi, Pagh, and
+  Velingker]{ghazi2019scalable}
+Badih Ghazi, Pasin Manurangsi, Rasmus Pagh, and Ameya Velingker.
+\newblock Private aggregation from fewer anonymous messages.
+\newblock In \emph{EUROCRYPT}, pages 798--827, 2020{\natexlab{c}}.
+
+\bibitem[Ghosh et~al.(2009)Ghosh, Roughgarden, and
+  Sundararajan]{Ghosh:2009:UUP:1536414.1536464}
+Arpita Ghosh, Tim Roughgarden, and Mukund Sundararajan.
+\newblock Universally utility-maximizing privacy mechanisms.
+\newblock In \emph{Proceedings of the Forty-first Annual ACM Symposium on
+  Theory of Computing}, STOC '09, pages 351--360, New York, NY, USA, 2009. ACM.
+\newblock ISBN 978-1-60558-506-2.
+\newblock \doi{10.1145/1536414.1536464}.
+\newblock URL \url{http://doi.acm.org/10.1145/1536414.1536464}.
+
+\bibitem[Gilad{-}Bachrach et~al.(2016)Gilad{-}Bachrach, Dowlin, Laine, Lauter,
+  Naehrig, and Wernsing]{gbdllnwCN}
+Ran Gilad{-}Bachrach, Nathan Dowlin, Kim Laine, Kristin~E. Lauter, Michael
+  Naehrig, and John Wernsing.
+\newblock Crypto{N}ets: Applying neural networks to encrypted data with high
+  throughput and accuracy.
+\newblock In \emph{Proceedings of the 33nd International Conference on Machine
+  Learning, {ICML} 2016, New York City, NY, USA, June 19-24, 2016}, pages
+  201--210, 2016.
+\newblock URL \url{http://proceedings.mlr.press/v48/gilad-bachrach16.html}.
+
+\bibitem[Girgis et~al.(2020)Girgis, Data, Diggavi, Kairouz, and
+  Suresh]{girgis2020shuffled}
+Antonious~M Girgis, Deepesh Data, Suhas Diggavi, Peter Kairouz, and
+  Ananda~Theertha Suresh.
+\newblock Shuffled model of federated learning: Privacy, communication and
+  accuracy trade-offs.
+\newblock \emph{arXiv preprint arXiv:2008.07180}, 2020.
+
+\bibitem[Goldreich et~al.(1987)Goldreich, Micali, and Wigderson]{goldreich87}
+O.~Goldreich, S.~Micali, and A.~Wigderson.
+\newblock How to play any mental game.
+\newblock In \emph{Proceedings of the Nineteenth Annual ACM Symposium on Theory
+  of Computing}, STOC '87, pages 218--229, New York, NY, USA, 1987. ACM.
+\newblock ISBN 0-89791-221-7.
+\newblock \doi{10.1145/28395.28420}.
+\newblock URL \url{http://doi.acm.org/10.1145/28395.28420}.
+
+\bibitem[Goldwasser et~al.(1989)Goldwasser, Micali, and
+  Rackoff]{DBLP:journals/siamcomp/GoldwasserMR89}
+Shafi Goldwasser, Silvio Micali, and Charles Rackoff.
+\newblock The knowledge complexity of interactive proof systems.
+\newblock \emph{{SIAM} J. Comput.}, 18\penalty0 (1):\penalty0 186--208, 1989.
+
+\bibitem[Goldwasser et~al.(2008)Goldwasser, Kalai, and
+  Rothblum]{DBLP:conf/stoc/GoldwasserKR08}
+Shafi Goldwasser, Yael~Tauman Kalai, and Guy~N. Rothblum.
+\newblock Delegating computation: interactive proofs for muggles.
+\newblock In \emph{{STOC}}, pages 113--122. {ACM}, 2008.
+
+\bibitem[Goodfellow et~al.(2015{\natexlab{a}})Goodfellow, Shlens, and
+  Szegedy]{DBLP:journals/corr/GoodfellowSS14}
+Ian~J. Goodfellow, Jonathon Shlens, and Christian Szegedy.
+\newblock Explaining and harnessing adversarial examples.
+\newblock In \emph{3rd International Conference on Learning Representations,
+  {ICLR} 2015, San Diego, CA, USA, May 7-9, 2015, Conference Track
+  Proceedings}, 2015{\natexlab{a}}.
+\newblock URL \url{http://arxiv.org/abs/1412.6572}.
+
+\bibitem[Goodfellow et~al.(2015{\natexlab{b}})Goodfellow, Shlens, and
+  Szegedy]{goodfellow2014explaining}
+Ian~J Goodfellow, Jonathon Shlens, and Christian Szegedy.
+\newblock Explaining and harnessing adversarial examples.
+\newblock \emph{ICLR}, 2015{\natexlab{b}}.
+
+\bibitem[Goryczka and Xiong(2017)]{DBLP:journals/tdsc/GoryczkaX17}
+Slawomir Goryczka and Li~Xiong.
+\newblock A comprehensive comparison of multiparty secure additions with
+  differential privacy.
+\newblock \emph{{IEEE} Trans. Dependable Sec. Comput.}, 14\penalty0
+  (5):\penalty0 463--477, 2017.
+\newblock \doi{10.1109/TDSC.2015.2484326}.
+\newblock URL \url{https://doi.org/10.1109/TDSC.2015.2484326}.
+
+\bibitem[Gu et~al.(2017)Gu, Dolan-Gavitt, and Garg]{gu2017badnets}
+Tianyu Gu, Brendan Dolan-Gavitt, and Siddharth Garg.
+\newblock Bad{N}ets: Identifying vulnerabilities in the machine learning model
+  supply chain.
+\newblock \emph{arXiv preprint arXiv:1708.06733}, 2017.
+
+\bibitem[Gupta and Raskar(2018)]{gupta2018distributed}
+Otkrist Gupta and Ramesh Raskar.
+\newblock Distributed learning of deep neural network over multiple agents.
+\newblock \emph{Journal of Network and Computer Applications}, 116:\penalty0
+  1--8, 2018.
+
+\bibitem[Haddadpour et~al.(2019)Haddadpour, Kamani, Mahdavi, and
+  Cadambe]{haddadpour2019local}
+Farzin Haddadpour, Mohammad~Mahdi Kamani, Mehrdad Mahdavi, and Viveck~R
+  Cadambe.
+\newblock Local {SGD} with periodic averaging: Tighter analysis and adaptive
+  synchronization.
+\newblock \emph{arXiv preprint arXiv:1910.13598}, 2019.
+
+\bibitem[Haeberlen et~al.(2011)Haeberlen, Pierce, and
+  Narayan]{haeberlen2011differential}
+Andreas Haeberlen, Benjamin~C Pierce, and Arjun Narayan.
+\newblock Differential privacy under fire.
+\newblock In \emph{USENIX Security Symposium}, 2011.
+
+\bibitem[Halevi et~al.(2011)Halevi, Lindell, and Pinkas]{halevi2011secure}
+Shai Halevi, Yehuda Lindell, and Benny Pinkas.
+\newblock Secure computation on the web: Computing without simultaneous
+  interaction.
+\newblock In \emph{Annual Cryptology Conference}, pages 132--150. Springer,
+  2011.
+
+\bibitem[Hamer et~al.(2020)Hamer, Mohri, and Suresh]{hamer2020fedboost}
+Jenny Hamer, Mehryar Mohri, and Ananda~Theertha Suresh.
+\newblock Fedboost: A communication-efficient algorithm for federated learning.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  3973--3983. PMLR, 2020.
+
+\bibitem[Han et~al.(2015)Han, Mao, and Dally]{han2015deep}
+Song Han, Huizi Mao, and William~J Dally.
+\newblock Deep compression: Compressing deep neural networks with pruning,
+  trained quantization and huffman coding.
+\newblock \emph{arXiv preprint arXiv:1510.00149}, 2015.
+
+\bibitem[Han et~al.(2018)Han, \"Ozg\"ur, and Weissman]{han2018}
+Yanjun Han, Ayfer \"Ozg\"ur, and Tsachy Weissman.
+\newblock Geometric lower bounds for distributed parameter estimation under
+  communication constraints.
+\newblock In \emph{Proceedings of Machine Learning Research}, pages 1--26, 75,
+  2018.
+
+\bibitem[Hard et~al.(2018)Hard, Rao, Mathews, Beaufays, Augenstein, Eichner,
+  Kiddon, and Ramage]{hard18gboard}
+Andrew Hard, Kanishka Rao, Rajiv Mathews, Fran{\c{c}}oise Beaufays, Sean
+  Augenstein, Hubert Eichner, Chlo{\'{e}} Kiddon, and Daniel Ramage.
+\newblock Federated learning for mobile keyboard prediction.
+\newblock \emph{arXiv preprint 1811.03604}, 2018.
+
+\bibitem[Hardt et~al.(2016)Hardt, Price, and Srebro]{hardt2016}
+Moritz Hardt, Eric Price, and Nathan Srebro.
+\newblock Equality of opportunity in supervised learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2016.
+
+\bibitem[Hardy et~al.(2017)Hardy, Henecka, Ivey-Law, Nock, Patrini, Smith, and
+  Thorne]{Hardy2017-da}
+Stephen Hardy, Wilko Henecka, Hamish Ivey-Law, Richard Nock, Giorgio Patrini,
+  Guillaume Smith, and Brian Thorne.
+\newblock Private federated learning on vertically partitioned data via entity
+  resolution and additively homomorphic encryption.
+\newblock \emph{arXiv preprint arXiv:1711.10677}, 2017.
+
+\bibitem[Hashimoto et~al.(2018)Hashimoto, Srivastava, Namkoong, and
+  Liang]{hashimoto2018fairness}
+Tatsunori Hashimoto, Megha Srivastava, Hongseok Namkoong, and Percy Liang.
+\newblock Fairness without demographics in repeated loss minimization.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  1934--1943, 2018.
+
+\bibitem[He et~al.(2019)He, Tan, Tang, Qiu, and Liu]{he2019central}
+Chaoyang He, Conghui Tan, Hanlin Tang, Shuang Qiu, and Ji~Liu.
+\newblock Central server free federated learning over single-sided trust social
+  networks.
+\newblock \emph{arXiv preprint arXiv:1910.04956}, 2019.
+
+\bibitem[He et~al.(2020{\natexlab{a}})He, Annavaram, and
+  Avestimehr]{FedGKT2020}
+Chaoyang He, Murali Annavaram, and Salman Avestimehr.
+\newblock Group knowledge transfer: Federated learning of large cnns at the
+  edge.
+\newblock In \emph{Advances in Neural Information Processing Systems 34},
+  2020{\natexlab{a}}.
+
+\bibitem[He et~al.(2020{\natexlab{b}})He, Annavaram, and
+  Avestimehr]{he2020fednas}
+Chaoyang He, Murali Annavaram, and Salman Avestimehr.
+\newblock Fednas: Federated deep learning via neural architecture search.
+\newblock 2020{\natexlab{b}}.
+
+\bibitem[He et~al.(2020{\natexlab{c}})He, Li, So, Zeng, Zhang, Wang, Wang,
+  Vepakomma, Singh, Qiu, Zhu, Wang, Shen, Zhao, Kang, Liu, Raskar, Yang,
+  Annavaram, and Avestimehr]{he2020fedml}
+Chaoyang He, Songze Li, Jinhyun So, Xiao Zeng, Mi~Zhang, Hongyi Wang, Xiaoyang
+  Wang, Praneeth Vepakomma, Abhishek Singh, Hang Qiu, Xinghua Zhu, Jianzong
+  Wang, Li~Shen, Peilin Zhao, Yan Kang, Yang Liu, Ramesh Raskar, Qiang Yang,
+  Murali Annavaram, and Salman Avestimehr.
+\newblock Fedml: A research library and benchmark for federated machine
+  learning, 2020{\natexlab{c}}.
+
+\bibitem[He et~al.(2020{\natexlab{d}})He, Ye, Shen, and Zhang]{MiLeNAS2020}
+Chaoyang He, Haishan Ye, Li~Shen, and Tong Zhang.
+\newblock Milenas: Efficient neural architecture search via mixed-level
+  reformulation.
+\newblock In \emph{Proceedings of IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, 2020{\natexlab{d}}.
+
+\bibitem[He et~al.(2018)He, Bian, and Jaggi]{he2018cola}
+Lie He, An~Bian, and Martin Jaggi.
+\newblock {COLA}: Decentralized linear learning.
+\newblock In \emph{NeurIPS 2018 - Advances in Neural Information Processing
+  Systems 31}, 2018.
+
+\bibitem[H{\'e}bert-Johnson et~al.(2018)H{\'e}bert-Johnson, Kim, Reingold, and
+  Rothblum]{hebert2018multicalibration}
+{\'U}rsula H{\'e}bert-Johnson, Michael Kim, Omer Reingold, and Guy Rothblum.
+\newblock Multicalibration: Calibration for the (computationally-identifiable)
+  masses.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  1944--1953, 2018.
+
+\bibitem[HElib()]{HElib}
+HElib.
+\newblock {HE}lib.
+\newblock \url{https://github.com/homenc/HElib}, October 2019.
+
+\bibitem[Hoffman et~al.(2018)Hoffman, Mohri, and Zhang]{hoffman2018algorithms}
+Judy Hoffman, Mehryar Mohri, and Ningshan Zhang.
+\newblock Algorithms and theory for multiple-source adaptation.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  8246--8256, 2018.
+
+\bibitem[Horvath et~al.(2019)Horvath, Ho, Horvath, Sahu, Canini, and
+  Richtarik]{horvath2019natural}
+Samuel Horvath, Chen-Yu Ho, Ludovit Horvath, Atal~Narayan Sahu, Marco Canini,
+  and Peter Richtarik.
+\newblock Natural compression for distributed deep learning.
+\newblock \emph{arXiv preprint arXiv:1905.10988}, 2019.
+
+\bibitem[Hsieh et~al.(2019)Hsieh, Phanishayee, Mutlu, and
+  Gibbons]{hsieh2019noniid}
+Kevin Hsieh, Amar Phanishayee, Onur Mutlu, and Phillip~B. Gibbons.
+\newblock The non-{IID} data quagmire of decentralized machine learning, 2019.
+\newblock URL \url{https://arxiv.org/abs/1910.00189}.
+
+\bibitem[Hsu et~al.(2019)Hsu, Qi, and Brown]{hsu2019measuring}
+Tzu-Ming~Harry Hsu, Hang Qi, and Matthew Brown.
+\newblock Measuring the effects of non-identical data distribution for
+  federated visual classification.
+\newblock \emph{arXiv preprint arXiv:1909.06335}, 2019.
+
+\bibitem[Hu et~al.(2019)Hu, Liu, Kong, and Niu]{hu2019learning}
+Yaochen Hu, Peng Liu, Linglong Kong, and Di~Niu.
+\newblock Learning privately over distributed features: An admm sharing
+  approach, 2019.
+
+\bibitem[Huang et~al.(2015)Huang, Mitra, and Vaidya]{Huang2015a}
+Zhenqi Huang, Sayan Mitra, and Nitin Vaidya.
+\newblock {Differentially Private Distributed Optimization}.
+\newblock In \emph{ICDCN}, 2015.
+
+\bibitem[Huo et~al.(2018)Huo, Gu, and Huang]{huo2018training}
+Zhouyuan Huo, Bin Gu, and Heng Huang.
+\newblock Training neural networks using features replay.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  6659--6668, 2018.
+
+\bibitem[Intel(2012)]{intel2012architecture}
+R~Intel.
+\newblock Architecture instruction set extensions programming reference.
+\newblock \emph{Intel Corporation, Feb}, 2012.
+
+\bibitem[Ion et~al.(2017)Ion, Kreuter, Nergiz, Patel, Saxena, Seth, Shanahan,
+  and Yung]{DBLP:journals/iacr/IonKNPSSSY17}
+Mihaela Ion, Ben Kreuter, Erhan Nergiz, Sarvar Patel, Shobhit Saxena, Karn
+  Seth, David Shanahan, and Moti Yung.
+\newblock Private intersection-sum protocol with applications to attributing
+  aggregate ad conversions.
+\newblock \emph{{IACR} Cryptology ePrint Archive}, 2017:\penalty0 738, 2017.
+
+\bibitem[Ion et~al.(2019)Ion, Kreuter, Nergiz, Patel, Raykova, Saxena, Seth,
+  Shanahan, and Yung]{DBLP:journals/iacr/IonKNPRSSSY19}
+Mihaela Ion, Ben Kreuter, Ahmet~Erhan Nergiz, Sarvar Patel, Mariana Raykova,
+  Shobhit Saxena, Karn Seth, David Shanahan, and Moti Yung.
+\newblock On deploying secure computing commercially: Private intersection-sum
+  protocols and their business applications.
+\newblock \emph{{IACR} Cryptology ePrint Archive}, 2019:\penalty0 723, 2019.
+
+\bibitem[Ishai et~al.(2003)Ishai, Kilian, Nissim, and Petrank]{IKNP}
+Yuval Ishai, Joe Kilian, Kobbi Nissim, and Erez Petrank.
+\newblock Extending oblivious transfers efficiently.
+\newblock In \emph{{CRYPTO}}, volume 2729 of \emph{Lecture Notes in Computer
+  Science}, pages 145--161. Springer, 2003.
+
+\bibitem[Jaderberg et~al.(2017)Jaderberg, Czarnecki, Osindero, Vinyals, Graves,
+  Silver, and Kavukcuoglu]{jaderberg2017decoupled}
+Max Jaderberg, Wojciech~Marian Czarnecki, Simon Osindero, Oriol Vinyals, Alex
+  Graves, David Silver, and Koray Kavukcuoglu.
+\newblock Decoupled neural interfaces using synthetic gradients.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning-Volume 70}, pages 1627--1635. JMLR. org, 2017.
+
+\bibitem[Jagielski et~al.(2018)Jagielski, Kearns, Mao, Oprea, Roth,
+  Sharifi{-}Malvajerdi, and Ullman]{jagielski2018privatefair}
+Matthew Jagielski, Michael~J. Kearns, Jieming Mao, Alina Oprea, Aaron Roth,
+  Saeed Sharifi{-}Malvajerdi, and Jonathan Ullman.
+\newblock Differentially private fair learning.
+\newblock \emph{CoRR}, abs/1812.02696, 2018.
+\newblock URL \url{http://arxiv.org/abs/1812.02696}.
+
+\bibitem[Jagielski et~al.(2020)Jagielski, Ullman, and
+  Oprea]{jagielski2020auditing}
+Matthew Jagielski, Jonathan Ullman, and Alina Oprea.
+\newblock Auditing differentially private machine learning: How private is
+  private sgd?
+\newblock \emph{Advances in Neural Information Processing Systems}, 33, 2020.
+
+\bibitem[Jeong et~al.(2018)Jeong, Oh, Kim, Park, Bennis, and Kim]{FD}
+Eunjeong Jeong, Seungeun Oh, Hyesung Kim, Jihong Park, Mehdi Bennis, and
+  Seong{-}Lyun Kim.
+\newblock Communication-efficient on-device machine learning: Federated
+  distillation and augmentation under non-{IID} private data.
+\newblock \emph{CoRR}, abs/1811.11479, 2018.
+\newblock URL \url{http://arxiv.org/abs/1811.11479}.
+
+\bibitem[Jia and Jafar(2019)]{Jia2019OnTC}
+Zhuqing Jia and Syed~Ali Jafar.
+\newblock On the capacity of secure distributed matrix multiplication.
+\newblock \emph{ArXiv}, abs/1908.06957, 2019.
+
+\bibitem[Jiang et~al.(2019)Jiang, Kone{\v{c}}n{\'y}, Rush, and
+  Kannan]{jiang2019improving}
+Yihan Jiang, Jakub Kone{\v{c}}n{\'y}, Keith Rush, and Sreeram Kannan.
+\newblock Improving federated learning personalization via model agnostic meta
+  learning.
+\newblock \emph{arXiv preprint arXiv:1909.12488}, 2019.
+
+\bibitem[{Kadhe} et~al.(2017){Kadhe}, {Garcia}, {Heidarzadeh}, {Rouayheb}, and
+  {Sprintson}]{pirsideinfo}
+S.~{Kadhe}, B.~{Garcia}, A.~{Heidarzadeh}, S.~E. {Rouayheb}, and
+  A.~{Sprintson}.
+\newblock Private information retrieval with side information: The single
+  server case.
+\newblock In \emph{2017 55th Annual Allerton Conference on Communication,
+  Control, and Computing (Allerton)}, pages 1099--1106, Oct 2017.
+\newblock \doi{10.1109/ALLERTON.2017.8262860}.
+
+\bibitem[Kairouz et~al.(2014)Kairouz, Oh, and Viswanath]{kairouz2014extremal}
+Peter Kairouz, Sewoong Oh, and Pramod Viswanath.
+\newblock Extremal mechanisms for local differential privacy.
+\newblock In Z.~Ghahramani, M.~Welling, C.~Cortes, N.~D. Lawrence, and K.~Q.
+  Weinberger, editors, \emph{Advances in Neural Information Processing Systems
+  27}, pages 2879--2887. Curran Associates, Inc., 2014.
+
+\bibitem[Kairouz et~al.(2016)Kairouz, Bonawitz, and
+  Ramage]{kairouz2016discrete}
+Peter Kairouz, K.~A. Bonawitz, and Daniel Ramage.
+\newblock Discrete distribution estimation under local privacy.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  2436--2444, 2016.
+
+\bibitem[Kairouz et~al.(2017)Kairouz, Oh, and
+  Viswanath]{kairouz2017composition}
+Peter Kairouz, Sewoong Oh, and Pramod Viswanath.
+\newblock The composition theorem for differential privacy.
+\newblock \emph{IEEE Transactions on Information Theory}, 63\penalty0
+  (6):\penalty0 4037--4049, 2017.
+
+\bibitem[Kairouz et~al.(2020)Kairouz, Liao, Huang, and
+  Sankar]{kairouz20learning}
+Peter Kairouz, Jiachun Liao, Chong Huang, and Lalitha Sankar.
+\newblock Censored and fair universal representations using generative
+  adversarial models.
+\newblock \emph{arXiv preprint arXiv:1910.00411}, 2020.
+
+\bibitem[Kairouz et~al.(2021{\natexlab{a}})Kairouz, Liu, and
+  Steinke]{kairouz2021distributed}
+Peter Kairouz, Ziyu Liu, and Thomas Steinke.
+\newblock The distributed discrete gaussian mechanism for federated learning
+  with secure aggregation, 2021{\natexlab{a}}.
+
+\bibitem[Kairouz et~al.(2021{\natexlab{b}})Kairouz, McMahan, Song, Thakkar,
+  Thakurta, and Xu]{kairouz2021practical}
+Peter Kairouz, Brendan McMahan, Shuang Song, Om~Thakkar, Abhradeep Thakurta,
+  and Zheng Xu.
+\newblock Practical and private (deep) learning without sampling or shuffling,
+  2021{\natexlab{b}}.
+
+\bibitem[Kamishima et~al.(2011)Kamishima, Akaho, and
+  Sakuma]{kamishima2011fairness}
+Toshihiro Kamishima, Shotaro Akaho, and Jun Sakuma.
+\newblock Fairness-aware learning through regularization approach.
+\newblock In \emph{2011 IEEE 11th International Conference on Data Mining
+  Workshops}, pages 643--650. IEEE, 2011.
+
+\bibitem[Kang et~al.(2019{\natexlab{a}})Kang, Sun, Hendrycks, Brown, and
+  Steinhardt]{kang2019testing}
+Daniel Kang, Yi~Sun, Dan Hendrycks, Tom Brown, and Jacob Steinhardt.
+\newblock Testing robustness against unforeseen adversaries.
+\newblock \emph{arXiv preprint arXiv:1908.08016}, 2019{\natexlab{a}}.
+
+\bibitem[Kang et~al.(2019{\natexlab{b}})Kang, Xiong, Niyato, Xie, and
+  Zhang]{kang2019incentiveB}
+Jiawen Kang, Zehui Xiong, Dusit Niyato, Shengli Xie, and Junshan Zhang.
+\newblock Incentive mechanism for reliable federated learning: A joint
+  optimization approach to combining reputation and contract theory.
+\newblock \emph{IEEE Internet of Things Journal}, 2019{\natexlab{b}}.
+
+\bibitem[Kang et~al.(2019{\natexlab{c}})Kang, Xiong, Niyato, Yu, Liang, and
+  Kim]{kang19incentive}
+Jiawen Kang, Zehui Xiong, Dusit Niyato, Han Yu, Ying{-}Chang Liang, and Dong~In
+  Kim.
+\newblock Incentive design for efficient federated learning in mobile networks:
+  {A} contract theory approach.
+\newblock In \emph{{IEEE} {VTS} Asia Pacific Wireless Communications Symposium,
+  {APWCS} 2019, Singapore, August 28-30, 2019}, pages 1--5, 2019{\natexlab{c}}.
+
+\bibitem[Karimi et~al.(2016)Karimi, Nutini, and Schmidt]{karimi2016linear}
+Hamed Karimi, Julie Nutini, and Mark Schmidt.
+\newblock Linear convergence of gradient and proximal-gradient methods under
+  the {P}olyak-{\l}ojasiewicz condition.
+\newblock In \emph{Joint European Conference on Machine Learning and Knowledge
+  Discovery in Databases}, pages 795--811. Springer, 2016.
+
+\bibitem[Karimireddy et~al.(2019)Karimireddy, Rebjock, Stich, and
+  Jaggi]{karimireddy2019ef}
+Sai~Praneeth Karimireddy, Quentin Rebjock, Sebastian Stich, and Martin Jaggi.
+\newblock Error feedback fixes {S}ign{SGD} and other gradient compression
+  schemes.
+\newblock In \emph{ICML}, 2019.
+
+\bibitem[Karimireddy et~al.(2020{\natexlab{a}})Karimireddy, Jaggi, Kale, Mohri,
+  Reddi, Stich, and Suresh]{karimireddy2020mime}
+Sai~Praneeth Karimireddy, Martin Jaggi, Satyen Kale, Mehryar Mohri, Sashank~J
+  Reddi, Sebastian~U Stich, and Ananda~Theertha Suresh.
+\newblock Mime: Mimicking centralized stochastic algorithms in federated
+  learning.
+\newblock \emph{arXiv preprint arXiv:2008.03606}, 2020{\natexlab{a}}.
+
+\bibitem[Karimireddy et~al.(2020{\natexlab{b}})Karimireddy, Kale, Mohri, Reddi,
+  Stich, and Suresh]{karimireddy2019scaffold}
+Sai~Praneeth Karimireddy, Satyen Kale, Mehryar Mohri, Sashank Reddi, Sebastian
+  Stich, and Ananda~Theertha Suresh.
+\newblock Scaffold: Stochastic controlled averaging for federated learning.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  5132--5143. PMLR, 2020{\natexlab{b}}.
+
+\bibitem[Kasiviswanathan et~al.(2011)Kasiviswanathan, Lee, Nissim,
+  Raskhodnikova, and Smith]{KLNRS11}
+Shiva~Prasad Kasiviswanathan, Homin~K. Lee, Kobbi Nissim, Sofya Raskhodnikova,
+  and Adam~D. Smith.
+\newblock What can we learn privately?
+\newblock \emph{{SIAM} J. Comput.}, 40\penalty0 (3):\penalty0 793--826, 2011.
+\newblock URL \url{https://doi.org/10.1137/090756090}.
+
+\bibitem[Kearns et~al.(2015)Kearns, Roth, Wu, and
+  Yaroslavtsev]{kearns2015protected}
+Michael~J. Kearns, Aaron Roth, Zhiwei~Steven Wu, and Grigory Yaroslavtsev.
+\newblock Privacy for the protected (only).
+\newblock \emph{CoRR}, abs/1506.00242, 2015.
+\newblock URL \url{http://arxiv.org/abs/1506.00242}.
+
+\bibitem[Khaled et~al.(2019{\natexlab{a}})Khaled, Mishchenko, and
+  Richtárik]{khaled2019analysis}
+Ahmed Khaled, Konstantin Mishchenko, and Peter Richtárik.
+\newblock First analysis of local {GD} on heterogeneous data,
+  2019{\natexlab{a}}.
+\newblock URL \url{https://arxiv.org/abs/1909.04715}.
+
+\bibitem[Khaled et~al.(2019{\natexlab{b}})Khaled, Mishchenko, and
+  Richtárik]{khaled2019better}
+Ahmed Khaled, Konstantin Mishchenko, and Peter Richtárik.
+\newblock Better communication complexity for local {SGD}, 2019{\natexlab{b}}.
+\newblock URL \url{https://arxiv.org/abs/1909.04746}.
+
+\bibitem[Khodak et~al.(2019)Khodak, Balcan, and Talwalkar]{khodak19adaptive}
+Mikhail Khodak, Maria-Florina Balcan, and Ameet Talwalkar.
+\newblock Adaptive gradient-based meta-learning methods.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2019.
+
+\bibitem[Kifer and Machanavajjhala(2014)]{pufferfish}
+Daniel Kifer and Ashwin Machanavajjhala.
+\newblock Pufferfish: A framework for mathematical privacy definitions.
+\newblock \emph{ACM Transactions on Database Systems}, 39\penalty0
+  (1):\penalty0 3:1--3:36, 2014.
+
+\bibitem[Kim et~al.(2017)Kim, Sun, Yu, and Jiang]{DBLP:conf/kdd/KimSYJ17}
+Yejin Kim, Jimeng Sun, Hwanjo Yu, and Xiaoqian Jiang.
+\newblock Federated tensor factorization for computational phenotyping.
+\newblock In \emph{Proceedings of the 23rd {ACM} {SIGKDD} International
+  Conference on Knowledge Discovery and Data Mining, Halifax, NS, Canada,
+  August 13 - 17, 2017}, pages 887--895, 2017.
+\newblock \doi{10.1145/3097983.3098118}.
+\newblock URL \url{https://doi.org/10.1145/3097983.3098118}.
+
+\bibitem[King et~al.(1995)King, Feng, and Sutherland]{king1995statlog}
+Ross~D. King, Cao Feng, and Alistair Sutherland.
+\newblock Stat{L}og: comparison of classification algorithms on large
+  real-world problems.
+\newblock \emph{Applied Artificial Intelligence an International Journal},
+  9\penalty0 (3):\penalty0 289--333, 1995.
+
+\bibitem[Koeberl et~al.(2014)Koeberl, Schulz, Sadeghi, and
+  Varadharajan]{DBLP:conf/eurosys/KoeberlSSV14}
+Patrick Koeberl, Steffen Schulz, Ahmad{-}Reza Sadeghi, and Vijay Varadharajan.
+\newblock Trust{L}ite: a security architecture for tiny embedded devices.
+\newblock In \emph{EuroSys}, pages 10:1--10:14. {ACM}, 2014.
+
+\bibitem[Koh and Liang(2017)]{koh2017understanding}
+Pang~Wei Koh and Percy Liang.
+\newblock Understanding black-box predictions via influence functions.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning-Volume 70}, pages 1885--1894. JMLR. org, 2017.
+
+\bibitem[Koh et~al.(2018)Koh, Steinhardt, and Liang]{koh2018stronger}
+Pang~Wei Koh, Jacob Steinhardt, and Percy Liang.
+\newblock Stronger data poisoning attacks break data sanitization defenses.
+\newblock \emph{arXiv preprint arXiv:1811.00741}, 2018.
+
+\bibitem[Kohavi and John(1995)]{kohavi1995automatic}
+Ron Kohavi and George~H John.
+\newblock Automatic parameter selection by minimizing estimated error.
+\newblock In \emph{Machine Learning Proceedings 1995}, pages 304--312.
+  Elsevier, 1995.
+
+\bibitem[Koloskova et~al.(2019)Koloskova, Stich, and Jaggi]{Koloskova2019}
+Anastasia Koloskova, Sebastian~U Stich, and Martin Jaggi.
+\newblock {Decentralized Stochastic Optimization and Gossip Algorithms with
+  Compressed Communication}.
+\newblock In \emph{ICML}, 2019.
+
+\bibitem[Koloskova et~al.(2020{\natexlab{a}})Koloskova, Lin, Stich, and
+  Jaggi]{koloskova2019deep}
+Anastasia Koloskova, Tao Lin, Sebastian~U Stich, and Martin Jaggi.
+\newblock Decentralized deep learning with arbitrary communication compression.
+\newblock \emph{International Conference on Learning Representations (ICLR)},
+  2020{\natexlab{a}}.
+
+\bibitem[Koloskova et~al.(2020{\natexlab{b}})Koloskova, Loizou, Boreiri, Jaggi,
+  and Stich]{decentralized_sgd2}
+Anastasia Koloskova, Nicolas Loizou, Sadra Boreiri, Martin Jaggi, and
+  Sebastian~U. Stich.
+\newblock {A Unified Theory of Decentralized SGD with Changing Topology and
+  Local Updates}.
+\newblock In \emph{ICML}, 2020{\natexlab{b}}.
+
+\bibitem[Kone{\v{c}}n{\'y} and Richt{\'a}rik(2018)]{konevcny2018randomized}
+Jakub Kone{\v{c}}n{\'y} and Peter Richt{\'a}rik.
+\newblock Randomized distributed mean estimation: Accuracy vs communication.
+\newblock \emph{Frontiers in Applied Mathematics and Statistics}, 4:\penalty0
+  62, 2018.
+
+\bibitem[Kone{\v{c}}n{\'y} et~al.(2016)Kone{\v{c}}n{\'y}, McMahan, Yu,
+  Richt{\'a}rik, Suresh, and Bacon]{konevcny2016federated}
+Jakub Kone{\v{c}}n{\'y}, H~Brendan McMahan, Felix~X. Yu, Peter Richt{\'a}rik,
+  Ananda~Theertha Suresh, and Dave Bacon.
+\newblock Federated learning: Strategies for improving communication
+  efficiency.
+\newblock \emph{arXiv preprint arXiv:1610.05492}, 2016.
+
+\bibitem[Kuppam et~al.(2019)Kuppam, McKenna, Pujol, Hay, Machanavajjhala, and
+  Miklau]{kuppam2019fair}
+Satya Kuppam, Ryan McKenna, David Pujol, Michael Hay, Ashwin Machanavajjhala,
+  and Gerome Miklau.
+\newblock Fair decision making using privacy-protected data.
+\newblock \emph{CoRR}, abs/1905.12744, 2019.
+\newblock URL \url{http://arxiv.org/abs/1905.12744}.
+
+\bibitem[Kurakin et~al.(2016)Kurakin, Goodfellow, and
+  Bengio]{kurakin2016adversarial}
+Alexey Kurakin, Ian Goodfellow, and Samy Bengio.
+\newblock Adversarial machine learning at scale.
+\newblock \emph{arXiv preprint arXiv:1611.01236}, 2016.
+
+\bibitem[Kushilevitz and Nisan(1997)]{Kushilevitz_Nisan_cc}
+Eyal Kushilevitz and Noam Nisan.
+\newblock \emph{Communication Complexity}.
+\newblock Cambridge University Press, New York, NY, USA, 1997.
+\newblock ISBN 0-521-56067-5.
+
+\bibitem[Kushilevitz and Ostrovsky(1997)]{Kushilevitz97replicationis}
+Eyal Kushilevitz and Rafail Ostrovsky.
+\newblock Replication is not needed: Single database, computationally-private
+  information retrieval.
+\newblock In \emph{In Proc. of the 38th Annu. IEEE Symp. on Foundations of
+  Computer Science}, pages 364--373, 1997.
+
+\bibitem[Kusner et~al.(2017)Kusner, Loftus, Russell, and
+  Silva]{kusner2017counterfactual}
+Matt~J Kusner, Joshua Loftus, Chris Russell, and Ricardo Silva.
+\newblock Counterfactual fairness.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  4066--4076, 2017.
+
+\bibitem[Kwon et~al.(2016)Kwon, Lazar, Devadas, and Ford]{kwon2016riffle}
+Albert Kwon, David Lazar, Srinivas Devadas, and Bryan Ford.
+\newblock Riffle.
+\newblock \emph{Proceedings on Privacy Enhancing Technologies}, 2016\penalty0
+  (2):\penalty0 115--134, 2016.
+
+\bibitem[Laguel et~al.(2020)Laguel, Pillutla, Malick, and
+  Harchaoui]{fair_quantile}
+Yassine Laguel, Krishna Pillutla, Jérôme Malick, and Zaid Harchaoui.
+\newblock {Device Heterogeneity in Federated Learning: A Superquantile
+  Approach}.
+\newblock \emph{arXiv preprint arXiv:2002.11223}, 2020.
+
+\bibitem[Lake et~al.(2017)Lake, Salakhutdinov, Gross, and
+  Tenenbaum]{lake11omniglot}
+Brenden~M. Lake, Ruslan Salakhutdinov, Jason Gross, and Joshua~B. Tenenbaum.
+\newblock One shot learning of simple visual concepts.
+\newblock In \emph{Proceedings of the Conference of the Cognitive Science
+  Society (CogSci)}, 2017.
+
+\bibitem[Lalitha et~al.(2019{\natexlab{a}})Lalitha, Kilinc, Javidi, and
+  Koushanfar]{Lalitha2019}
+Anusha Lalitha, Osman~Cihan Kilinc, Tara Javidi, and Farinaz Koushanfar.
+\newblock {Peer-to-peer Federated Learning on Graphs}.
+\newblock Technical report, arXiv:1901.11173, 2019{\natexlab{a}}.
+
+\bibitem[Lalitha et~al.(2019{\natexlab{b}})Lalitha, Wang, Kilinc, Lu, Javidi,
+  and Koushanfar]{BayesFL}
+Anusha Lalitha, Xinghan Wang, Osman Kilinc, Yongxi Lu, Tara Javidi, and Farinaz
+  Koushanfar.
+\newblock Decentralized {B}ayesian learning over graphs.
+\newblock \emph{arXiv preprint: 1905.10466}, 2019{\natexlab{b}}.
+
+\bibitem[Lamport et~al.(1982)Lamport, Shostak, and Pease]{lamport1982byzantine}
+Leslie Lamport, Robert Shostak, and Marshall Pease.
+\newblock The {B}yzantine generals problem.
+\newblock \emph{ACM Transactions on Programming Languages and Systems
+  (TOPLAS)}, 4\penalty0 (3):\penalty0 382--401, 1982.
+
+\bibitem[Lan(2012)]{Lan2012}
+Guanghui Lan.
+\newblock An optimal method for stochastic composite optimization.
+\newblock \emph{Mathematical Programming}, 133\penalty0 (1):\penalty0 365--397,
+  Jun 2012.
+\newblock ISSN 1436-4646.
+\newblock \doi{10.1007/s10107-010-0434-y}.
+\newblock URL \url{https://doi.org/10.1007/s10107-010-0434-y}.
+
+\bibitem[Lapets et~al.(2016)Lapets, Volgushev, Bestavros, Jansen, and
+  Varia]{DBLP:conf/secdev/LapetsVBJV16}
+Andrei Lapets, Nikolaj Volgushev, Azer Bestavros, Frederick Jansen, and Mayank
+  Varia.
+\newblock Secure {MPC} for analytics as a web application.
+\newblock In \emph{SecDev}, pages 73--74. {IEEE} Computer Society, 2016.
+
+\bibitem[L{\'{e}}cuyer et~al.(2019)L{\'{e}}cuyer, Atlidakis, Geambasu, Hsu, and
+  Jana]{DBLP:conf/sp/LecuyerAG0J19}
+Mathias L{\'{e}}cuyer, Vaggelis Atlidakis, Roxana Geambasu, Daniel Hsu, and
+  Suman Jana.
+\newblock Certified robustness to adversarial examples with differential
+  privacy.
+\newblock In \emph{2019 {IEEE} Symposium on Security and Privacy, {SP} 2019,
+  San Francisco, CA, USA, May 19-23, 2019}, pages 656--672, 2019.
+\newblock \doi{10.1109/SP.2019.00044}.
+\newblock URL \url{https://doi.org/10.1109/SP.2019.00044}.
+
+\bibitem[Lepoint et~al.(2020)Lepoint, Patel, Raykova, Seth, and
+  Trieu]{DBLP:journals/iacr/LepointPRST20}
+Tancr{\`{e}}de Lepoint, Sarvar Patel, Mariana Raykova, Karn Seth, and Ni~Trieu.
+\newblock Private join and compute from {PIR} with default.
+\newblock \emph{{IACR} Cryptol. ePrint Arch.}, 2020:\penalty0 1011, 2020.
+
+\bibitem[Leroy et~al.(2018)Leroy, Coucke, Lavril, Gisselbrecht, and
+  Dureau]{leroy2018federated}
+David Leroy, Alice Coucke, Thibaut Lavril, Thibault Gisselbrecht, and Joseph
+  Dureau.
+\newblock Federated learning for keyword spotting.
+\newblock \emph{arXiv preprint arXiv:{1810.05512}}, 2018.
+
+\bibitem[Li et~al.(2019{\natexlab{a}})Li, Khodak, Caldas, and
+  Talwalkar]{li19dpmeta}
+Jeffrey Li, Mikhail Khodak, Sebastian Caldas, and Ameet Talwalkar.
+\newblock Differentially private meta-learning.
+\newblock \emph{arXiv preprint arXiv:1909.05830}, 2019{\natexlab{a}}.
+
+\bibitem[Li et~al.(2018)Li, Sahu, Zaheer, Sanjabi, Talwalkar, and
+  Smith]{li2018federated}
+Tian Li, Anit~Kumar Sahu, Manzil Zaheer, Maziar Sanjabi, Ameet Talwalkar, and
+  Virginia Smith.
+\newblock Federated optimization in heterogeneous networks, 2018.
+\newblock URL \url{https://arxiv.org/abs/1812.06127}.
+
+\bibitem[Li et~al.(2019{\natexlab{b}})Li, Sahu, Talwalkar, and
+  Smith]{li2019federated}
+Tian Li, Anit~Kumar Sahu, Ameet Talwalkar, and Virginia Smith.
+\newblock Federated learning: Challenges, methods, and future directions,
+  2019{\natexlab{b}}.
+
+\bibitem[Li et~al.(2019{\natexlab{c}})Li, Sanjabi, and Smith]{li2019fair}
+Tian Li, Maziar Sanjabi, and Virginia Smith.
+\newblock Fair resource allocation in federated learning.
+\newblock \emph{arXiv preprint arXiv:1905.10497}, 2019{\natexlab{c}}.
+
+\bibitem[Li et~al.(2019{\natexlab{d}})Li, Huang, Yang, Wang, and
+  Zhang]{li2019convergence}
+Xiang Li, Kaixuan Huang, Wenhao Yang, Shusen Wang, and Zhihua Zhang.
+\newblock On the convergence of {F}ed{A}vg on non-{IID} data.
+\newblock \emph{arXiv preprint arXiv:1907.02189}, 2019{\natexlab{d}}.
+
+\bibitem[Li et~al.(2019{\natexlab{e}})Li, Yang, Wang, and
+  Zhang]{li2019communication}
+Xiang Li, Wenhao Yang, Shusen Wang, and Zhihua Zhang.
+\newblock Communication efficient decentralized training with multiple local
+  updates.
+\newblock \emph{arXiv preprint arXiv:1910.09126}, 2019{\natexlab{e}}.
+
+\bibitem[Lian et~al.(2017)Lian, Zhang, Zhang, Hsieh, Zhang, and Liu]{Lian2017b}
+Xiangru Lian, Ce~Zhang, Huan Zhang, Cho-Jui Hsieh, Wei Zhang, and Ji~Liu.
+\newblock {Can Decentralized Algorithms Outperform Centralized Algorithms? A
+  Case Study for Decentralized Parallel Stochastic Gradient Descent}.
+\newblock In \emph{NIPS}, 2017.
+
+\bibitem[Lian et~al.(2018)Lian, Zhang, Zhang, and Liu]{Lian2018}
+Xiangru Lian, Wei Zhang, Ce~Zhang, and Ji~Liu.
+\newblock {Asynchronous Decentralized Parallel Stochastic Gradient Descent}.
+\newblock In \emph{ICML}, 2018.
+
+\bibitem[libsnark()]{libsnark}
+libsnark.
+\newblock {libsnark}: a c++ library for {zkSNARK} proofs.
+\newblock \url{https://github.com/scipr-lab/libsnark}, December 2019.
+
+\bibitem[Lie and Maniatis(2017)]{lie2017glimmers}
+David Lie and Petros Maniatis.
+\newblock Glimmers: Resolving the privacy/trust quagmire.
+\newblock In \emph{Proceedings of the 16th Workshop on Hot Topics in Operating
+  Systems}, pages 94--99. ACM, 2017.
+
+\bibitem[Lin et~al.(2016)Lin, Talathi, and Annapureddy]{lin2016fixed}
+Darryl Lin, Sachin Talathi, and Sreekanth Annapureddy.
+\newblock Fixed point quantization of deep convolutional networks.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  2849--2858, 2016.
+
+\bibitem[Lin et~al.(2020)Lin, Stich, and Jaggi]{lin2018don}
+Tao Lin, Sebastian~U Stich, and Martin Jaggi.
+\newblock Don't use large mini-batches, use local {SGD}.
+\newblock \emph{International Conference on Learning Representations (ICLR)},
+  2020.
+
+\bibitem[Lin et~al.(2017)Lin, Han, Mao, Wang, and Dally]{lin2017deep}
+Yujun Lin, Song Han, Huizi Mao, Yu~Wang, and William~J Dally.
+\newblock Deep gradient compression: Reducing the communication bandwidth for
+  distributed training.
+\newblock \emph{arXiv preprint arXiv:1712.01887}, 2017.
+
+\bibitem[Little(1993)]{little1993poststratification}
+R.~J.~A. Little.
+\newblock Post-stratification: A modeler's perspective.
+\newblock \emph{Journal of the American Statistical Association}, 88\penalty0
+  (423):\penalty0 1001--1012, 1993.
+\newblock ISSN 01621459.
+
+\bibitem[Liu et~al.(2018{\natexlab{a}})Liu, Simonyan, and Yang]{liu2018darts}
+Hanxiao Liu, Karen Simonyan, and Yiming Yang.
+\newblock {DARTS}: Differentiable architecture search.
+\newblock \emph{arXiv preprint arXiv:1806.09055}, 2018{\natexlab{a}}.
+
+\bibitem[Liu et~al.(2018{\natexlab{b}})Liu, Dolan-Gavitt, and
+  Garg]{liu2018fine}
+Kang Liu, Brendan Dolan-Gavitt, and Siddharth Garg.
+\newblock Fine-pruning: Defending against backdooring attacks on deep neural
+  networks.
+\newblock In \emph{International Symposium on Research in Attacks, Intrusions,
+  and Defenses}, pages 273--294. Springer, 2018{\natexlab{b}}.
+
+\bibitem[Liu and Oh(2019)]{liu2019minimax}
+Xiyang Liu and Sewoong Oh.
+\newblock Minimax rates of estimating approximate differential privacy.
+\newblock \emph{arXiv preprint arXiv:1905.10335}, 2019.
+
+\bibitem[Liu et~al.(2019)Liu, Kang, Zhang, Li, Cheng, Chen, Hong, and
+  Yang]{liuVFL}
+Yang Liu, Yan Kang, Xinwei Zhang, Liping Li, Yong Cheng, Tianjian Chen, Mingyi
+  Hong, and Qiang Yang.
+\newblock A communication efficient vertical federated learning framework.
+\newblock \emph{CoRR}, abs/1912.11187, 2019.
+\newblock URL \url{http://arxiv.org/abs/1912.11187}.
+
+\bibitem[{Liu} et~al.(2020){Liu}, {Kang}, {Xing}, {Chen}, and
+  {Yang}]{liu2018secure}
+Yang {Liu}, Yan {Kang}, Chaoping {Xing}, Tianjian {Chen}, and Qiang {Yang}.
+\newblock A secure federated transfer learning framework.
+\newblock \emph{IEEE Intelligent Systems}, 35\penalty0 (4):\penalty0 70--82,
+  2020.
+\newblock \doi{10.1109/MIS.2020.2988525}.
+
+\bibitem[Liu et~al.(2020{\natexlab{a}})Liu, Yi, and Chen]{liu2020backdoor}
+Yang Liu, Zhihao Yi, and Tianjian Chen.
+\newblock Backdoor attacks and defenses in feature-partitioned collaborative
+  learning, 2020{\natexlab{a}}.
+
+\bibitem[Liu et~al.(2018{\natexlab{c}})Liu, Ma, Aafer, Lee, Zhai, Wang, and
+  Zhang]{DBLP:conf/ndss/LiuMALZW018}
+Yingqi Liu, Shiqing Ma, Yousra Aafer, Wen{-}Chuan Lee, Juan Zhai, Weihang Wang,
+  and Xiangyu Zhang.
+\newblock Trojaning attack on neural networks.
+\newblock In \emph{25th Annual Network and Distributed System Security
+  Symposium, {NDSS} 2018, San Diego, California, USA, February 18-21, 2018},
+  2018{\natexlab{c}}.
+\newblock URL
+  \url{http://wp.internetsociety.org/ndss/wp-content/uploads/sites/25/2018/02/ndss2018\_03A-5\_Liu\_paper.pdf}.
+
+\bibitem[Liu et~al.(2020{\natexlab{b}})Liu, Suresh, Yu, Kumar, and
+  Riley]{liu2020learning}
+Yuhan Liu, Ananda~Theertha Suresh, Felix Xinnan~X Yu, Sanjiv Kumar, and Michael
+  Riley.
+\newblock Learning discrete distributions: user vs item-level privacy.
+\newblock \emph{Advances in Neural Information Processing Systems}, 33,
+  2020{\natexlab{b}}.
+
+\bibitem[Ludwig et~al.(2020)Ludwig, Baracaldo, Thomas, Zhou, Anwar, Rajamoni,
+  Ong, Radhakrishnan, Verma, Sinn, et~al.]{IBMFL}
+Heiko Ludwig, Nathalie Baracaldo, Gegi Thomas, Yi~Zhou, Ali Anwar, Shashank
+  Rajamoni, Yuya Ong, Jayaram Radhakrishnan, Ashish Verma, Mathieu Sinn, et~al.
+\newblock {IBM} federated learning: An enterprise framework white paper {V}0.1.
+\newblock \emph{arXiv preprint arXiv:2007.10987}, 2020.
+
+\bibitem[Luo et~al.(2019)Luo, Wu, Luo, Huang, Huang, Liu, and
+  Yang]{luo2019real}
+Jiahuan Luo, Xueyang Wu, Yun Luo, Anbu Huang, Yunfeng Huang, Yang Liu, and
+  Qiang Yang.
+\newblock Real-world image datasets for federated learning.
+\newblock \emph{arXiv preprint arXiv:1910.11089}, 2019.
+
+\bibitem[Luo et~al.(2018)Luo, Tian, Qin, Chen, and Liu]{luo2018neural}
+Renqian Luo, Fei Tian, Tao Qin, Enhong Chen, and Tie-Yan Liu.
+\newblock Neural architecture optimization.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  7816--7827, 2018.
+
+\bibitem[Lyu et~al.(2020)Lyu, Yu, Nandakumar, Li, Ma, Jin, Yu, and
+  Ng]{Lyu-et-al:2020TPDS}
+Lingjuan Lyu, Jiangshan Yu, Karthik Nandakumar, Yitong Li, Xingjun Ma, Jiong
+  Jin, Han Yu, and Kee~Siong Ng.
+\newblock Towards fair and privacy-preserving federated deep models.
+\newblock \emph{IEEE Transactions on Parallel and Distributed Systems},
+  31\penalty0 (11):\penalty0 2524--2541, 2020.
+
+\bibitem[Ma et~al.(2019{\natexlab{a}})Ma, Zhang, Lou, Ho, Xiong, and
+  Jiang]{ma19cikm}
+Jing Ma, Qiuchen Zhang, Jian Lou, Joyce Ho, Li~Xiong, and Xiaoqian Jiang.
+\newblock Privacy-preserving tensor factorization for collaborative health data
+  analysis.
+\newblock In \emph{ACM CIKM}, volume~2, 2019{\natexlab{a}}.
+
+\bibitem[Ma et~al.(2019{\natexlab{b}})Ma, Zhu, and Hsu]{MZH19}
+Yuzhe Ma, Xiaojin Zhu, and Justin Hsu.
+\newblock Data poisoning against differentially-private learners: Attacks and
+  defenses.
+\newblock In \emph{International Joint Conference on Artificial Intelligence
+  (IJCAI), Macao, China}, 2019{\natexlab{b}}.
+\newblock URL \url{https://arxiv.org/abs/1903.09860}.
+
+\bibitem[Madras et~al.(2018)Madras, Creager, Pitassi, and Zemel]{Madras2018}
+David Madras, Elliot Creager, Toniann Pitassi, and Richard Zemel.
+\newblock Learning adversarially fair and transferable representations.
+\newblock In \emph{ICML}, 2018.
+
+\bibitem[Madry et~al.(2017)Madry, Makelov, Schmidt, Tsipras, and
+  Vladu]{madry2017towards}
+Aleksander Madry, Aleksandar Makelov, Ludwig Schmidt, Dimitris Tsipras, and
+  Adrian Vladu.
+\newblock Towards deep learning models resistant to adversarial attacks.
+\newblock \emph{ICLR}, 2017.
+
+\bibitem[Mansour et~al.(2009{\natexlab{a}})Mansour, Mohri, and
+  Rostamizadeh]{mansour2009domain}
+Yishay Mansour, Mehryar Mohri, and Afshin Rostamizadeh.
+\newblock Domain adaptation: Learning bounds and algorithms.
+\newblock \emph{arXiv preprint arXiv:0902.3430}, 2009{\natexlab{a}}.
+
+\bibitem[Mansour et~al.(2009{\natexlab{b}})Mansour, Mohri, and
+  Rostamizadeh]{mansour2009domainb}
+Yishay Mansour, Mehryar Mohri, and Afshin Rostamizadeh.
+\newblock Domain adaptation with multiple sources.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  1041--1048, 2009{\natexlab{b}}.
+
+\bibitem[Mansour et~al.(2020{\natexlab{a}})Mansour, Mohri, Ro, and
+  Suresh]{mansour2020three}
+Yishay Mansour, Mehryar Mohri, Jae Ro, and Ananda~Theertha Suresh.
+\newblock Three approaches for personalization with applications to federated
+  learning.
+\newblock \emph{arXiv preprint arXiv:2002.10619}, 2020{\natexlab{a}}.
+
+\bibitem[Mansour et~al.(2020{\natexlab{b}})Mansour, Mohri, Suresh, and
+  Wu]{mansour2020theory}
+Yishay Mansour, Mehryar Mohri, Ananda~Theertha Suresh, and Ke~Wu.
+\newblock A theory of multiple-source adaptation with limited target labeled
+  data.
+\newblock \emph{arXiv preprint arXiv:2007.09762}, 2020{\natexlab{b}}.
+
+\bibitem[Martin et~al.(2019)Martin, Kanai, Kamatani, Okada, Neale, and
+  Daly]{martin2019current}
+Alicia~R Martin, Masahiro Kanai, Yoichiro Kamatani, Yukinori Okada, Benjamin~M
+  Neale, and Mark~J Daly.
+\newblock Current clinical use of polygenic scores will risk exacerbating
+  health disparities.
+\newblock \emph{BioRxiv}, page 441261, 2019.
+
+\bibitem[McMahan and Ramage(2017)]{flblog17}
+H~Brendan McMahan and Daniel Ramage.
+\newblock Federated learning: Collaborative machine learning without
+  centralized training data, April 2017.
+\newblock URL
+  \url{https://ai.googleblog.com/2017/04/federated-learning-collaborative.html}.
+\newblock Google AI Blog.
+
+\bibitem[McMahan and Streeter(2010)]{mcmahan2010adaptive}
+H~Brendan McMahan and Matthew Streeter.
+\newblock Adaptive bound optimization for online convex optimization.
+\newblock \emph{arXiv preprint arXiv:1002.4908}, 2010.
+
+\bibitem[McMahan et~al.(1812)McMahan, Andrew, Erlingsson, Chien, Mironov,
+  Papernot, and Kairouz]{mcmahan2018general}
+H~Brendan McMahan, Galen Andrew, Ulfar Erlingsson, Steve Chien, Ilya Mironov,
+  Nicolas Papernot, and Peter Kairouz.
+\newblock A general approach to adding differential privacy to iterative
+  training procedures. dec 2018.
+\newblock \emph{URL https://arxiv. org/abs}, 1812.
+
+\bibitem[McMahan et~al.(2017 (original version on arxiv Feb. 2016))McMahan,
+  Moore, Ramage, Hampson, and y~Arcas]{mcmahan17fedavg}
+H~Brendan McMahan, Eider Moore, Daniel Ramage, Seth Hampson, and Blaise~Aguera
+  y~Arcas.
+\newblock Communication-efficient learning of deep networks from decentralized
+  data.
+\newblock In \emph{Proceedings of the 20th International Conference on
+  Artificial Intelligence and Statistics}, pages 1273--1282, 2017 (original
+  version on arxiv Feb. 2016).
+
+\bibitem[McMahan et~al.(2018)McMahan, Ramage, Talwar, and Zhang]{mcmahan18dplm}
+H~Brendan McMahan, Daniel Ramage, Kunal Talwar, and Li~Zhang.
+\newblock Learning differentially private recurrent language models.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2018.
+
+\bibitem[McSherry and Talwar(2007)]{mcsherry2007mechanism}
+Frank McSherry and Kunal Talwar.
+\newblock Mechanism design via differential privacy.
+\newblock In \emph{FOCS}, pages 94--103, 2007.
+
+\bibitem[Mei and Zhu(2015)]{mei2015using}
+Shike Mei and Xiaojin Zhu.
+\newblock Using machine teaching to identify optimal training-set attacks on
+  machine learners.
+\newblock In \emph{Twenty-Ninth AAAI Conference on Artificial Intelligence},
+  2015.
+
+\bibitem[Melis et~al.(2018)Melis, Song, De~Cristofaro, and
+  Shmatikov]{melis2018exploiting}
+Luca Melis, Congzheng Song, Emiliano De~Cristofaro, and Vitaly Shmatikov.
+\newblock Exploiting unintended feature leakage in collaborative learning.
+\newblock \emph{arXiv preprint arXiv:1805.04049}, 2018.
+
+\bibitem[Mhamdi et~al.(2018)Mhamdi, Guerraoui, and Rouault]{mhamdi2018hidden}
+El~Mahdi~El Mhamdi, Rachid Guerraoui, and S{\'e}bastien Rouault.
+\newblock The hidden vulnerability of distributed learning in {B}yzantium.
+\newblock In \emph{ICML}, 2018.
+
+\bibitem[Micali(2000)]{DBLP:journals/siamcomp/Micali00}
+Silvio Micali.
+\newblock Computationally sound proofs.
+\newblock \emph{{SIAM} J. Comput.}, 30\penalty0 (4):\penalty0 1253--1298, 2000.
+
+\bibitem[Mireshghallah et~al.(2020)Mireshghallah, Taram, , Vepakomma, Singh,
+  Raskar, and Hadi]{pdlSurvey}
+Fatemehsadat Mireshghallah, Mohammadkazem Taram, , Praneeth Vepakomma, Abhishek
+  Singh, Ramesh Raskar, and Esmaeilzadeh Hadi.
+\newblock Privacy in deep learning: A survey.
+\newblock \emph{arXiv preprint arXiv:2004.12254}, 2020.
+
+\bibitem[Mironov(2012)]{mironov2012significance}
+Ilya Mironov.
+\newblock On significance of the least significant bits for differential
+  privacy.
+\newblock In \emph{Proceedings of the 2012 ACM conference on Computer and
+  communications security}, pages 650--661. ACM, 2012.
+
+\bibitem[Mironov(2017)]{mironov2017renyi}
+Ilya Mironov.
+\newblock R{\'e}nyi differential privacy.
+\newblock In \emph{2017 IEEE 30th Computer Security Foundations Symposium
+  (CSF)}, pages 263--275. IEEE, 2017.
+
+\bibitem[Mironov et~al.(2009)Mironov, Pandey, Reingold, and
+  Vadhan]{Mironov-CDP}
+Ilya Mironov, Omkant Pandey, Omer Reingold, and Salil Vadhan.
+\newblock Computational differential privacy.
+\newblock In \emph{Advances in Cryptology---CRYPTO}, pages 126--142, 2009.
+
+\bibitem[Mironov et~al.(2019)Mironov, Talwar, and Zhang]{mironov2019r}
+Ilya Mironov, Kunal Talwar, and Li~Zhang.
+\newblock R$\backslash$'enyi differential privacy of the sampled {G}aussian
+  mechanism.
+\newblock \emph{arXiv preprint arXiv:1908.10530}, 2019.
+
+\bibitem[Mitchell et~al.(2018)Mitchell, Potash, and
+  Barocas]{mitchell2018prediction}
+Shira Mitchell, Eric Potash, and Solon Barocas.
+\newblock Prediction-based decisions and fairness: A catalogue of choices,
+  assumptions, and definitions.
+\newblock \emph{arXiv preprint arXiv:1811.07867}, 2018.
+
+\bibitem[Mnih and Hinton(2012)]{mnih2012learning}
+Volodymyr Mnih and Geoffrey~E Hinton.
+\newblock Learning to label aerial images from noisy data.
+\newblock In \emph{Proceedings of the 29th International conference on machine
+  learning (ICML-12)}, pages 567--574, 2012.
+
+\bibitem[Mohassel and Zhang(2017)]{secureml}
+Payman Mohassel and Yupeng Zhang.
+\newblock Secure{ML}: {A} system for scalable privacy-preserving machine
+  learning.
+\newblock In \emph{{IEEE} Symposium on Security and Privacy}, pages 19--38.
+  {IEEE} Computer Society, 2017.
+
+\bibitem[Mohri et~al.(2019)Mohri, Sivek, and Suresh]{Mohri2019}
+Mehryar Mohri, Gary Sivek, and Ananda~Theertha Suresh.
+\newblock {Agnostic Federated Learning}.
+\newblock In \emph{ICML}, 2019.
+
+\bibitem[Moreno-Torres et~al.(2012)Moreno-Torres, Raeder, Alaiz-Rodr\'{\i}Guez,
+  Chawla, and Herrera]{torres2012unifying}
+Jose~G. Moreno-Torres, Troy Raeder, Roc\'{\i}O Alaiz-Rodr\'{\i}Guez, Nitesh~V.
+  Chawla, and Francisco Herrera.
+\newblock A unifying view on dataset shift in classification.
+\newblock \emph{Pattern Recogn.}, 45\penalty0 (1), January 2012.
+
+\bibitem[{Musketeer}(2019)]{musketeer19mfg}
+{Musketeer}.
+\newblock Musketeer: About, 2019.
+\newblock URL \url{http://musketeer.eu/project/}.
+\newblock Retrieved Aug 2019.
+
+\bibitem[Naim et~al.(2019)Naim, Ye, and Rouayheb]{onoffisit}
+Carolina Naim, Fangwei Ye, and Salim~El Rouayheb.
+\newblock {ON-OFF} privacy with correlated requests.
+\newblock In \emph{2019 IEEE International Symposium on Information Theory
+  (ISIT)}, July 2019.
+
+\bibitem[Natarajan et~al.(2013)Natarajan, Dhillon, Ravikumar, and
+  Tewari]{natarajan2013learning}
+Nagarajan Natarajan, Inderjit~S Dhillon, Pradeep~K Ravikumar, and Ambuj Tewari.
+\newblock Learning with noisy labels.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  1196--1204, 2013.
+
+\bibitem[Neglia et~al.(2020)Neglia, Xu, Towsley, and Calbi]{neglia2020}
+Giovanni Neglia, Chuan Xu, Don Towsley, and Gianmarco Calbi.
+\newblock Decentralized gradient methods: does topology matter?
+\newblock In \emph{AISTATS}, 2020.
+
+\bibitem[Nichol et~al.(2018)Nichol, Achiam, and Schulman]{nichol18reptile}
+Alex Nichol, Joshua Achiam, and John Schulman.
+\newblock On first-order meta-learning algorithms.
+\newblock \emph{arXiv preprint arXiv:1803.02999}, 2018.
+
+\bibitem[Nikolaenko et~al.(2013)Nikolaenko, Weinsberg, Ioannidis, Joye, Boneh,
+  and Taft]{DBLP:conf/sp/NikolaenkoWIJBT13}
+Valeria Nikolaenko, Udi Weinsberg, Stratis Ioannidis, Marc Joye, Dan Boneh, and
+  Nina Taft.
+\newblock Privacy-preserving ridge regression on hundreds of millions of
+  records.
+\newblock In \emph{{IEEE} Symposium on Security and Privacy}, pages 334--348.
+  {IEEE} Computer Society, 2013.
+
+\bibitem[Niu et~al.(2019)Niu, Wu, Tang, Hua, Jia, Lv, Wu, and
+  Chen]{niu2019secure}
+Chaoyue Niu, Fan Wu, Shaojie Tang, Lifeng Hua, Rongfei Jia, Chengfei Lv, Zhihua
+  Wu, and Guihai Chen.
+\newblock Secure federated submodel learning.
+\newblock \emph{arXiv preprint arXiv:1911.02254}, 2019.
+
+\bibitem[NSA(2012)]{nsa2012defense}
+NSA.
+\newblock Defense in depth: A practical strategy for achieving {I}nformation
+  {A}ssurance in today's highly networked environments.
+\newblock Technical report, NSA, 2012.
+
+\bibitem[Oktay et~al.(2019)Oktay, Ball{\'e}, Singh, and
+  Shrivastava]{oktay2019model}
+Deniz Oktay, Johannes Ball{\'e}, Saurabh Singh, and Abhinav Shrivastava.
+\newblock Model compression by entropy penalized reparameterization.
+\newblock \emph{arXiv preprint arXiv:1906.06624}, 2019.
+
+\bibitem[Olumofin and Goldberg(2011)]{olumofin2011revisiting}
+Femi Olumofin and Ian Goldberg.
+\newblock Revisiting the computational practicality of private information
+  retrieval.
+\newblock In \emph{International Conference on Financial Cryptography and Data
+  Security}, pages 158--172. Springer, 2011.
+
+\bibitem[Palisade()]{Palisade}
+Palisade.
+\newblock {PALISADE} lattice cryptography library.
+\newblock \url{https://gitlab.com/palisade/palisade-release }, October 2019.
+
+\bibitem[Pan and Yang(2010)]{Pan:2010:STL:1850483.1850545}
+Sinno~Jialin Pan and Qiang Yang.
+\newblock A survey on transfer learning.
+\newblock \emph{IEEE Transactions on Knowledge and Data Engineering},
+  22\penalty0 (10):\penalty0 1345--1359, 2010.
+
+\bibitem[Papernot et~al.(2017)Papernot, McDaniel, Goodfellow, Jha, Celik, and
+  Swami]{papernot2017practical}
+Nicolas Papernot, Patrick McDaniel, Ian Goodfellow, Somesh Jha, Z~Berkay Celik,
+  and Ananthram Swami.
+\newblock Practical black-box attacks against machine learning.
+\newblock In \emph{Proceedings of the 2017 ACM on Asia conference on computer
+  and communications security}, pages 506--519. ACM, 2017.
+
+\bibitem[Papernot et~al.(2020)Papernot, Thakurta, Song, Chien, and
+  Erlingsson]{papernot2020tempered}
+Nicolas Papernot, Abhradeep Thakurta, Shuang Song, Steve Chien, and {\'U}lfar
+  Erlingsson.
+\newblock Tempered sigmoid activations for deep learning with differential
+  privacy.
+\newblock \emph{arXiv preprint arXiv:2007.14191}, 2020.
+
+\bibitem[Park et~al.(2018)Park, Samarakoon, Bennis, and Debbah]{EdgeML}
+Jihong Park, Sumudu Samarakoon, Mehdi Bennis, and M{\'{e}}rouane Debbah.
+\newblock Wireless network intelligence at the edge.
+\newblock \emph{CoRR}, abs/1812.02858, 2018.
+\newblock URL \url{http://arxiv.org/abs/1812.02858}.
+
+\bibitem[Parno et~al.(2016)Parno, Howell, Gentry, and
+  Raykova]{DBLP:journals/cacm/ParnoHG016}
+Bryan Parno, Jon Howell, Craig Gentry, and Mariana Raykova.
+\newblock Pinocchio: nearly practical verifiable computation.
+\newblock \emph{Commun. {ACM}}, 59\penalty0 (2):\penalty0 103--112, 2016.
+
+\bibitem[Paszke et~al.(2019)Paszke, Gross, Massa, Lerer, Bradbury, Chanan,
+  Killeen, Lin, Gimelshein, Antiga, Desmaison, Kopf, Yang, DeVito, Raison,
+  Tejani, Chilamkurthy, Steiner, Fang, Bai, and
+  Chintala]{pytorch_NEURIPS2019_9015}
+Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory
+  Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, Alban
+  Desmaison, Andreas Kopf, Edward Yang, Zachary DeVito, Martin Raison, Alykhan
+  Tejani, Sasank Chilamkurthy, Benoit Steiner, Lu~Fang, Junjie Bai, and Soumith
+  Chintala.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock In H.~Wallach, H.~Larochelle, A.~Beygelzimer, F.~d\textquotesingle
+  Alch\'{e}-Buc, E.~Fox, and R.~Garnett, editors, \emph{Advances in Neural
+  Information Processing Systems 32}, pages 8024--8035. Curran Associates,
+  Inc., 2019.
+\newblock URL
+  \url{http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-performance-deep-learning-library.pdf}.
+
+\bibitem[Patel and Dieuleveut(2019)]{patel19communication}
+Kumar~Kshitij Patel and Aymeric Dieuleveut.
+\newblock Communication trade-offs for synchronized distributed {SGD} with
+  large step size.
+\newblock \emph{NeurIPS}, 2019.
+
+\bibitem[Patel et~al.(2018)Patel, Persiano, and Yeo]{Patel18googlePIR}
+Sarvar Patel, Giuseppe Persiano, and Kevin Yeo.
+\newblock Private stateful information retrieval.
+\newblock In \emph{Proceedings of the 2018 ACM SIGSAC Conference on Computer
+  and Communications Security}, CCS '18, pages 1002--1019, New York, NY, USA,
+  2018. ACM.
+\newblock ISBN 978-1-4503-5693-0.
+\newblock \doi{10.1145/3243734.3243821}.
+\newblock URL \url{http://doi.acm.org/10.1145/3243734.3243821}.
+
+\bibitem[Patrini et~al.(2016)Patrini, Nock, Hardy, and Caetano]{pnhcFL}
+Giorgio Patrini, Richard Nock, Stephen Hardy, and Tib{\'{e}}rio~S. Caetano.
+\newblock Fast learning from distributed datasets without entity matching.
+\newblock In \emph{Proceedings of the Twenty-Fifth International Joint
+  Conference on Artificial Intelligence, {IJCAI} 2016, New York, NY, USA, 9-15
+  July 2016}, pages 1909--1917, 2016.
+\newblock URL \url{http://www.ijcai.org/Abstract/16/273}.
+
+\bibitem[Pedregosa(2016)]{pedregosa2016hyperparameter}
+Fabian Pedregosa.
+\newblock Hyperparameter optimization with approximate gradient.
+\newblock \emph{arXiv preprint arXiv:1602.02355}, 2016.
+
+\bibitem[Pham et~al.(2018)Pham, Guan, Zoph, Le, and Dean]{pham2018efficient}
+Hieu Pham, Melody Guan, Barret Zoph, Quoc Le, and Jeff Dean.
+\newblock Efficient neural architecture search via parameter sharing.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  4092--4101, 2018.
+
+\bibitem[Pichai(May 7, 2019)]{sundar2019nyt}
+Sundar Pichai.
+\newblock {Google's {S}undar {P}ichai: Privacy Should Not Be a Luxury Good}.
+\newblock \emph{New York Times}, May 7, 2019.
+
+\bibitem[Pichapati et~al.(2019)Pichapati, Suresh, Yu, Reddi, and
+  Kumar]{pichapati2019adaclip}
+Venkatadheeraj Pichapati, Ananda~Theertha Suresh, Felix~X Yu, Sashank~J Reddi,
+  and Sanjiv Kumar.
+\newblock Ada{C}li{P}: Adaptive clipping for private {SGD}.
+\newblock \emph{arXiv preprint arXiv:1908.07643}, 2019.
+
+\bibitem[Pihur et~al.(2018)Pihur, Korolova, Liu, Sankuratripati, Yung, Huang,
+  and Zeng]{snap}
+Vasyl Pihur, Aleksandra Korolova, Frederick Liu, Subhash Sankuratripati, Moti
+  Yung, Dachuan Huang, and Ruogu Zeng.
+\newblock Differentially-private {``Draw and Discard"} machine learning.
+\newblock \emph{CoRR}, abs/1807.04369, 2018.
+\newblock URL \url{http://arxiv.org/abs/1807.04369}.
+
+\bibitem[Pillutla et~al.(2019)Pillutla, Kakade, and
+  Harchaoui]{pillutla2019robust}
+Krishna Pillutla, Sham~M Kakade, and Zaid Harchaoui.
+\newblock Robust aggregation for federated learning.
+\newblock \emph{arXiv preprint arXiv:1912.13445}, 2019.
+
+\bibitem[Quionero-Candela et~al.(2009)Quionero-Candela, Sugiyama, Schwaighofer,
+  and Lawrence]{candela2009datasetshift}
+Joaquin Quionero-Candela, Masashi Sugiyama, Anton Schwaighofer, and Neil~D.
+  Lawrence.
+\newblock \emph{Dataset Shift in Machine Learning}.
+\newblock The MIT Press, 2009.
+\newblock ISBN 0262170051, 9780262170055.
+
+\bibitem[Rajput et~al.(2019)Rajput, Wang, Charles, and
+  Papailiopoulos]{rajput2019detox}
+Shashank Rajput, Hongyi Wang, Zachary Charles, and Dimitris Papailiopoulos.
+\newblock {DETOX}: A redundancy-based framework for faster and more robust
+  gradient aggregation.
+\newblock \emph{arXiv preprint arXiv:1907.12205}, 2019.
+
+\bibitem[Ramage and Mazzocchi(2020)]{fablog20}
+Daniel Ramage and Stefano Mazzocchi.
+\newblock Federated analytics: Collaborative data science without data
+  collection, May 2020.
+\newblock URL
+  \url{https://ai.googleblog.com/2020/05/federated-analytics-collaborative-data.html}.
+\newblock Google AI Blog.
+
+\bibitem[Ramaswamy et~al.(2019)Ramaswamy, Mathews, Rao, and
+  Beaufays]{ramaswamy19emoji}
+Swaroop Ramaswamy, Rajiv Mathews, Kanishka Rao, and Fran{\c{c}}oise Beaufays.
+\newblock Federated learning for emoji prediction in a mobile keyboard.
+\newblock \emph{arXiv preprint 1906.04329}, 2019.
+
+\bibitem[Ramaswamy et~al.(2020)Ramaswamy, Thakkar, Mathews, Andrew, McMahan,
+  and Beaufays]{ramaswamy2020training}
+Swaroop Ramaswamy, Om~Thakkar, Rajiv Mathews, Galen Andrew, H~Brendan McMahan,
+  and Fran{\c{c}}oise Beaufays.
+\newblock Training production language models without memorizing user data.
+\newblock \emph{arXiv preprint arXiv:2009.10031}, 2020.
+
+\bibitem[Rastogi and Nath(2010)]{Rastogi:2010:DPA:1807167.1807247}
+Vibhor Rastogi and Suman Nath.
+\newblock Differentially private aggregation of distributed time-series with
+  transformation and encryption.
+\newblock In \emph{Proceedings of the 2010 ACM SIGMOD International Conference
+  on Management of Data}, SIGMOD '10, pages 735--746, New York, NY, USA, 2010.
+  ACM.
+\newblock ISBN 978-1-4503-0032-2.
+\newblock \doi{10.1145/1807167.1807247}.
+\newblock URL \url{http://doi.acm.org/10.1145/1807167.1807247}.
+
+\bibitem[Ravi and Larochelle(2017)]{ravi17miniimagenet}
+Sachin Ravi and Hugo Larochelle.
+\newblock Optimization as a model for few-shot learning.
+\newblock In \emph{Proceedings of the 5th International Conference on Learning
+  Representations}, 2017.
+
+\bibitem[Real et~al.(2017)Real, Moore, Selle, Saxena, Suematsu, Tan, Le, and
+  Kurakin]{real2017large}
+Esteban Real, Sherry Moore, Andrew Selle, Saurabh Saxena, Yutaka~Leon Suematsu,
+  Jie Tan, Quoc~V Le, and Alexey Kurakin.
+\newblock Large-scale evolution of image classifiers.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning-Volume 70}, pages 2902--2911. JMLR. org, 2017.
+
+\bibitem[Real et~al.(2019)Real, Aggarwal, Huang, and Le]{real2019regularized}
+Esteban Real, Alok Aggarwal, Yanping Huang, and Quoc~V Le.
+\newblock Regularized evolution for image classifier architecture search.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial
+  Intelligence}, volume~33, pages 4780--4789, 2019.
+
+\bibitem[Reddi et~al.(2020)Reddi, Charles, Zaheer, Garrett, Rush,
+  Kone{\v{c}}n{\`y}, Kumar, and McMahan]{reddi2020adaptive}
+Sashank Reddi, Zachary Charles, Manzil Zaheer, Zachary Garrett, Keith Rush,
+  Jakub Kone{\v{c}}n{\`y}, Sanjiv Kumar, and H~Brendan McMahan.
+\newblock Adaptive federated optimization.
+\newblock \emph{arXiv preprint arXiv:2003.00295}, 2020.
+
+\bibitem[Reisizadeh et~al.(2019{\natexlab{a}})Reisizadeh, Mokhtari, Hassani,
+  Jadbabaie, and Pedarsani]{reisizadeh2019fedpaq}
+Amirhossein Reisizadeh, Aryan Mokhtari, Hamed Hassani, Ali Jadbabaie, and
+  Ramtin Pedarsani.
+\newblock Fedpaq: A communication-efficient federated learning method with
+  periodic averaging and quantization.
+\newblock \emph{arXiv preprint arXiv:1909.13014}, 2019{\natexlab{a}}.
+
+\bibitem[Reisizadeh et~al.(2019{\natexlab{b}})Reisizadeh, Taheri, Mokhtari,
+  Hassani, and Pedarsani]{reisizadeh2019robust}
+Amirhossein Reisizadeh, Hossein Taheri, Aryan Mokhtari, Hamed Hassani, and
+  Ramtin Pedarsani.
+\newblock Robust and communication-efficient collaborative learning.
+\newblock \emph{arXiv:1907.10595}, 2019{\natexlab{b}}.
+
+\bibitem[Reyzin et~al.(2018)Reyzin, Smith, and Yakoubov]{hatelove}
+Leonid Reyzin, Adam~D. Smith, and Sophia Yakoubov.
+\newblock Turning {HATE} into {LOVE:} homomorphic ad hoc threshold encryption
+  for scalable {MPC}.
+\newblock \emph{{IACR} Cryptology ePrint Archive}, 2018:\penalty0 997, 2018.
+
+\bibitem[Riazi et~al.(2019)Riazi, Laine, Pelton, and Dai]{riazi2019heax}
+M~Sadegh Riazi, Kim Laine, Blake Pelton, and Wei Dai.
+\newblock {HEAX}: High-performance architecture for computation on
+  homomorphically encrypted data in the cloud.
+\newblock \emph{arXiv preprint arXiv:1909.09731}, 2019.
+
+\bibitem[Richardson et~al.(2019)Richardson, Schultz, and
+  Crawford]{richardson2019dirty}
+Rashida Richardson, Jason Schultz, and Kate Crawford.
+\newblock Dirty data, bad predictions: How civil rights violations impact
+  police data, predictive policing systems, and justice.
+\newblock \emph{New York University Law Review Online, Forthcoming}, 2019.
+
+\bibitem[Ripley(1993)]{ripley1993statistical}
+Brian~D Ripley.
+\newblock Statistical aspects of neural networks.
+\newblock \emph{Networks and chaos—statistical and probabilistic aspects},
+  50:\penalty0 40--123, 1993.
+
+\bibitem[Rivest et~al.(1978)Rivest, Adleman, and Dertouzos]{Rivest1978}
+Ronald~L Rivest, Len Adleman, and Michael~L Dertouzos.
+\newblock On data banks and privacy homomorphisms.
+\newblock \emph{Foundations of Secure Computation, Academia Press}, pages
+  169--179, 1978.
+
+\bibitem[Rodr{\'\i}guez-Barroso et~al.(2020)Rodr{\'\i}guez-Barroso, Stipcich,
+  Jim{\'e}nez-L{\'o}pez, Ruiz-Mill{\'a}n, Mart{\'\i}nez-C{\'a}mara,
+  Gonz{\'a}lez-Seco, Luz{\'o}n, Veganzones, and
+  Herrera]{rodriguez2020federated}
+Nuria Rodr{\'\i}guez-Barroso, Goran Stipcich, Daniel Jim{\'e}nez-L{\'o}pez,
+  Jos{\'e}~Antonio Ruiz-Mill{\'a}n, Eugenio Mart{\'\i}nez-C{\'a}mara, Gerardo
+  Gonz{\'a}lez-Seco, M~Victoria Luz{\'o}n, Miguel~Angel Veganzones, and
+  Francisco Herrera.
+\newblock Federated learning and differential privacy: Software tools analysis,
+  the sherpa. ai fl framework and methodological guidelines for preserving data
+  privacy.
+\newblock \emph{Information Fusion}, 64:\penalty0 270--292, 2020.
+
+\bibitem[Roth et~al.(2019)Roth, Noble, Falk, and
+  Haeberlen]{DBLP:conf/sosp/RothNFH19}
+Edo Roth, Daniel Noble, Brett~Hemenway Falk, and Andreas Haeberlen.
+\newblock Honeycrisp: large-scale differentially private aggregation without a
+  trusted core.
+\newblock In \emph{{SOSP}}, pages 196--210. {ACM}, 2019.
+
+\bibitem[Ryffel et~al.(2018)Ryffel, Trask, Dahl, Wagner, Mancuso, Rueckert, and
+  Passerat-Palmbach]{PySyft}
+Theo Ryffel, Andrew Trask, Morten Dahl, Bobby Wagner, Jason Mancuso, Daniel
+  Rueckert, and Jonathan Passerat-Palmbach.
+\newblock A generic framework for privacy preserving deep learning, 2018.
+
+\bibitem[{Sabater} et~al.(2020){Sabater}, {Bellet}, and {Ramon}]{sabater2020}
+C{\'e}sar {Sabater}, Aur{\'e}lien {Bellet}, and Jan {Ramon}.
+\newblock {Distributed Differentially Private Averaging with Improved Utility
+  and Robustness to Malicious Parties}.
+\newblock \emph{arXiv preprint arXiv:2006.07218}, 2020.
+
+\bibitem[Salmon et~al.(2011)Salmon, Moraes, Dror, and Shaw]{salmon2011parallel}
+John~K Salmon, Mark~A Moraes, Ron~O Dror, and David~E Shaw.
+\newblock Parallel random numbers: {A}s easy as 1, 2, 3.
+\newblock In \emph{Proceedings of 2011 International Conference for High
+  Performance Computing, Networking, Storage and Analysis}, page~16. ACM, 2011.
+
+\bibitem[Samarakoon et~al.(2018)Samarakoon, Bennis, Saad, and Debbah]{FL5G}
+Sumudu Samarakoon, Mehdi Bennis, Walid Saad, and M{\'{e}}rouane Debbah.
+\newblock Federated learning for ultra-reliable low-latency {V2V}
+  communications.
+\newblock \emph{CoRR}, abs/1805.09253, 2018.
+\newblock URL \url{http://arxiv.org/abs/1805.09253}.
+
+\bibitem[Sambasivan et~al.(2018)Sambasivan, Checkley, Batool, Ahmed, Nemer,
+  Gayt{\'a}n-Lugo, Matthews, Consolvo, and Churchill]{sambasivan2018privacy}
+Nithya Sambasivan, Garen Checkley, Amna Batool, Nova Ahmed, David Nemer,
+  Laura~Sanely Gayt{\'a}n-Lugo, Tara Matthews, Sunny Consolvo, and Elizabeth
+  Churchill.
+\newblock " privacy is not for me, it's for those rich women": Performative
+  privacy practices on mobile phones by women in south asia.
+\newblock In \emph{Fourteenth Symposium on Usable Privacy and Security
+  ($\{$SOUPS$\}$ 2018)}, pages 127--142, 2018.
+
+\bibitem[Sathya et~al.(2018)Sathya, Vepakomma, Raskar, Ramachandra, and
+  Bhattacharya]{sathya2018review}
+Sai~Sri Sathya, Praneeth Vepakomma, Ramesh Raskar, Ranjan Ramachandra, and
+  Santanu Bhattacharya.
+\newblock A review of homomorphic encryption libraries for secure computation.
+\newblock \emph{arXiv preprint arXiv:1812.02428}, 2018.
+
+\bibitem[Sattler et~al.(2019)Sattler, Wiedemann, M{\"u}ller, and
+  Samek]{sattler2019robust}
+Felix Sattler, Simon Wiedemann, Klaus-Robert M{\"u}ller, and Wojciech Samek.
+\newblock Robust and communication-efficient federated learning from non-{IID}
+  data.
+\newblock \emph{arXiv preprint arXiv:1903.02891}, 2019.
+
+\bibitem[Schnell(2013)]{sEP}
+R.~Schnell.
+\newblock Efficient private record linkage of very large datasets.
+\newblock In \emph{59$^{th}$ World Statistics Congress}, 2013.
+
+\bibitem[Schnell et~al.(2011)Schnell, Bachteler, and Reiher]{schnell11}
+R.~Schnell, T.~Bachteler, and J.~Reiher.
+\newblock A novel error-tolerant anonymous linking code.
+\newblock Technical report, Paper No. WP-GRLC-2011-02, German Record Linkage
+  Center Working Paper Series, 2011.
+
+\bibitem[Schnorr(1990)]{Schnorr:1990:EIS:111563.111628}
+Claus~P. Schnorr.
+\newblock Efficient identification and signatures for smart cards.
+\newblock In \emph{Proceedings of the Workshop on the Theory and Application of
+  Cryptographic Techniques on Advances in Cryptology}, EUROCRYPT '89, 1990.
+
+\bibitem[SEAL()]{SEAL}
+SEAL.
+\newblock {M}icrosoft {SEAL} (release 3.6).
+\newblock \url{https://github.com/Microsoft/SEAL}, November 2020.
+\newblock Microsoft Research, Redmond, WA.
+
+\bibitem[Seide and Agarwal(2016)]{cntk}
+Frank Seide and Amit Agarwal.
+\newblock Cntk: Microsoft's open-source deep-learning toolkit.
+\newblock In \emph{Proceedings of the 22nd ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, KDD '16, page 2135, New York, NY,
+  USA, 2016. Association for Computing Machinery.
+\newblock ISBN 9781450342322.
+\newblock \doi{10.1145/2939672.2945397}.
+\newblock URL \url{https://doi.org/10.1145/2939672.2945397}.
+
+\bibitem[Seshadri et~al.(2007)Seshadri, Luk, Perrig, van Doom, and
+  Khosla]{DBLP:series/ais/SeshadriLPDK07}
+Arvind Seshadri, Mark Luk, Adrian Perrig, Leendert van Doom, and Pradeep~K.
+  Khosla.
+\newblock Pioneer: Verifying code integrity and enforcing untampered code
+  execution on legacy systems.
+\newblock In \emph{Malware Detection}, volume~27 of \emph{Advances in
+  Information Security}, pages 253--289. Springer, 2007.
+
+\bibitem[Shafahi et~al.(2019)Shafahi, Najibi, Ghiasi, Xu, Dickerson, Studer,
+  Davis, Taylor, and Goldstein]{shafahi2018free}
+Ali Shafahi, Mahyar Najibi, Amin Ghiasi, Zheng Xu, John Dickerson, Christoph
+  Studer, Larry~S Davis, Gavin Taylor, and Tom Goldstein.
+\newblock Adversarial training for free.
+\newblock \emph{NeurIPS}, 2019.
+
+\bibitem[Sharma et~al.(2019)Sharma, Vepakomma, Swedish, Chang, Kalpathy-Cramer,
+  and Raskar]{sharma2019expertmatcher}
+Vivek Sharma, Praneeth Vepakomma, Tristan Swedish, Ken Chang, Jayashree
+  Kalpathy-Cramer, and Ramesh Raskar.
+\newblock Expert{M}atcher: Automating {ML} model selection for clients using
+  hidden representations.
+\newblock \emph{arXiv preprint arXiv:1910.03731}, 2019.
+
+\bibitem[Sharma and Chen(2017)]{sharma2017attacking}
+Yash Sharma and Pin-Yu Chen.
+\newblock Attacking the {M}adry defense model with $ l\_1 $-based adversarial
+  examples.
+\newblock \emph{arXiv preprint arXiv:1710.10733}, 2017.
+
+\bibitem[SHELL()]{SHELL}
+SHELL.
+\newblock \url{https://github.com/google/shell-encryption}, December 2020.
+\newblock Google.
+
+\bibitem[Shen and Sanghavi(2019)]{pmlr-v97-shen19e}
+Yanyao Shen and Sujay Sanghavi.
+\newblock Learning with bad training data via iterative trimmed loss
+  minimization.
+\newblock In Kamalika Chaudhuri and Ruslan Salakhutdinov, editors,
+  \emph{Proceedings of the 36th International Conference on Machine Learning},
+  volume~97 of \emph{Proceedings of Machine Learning Research}, pages
+  5739--5748, Long Beach, California, USA, 09--15 Jun 2019. PMLR.
+\newblock URL \url{http://proceedings.mlr.press/v97/shen19e.html}.
+
+\bibitem[Shi et~al.(2011)Shi, Chan, Rieffel, Chow, and Song]{shi2011privacy}
+Elaine Shi, HTH Chan, Eleanor Rieffel, Richard Chow, and Dawn Song.
+\newblock Privacy-preserving aggregation of time-series data.
+\newblock In \emph{Annual Network \& Distributed System Security Symposium
+  (NDSS)}, 2011.
+
+\bibitem[Shokri et~al.(2017)Shokri, Stronati, Song, and
+  Shmatikov]{shokri2017membership}
+Reza Shokri, Marco Stronati, Congzheng Song, and Vitaly Shmatikov.
+\newblock Membership inference attacks against machine learning models.
+\newblock In \emph{2017 IEEE Symposium on Security and Privacy (SP)}, pages
+  3--18. IEEE, 2017.
+
+\bibitem[Shridhar et~al.(2019)Shridhar, Laumann, and Liwicki]{BL-overview}
+Kumar Shridhar, Felix Laumann, and Marcus Liwicki.
+\newblock A comprehensive guide to {B}ayesian convolutional neural network with
+  variational inference.
+\newblock \emph{arXiv preprint: 1901.02731}, 2019.
+
+\bibitem[Silver et~al.(2013)Silver, Yang, and Li]{silver13lifelong}
+Daniel~L. Silver, Qiang Yang, and Lianghao Li.
+\newblock Lifelong machine learning systems: Beyond learning algorithms.
+\newblock In \emph{AAAI Spring Symposium Series}, 2013.
+
+\bibitem[Singh et~al.(2019)Singh, Vepakomma, Gupta, and
+  Raskar]{vepakomma2019splitComm}
+Abhishek Singh, Praneeth Vepakomma, Otkrist Gupta, and Ramesh Raskar.
+\newblock Detailed comparison of communication efficiency of split learning and
+  federated learning.
+\newblock \emph{arXiv preprint arXiv:1909.09145}, 2019.
+
+\bibitem[Singh et~al.(2020)Singh, Chopra, Sharma, Garza, Zhang, Vepakomma, and
+  Raskar]{channelPruning}
+Abhishek Singh, Ayush Chopra, Vivek Sharma, Ethan Garza, Emily Zhang, Praneeth
+  Vepakomma, and Ramesh Raskar.
+\newblock {DISCO}: Dynamic and invariant sensitive channel obfuscation for deep
+  neural networks.
+\newblock 2020.
+
+\bibitem[Sion and Carbunar(2007)]{sion2007computational}
+Radu Sion and Bogdan Carbunar.
+\newblock On the computational practicality of private information retrieval.
+\newblock In \emph{Proceedings of the Network and Distributed Systems Security
+  Symposium}, pages 2006--06. Internet Society, 2007.
+
+\bibitem[Smith et~al.(2017)Smith, Chiang, Sanjabi, and Talwalkar]{Smith2017}
+Virginia Smith, Chao-Kai Chiang, Maziar Sanjabi, and Ameet~S. Talwalkar.
+\newblock {Federated Multi-Task Learning}.
+\newblock In \emph{NIPS}, 2017.
+
+\bibitem[Snell et~al.(2017)Snell, Swersky, and Zemel]{snell17protonets}
+Jake Snell, Kevin Swersky, and Richard~S. Zemel.
+\newblock Prototypical networks for few-shot learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[Snoek et~al.(2015)Snoek, Rippel, Swersky, Kiros, Satish, Sundaram,
+  Patwary, Prabhat, and Adams]{snoek2015scalable}
+Jasper Snoek, Oren Rippel, Kevin Swersky, Ryan Kiros, Nadathur Satish,
+  Narayanan Sundaram, Mostofa Patwary, Mr~Prabhat, and Ryan Adams.
+\newblock Scalable {B}ayesian optimization using deep neural networks.
+\newblock In \emph{International conference on machine learning}, pages
+  2171--2180, 2015.
+
+\bibitem[So et~al.(2020{\natexlab{a}})So, Guler, and Avestimehr]{BREA2020}
+Jinhyun So, Basak Guler, and A.~Salman Avestimehr.
+\newblock Byzantine-resilient secure federated learning.
+\newblock \emph{IEEE Journal on Selected Areas in Communication, Series on
+  Machine Learning for Communications and Networks}, 2020{\natexlab{a}}.
+
+\bibitem[So et~al.(2020{\natexlab{b}})So, Guler, and Avestimehr]{so2020turbo}
+Jinhyun So, Basak Guler, and A~Salman Avestimehr.
+\newblock Turbo-aggregate: Breaking the quadratic aggregation barrier in secure
+  federated learning.
+\newblock \emph{arXiv preprint arXiv:2002.04156}, 2020{\natexlab{b}}.
+
+\bibitem[Song et~al.(2019)Song, Shokri, and Mittal]{song:ccs19}
+Liwei Song, Reza Shokri, and Prateek Mittal.
+\newblock Privacy risks of securing machine learning models against adversarial
+  examples.
+\newblock In \emph{In Proceedings of the {ACM} Conference on Computer and
+  Communication Security (CCS)}, 2019.
+
+\bibitem[Srinathan and Rangan(2000)]{srinathan2000efficient}
+K~Srinathan and C~Pandu Rangan.
+\newblock Efficient asynchronous secure multiparty distributed computation.
+\newblock In \emph{International Conference on Cryptology in India}, pages
+  117--129. Springer, 2000.
+
+\bibitem[Srivastava et~al.(2019)Srivastava, Bellet, Tommasi, and
+  Vincent]{Srivastava2019a}
+Brij Mohan~Lal Srivastava, Aur\'elien Bellet, Marc Tommasi, and Emmanuel
+  Vincent.
+\newblock {P}rivacy-{P}reserving {A}dversarial {R}epresentation {L}earning in
+  {ASR}: {R}eality or {I}llusion?
+\newblock In \emph{Annual Conference of the International Speech Communication
+  Association (Interspeech)}, 2019.
+
+\bibitem[Steinhardt et~al.(2017)Steinhardt, Koh, and
+  Liang]{steinhardt2017certified}
+Jacob Steinhardt, Pang Wei~W Koh, and Percy~S Liang.
+\newblock Certified defenses for data poisoning attacks.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  3517--3529, 2017.
+
+\bibitem[Steinke and Ullman(2017)]{steinke2017tight}
+Thomas Steinke and Jonathan Ullman.
+\newblock Tight lower bounds for differentially private selection.
+\newblock In \emph{FOCS}, pages 552--563, 2017.
+
+\bibitem[Stich(2019)]{stich2018local}
+Sebastian~U Stich.
+\newblock Local {SGD} converges fast and communicates little.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2019.
+
+\bibitem[Stich and Karimireddy(2019)]{stich2019error}
+Sebastian~U Stich and Sai~Praneeth Karimireddy.
+\newblock The error-feedback framework: Better rates for {SGD} with delayed
+  gradients and compressed communication.
+\newblock \emph{arXiv:1909.05350}, 2019.
+
+\bibitem[Su and Vaidya(2016)]{Su2016FaultTolerantMO}
+Lili Su and Nitin~H. Vaidya.
+\newblock {Fault-Tolerant Multi-Agent Optimization: Optimal Iterative
+  Distributed Algorithms}.
+\newblock In \emph{PODC}, 2016.
+
+\bibitem[Subramanyan et~al.(2017)Subramanyan, Sinha, Lebedev, Devadas, and
+  Seshia]{subramanyan2017formal}
+Pramod Subramanyan, Rohit Sinha, Ilia Lebedev, Srinivas Devadas, and Sanjit~A
+  Seshia.
+\newblock A formal foundation for secure remote execution of enclaves.
+\newblock In \emph{Proceedings of the 2017 ACM SIGSAC Conference on Computer
+  and Communications Security}, pages 2435--2450. ACM, 2017.
+
+\bibitem[Sun et~al.(2019)Sun, Kairouz, Suresh, and McMahan]{sun2019backdoor}
+Ziteng Sun, Peter Kairouz, Ananda~Theertha Suresh, and H~Brendan McMahan.
+\newblock Can you really backdoor federated learning?
+\newblock \emph{arXiv preprint arXiv:1911.07963}, 2019.
+
+\bibitem[{support.google}(2019)]{messages19privacy}
+{support.google}.
+\newblock Your chats stay private while {M}essages improves suggestions, 2019.
+\newblock URL \url{https://support.google.com/messages/answer/9327902}.
+\newblock Retrieved Aug 2019.
+
+\bibitem[Suresh et~al.(2017)Suresh, Yu, Kumar, and
+  McMahan]{suresh2017distributed}
+Ananda~Theertha Suresh, Felix~X. Yu, Sanjiv Kumar, and H~Brendan McMahan.
+\newblock Distributed mean estimation with limited communication.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning-Volume 70}, pages 3329--3337. JMLR. org, 2017.
+
+\bibitem[Szegedy et~al.(2013)Szegedy, Zaremba, Sutskever, Bruna, Erhan,
+  Goodfellow, and Fergus]{szegedy2013intriguing}
+Christian Szegedy, Wojciech Zaremba, Ilya Sutskever, Joan Bruna, Dumitru Erhan,
+  Ian Goodfellow, and Rob Fergus.
+\newblock Intriguing properties of neural networks.
+\newblock \emph{ICLR}, 2013.
+
+\bibitem[Sz{\'e}kely et~al.(2007)Sz{\'e}kely, Rizzo, Bakirov,
+  et~al.]{szekely2007measuring}
+G{\'a}bor~J Sz{\'e}kely, Maria~L Rizzo, Nail~K Bakirov, et~al.
+\newblock Measuring and testing dependence by correlation of distances.
+\newblock \emph{The annals of statistics}, 35\penalty0 (6):\penalty0
+  2769--2794, 2007.
+
+\bibitem[Tang et~al.(2018)Tang, Lian, Yan, Zhang, and Liu]{Tang2018}
+Hanlin Tang, Xiangru Lian, Ming Yan, Ce~Zhang, and Ji~Liu.
+\newblock D2: Decentralized training over decentralized data.
+\newblock In \emph{ICML}, 2018.
+
+\bibitem[Tang et~al.(2019)Tang, Lian, Qiu, Yuan, Zhang, Zhang, and
+  Liu]{tang2019texttt}
+Hanlin Tang, Xiangru Lian, Shuang Qiu, Lei Yuan, Ce~Zhang, Tong Zhang, and
+  Ji~Liu.
+\newblock Deep{S}queeze: Parallel stochastic gradient descent with double-pass
+  error-compensated compression.
+\newblock \emph{arXiv preprint arXiv:1907.07346}, 2019.
+
+\bibitem[Tang et~al.(2017)Tang, Korolova, Bai, Wang, and Wang]{appleepsilon}
+Jun Tang, Aleksandra Korolova, Xiaolong Bai, Xueqiang Wang, and XiaoFeng Wang.
+\newblock Privacy loss in {Apple}'s implementation of differential privacy on
+  {MacOS} 10.12.
+\newblock \emph{CoRR}, abs/1709.02753, 2017.
+\newblock URL \url{http://arxiv.org/abs/1709.02753}.
+
+\bibitem[Thakkar et~al.(2019)Thakkar, Andrew, and
+  McMahan]{thakkar2019differentially}
+Om~Thakkar, Galen Andrew, and H~Brendan McMahan.
+\newblock Differentially private learning with adaptive clipping.
+\newblock \emph{arXiv preprint arXiv:1905.03871}, 2019.
+
+\bibitem[Tram{\`{e}}r and Boneh(2019)]{tramer2018slalom}
+Florian Tram{\`{e}}r and Dan Boneh.
+\newblock Slalom: Fast, verifiable and private execution of neural networks in
+  trusted hardware.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+\newblock URL \url{https://openreview.net/forum?id=rJVorjCcKQ}.
+
+\bibitem[Tram{\`e}r and Boneh(2019)]{tramer2019adversarial}
+Florian Tram{\`e}r and Dan Boneh.
+\newblock Adversarial training and robustness for multiple perturbations.
+\newblock \emph{arXiv preprint arXiv:1904.13000}, 2019.
+
+\bibitem[Tram{\`e}r and Boneh(2020)]{tramer2020differentially}
+Florian Tram{\`e}r and Dan Boneh.
+\newblock Differentially private learning needs better features (or much more
+  data).
+\newblock \emph{arXiv preprint arXiv:2011.11660}, 2020.
+
+\bibitem[Tram{\`{e}}r et~al.(2016)Tram{\`{e}}r, Zhang, Juels, Reiter, and
+  Ristenpart]{DBLP:conf/uss/TramerZJRR16}
+Florian Tram{\`{e}}r, Fan Zhang, Ari Juels, Michael~K. Reiter, and Thomas
+  Ristenpart.
+\newblock Stealing machine learning models via prediction {API}s.
+\newblock In \emph{25th {USENIX} Security Symposium, {USENIX} Security 16,
+  Austin, TX, USA, August 10-12, 2016.}, pages 601--618, 2016.
+\newblock URL
+  \url{https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/tramer}.
+
+\bibitem[Tram{\`{e}}r et~al.(2017)Tram{\`{e}}r, Zhang, Lin, Hubaux, Juels, and
+  Shi]{DBLP:conf/eurosp/TramerZLHJS17}
+Florian Tram{\`{e}}r, Fan Zhang, Huang Lin, Jean{-}Pierre Hubaux, Ari Juels,
+  and Elaine Shi.
+\newblock Sealed-glass proofs: Using transparent enclaves to prove and sell
+  knowledge.
+\newblock In \emph{2017 {IEEE} European Symposium on Security and Privacy,
+  EuroS{\&}P 2017, Paris, France, April 26-28, 2017}, pages 19--34, 2017.
+
+\bibitem[Tram{\`{e}}r et~al.(2018)Tram{\`{e}}r, Kurakin, Papernot, Goodfellow,
+  Boneh, and McDaniel]{DBLP:conf/iclr/TramerKPGBM18}
+Florian Tram{\`{e}}r, Alexey Kurakin, Nicolas Papernot, Ian~J. Goodfellow, Dan
+  Boneh, and Patrick~D. McDaniel.
+\newblock Ensemble adversarial training: Attacks and defenses.
+\newblock In \emph{6th International Conference on Learning Representations,
+  {ICLR} 2018, Vancouver, BC, Canada, April 30 - May 3, 2018, Conference Track
+  Proceedings}, 2018.
+
+\bibitem[Tram{\`{e}}r et~al.(2020)Tram{\`{e}}r, Behrmann, Carlini, Papernot,
+  and Jacobsen]{DBLP:conf/icml/TramerBCPJ20}
+Florian Tram{\`{e}}r, Jens Behrmann, Nicholas Carlini, Nicolas Papernot, and
+  J{\"{o}}rn{-}Henrik Jacobsen.
+\newblock Fundamental tradeoffs between invariance and sensitivity to
+  adversarial perturbations.
+\newblock In \emph{Proceedings of the 37th International Conference on Machine
+  Learning, {ICML} 2020, 13-18 July 2020, Virtual Event}, volume 119 of
+  \emph{Proceedings of Machine Learning Research}, pages 9561--9571. {PMLR},
+  2020.
+\newblock URL \url{http://proceedings.mlr.press/v119/tramer20a.html}.
+
+\bibitem[Tran et~al.(2018)Tran, Li, and Madry]{tran2018spectral}
+Brandon Tran, Jerry Li, and Aleksander Madry.
+\newblock Spectral signatures in backdoor attacks.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  8000--8010, 2018.
+
+\bibitem[Ullman(2018)]{Ullman18}
+Jonathan Ullman.
+\newblock Tight lower bounds for locally differentially private selection.
+\newblock Technical Report abs/1802.02638, arXiv, 2018.
+\newblock URL \url{http://arxiv.org/abs/1802.02638}.
+
+\bibitem[v2~Authors(2019)]{GDLv2}
+The Google-Landmark v2~Authors.
+\newblock Google landmark dataset v2, 2019.
+\newblock URL \url{https://github.com/cvdfoundation/google-landmark}.
+
+\bibitem[Vaidya et~al.(2008)Vaidya, Yu, and Jiang]{vaidya2008ppsvm}
+Jaideep Vaidya, Hwanjo Yu, and Xiaoqian Jiang.
+\newblock Privacy-preserving {SVM} classification.
+\newblock \emph{Knowl. Inf. Syst.}, 14\penalty0 (2), January 2008.
+
+\bibitem[Van~Bulck et~al.(2018)Van~Bulck, Minkin, Weisse, Genkin, Kasikci,
+  Piessens, Silberstein, Wenisch, Yarom, and Strackx]{van2018foreshadow}
+Jo~Van~Bulck, Marina Minkin, Ofir Weisse, Daniel Genkin, Baris Kasikci, Frank
+  Piessens, Mark Silberstein, Thomas~F Wenisch, Yuval Yarom, and Raoul Strackx.
+\newblock Foreshadow: Extracting the keys to the intel $\{$SGX$\}$ kingdom with
+  transient out-of-order execution.
+\newblock In \emph{27th $\{$USENIX$\}$ Security Symposium ($\{$USENIX$\}$
+  Security 18)}, pages 991--1008, 2018.
+
+\bibitem[Vanhaesebrouck et~al.(2017)Vanhaesebrouck, Bellet, and
+  Tommasi]{Vanhaesebrouck2017}
+Paul Vanhaesebrouck, Aur{\'e}lien Bellet, and Marc Tommasi.
+\newblock Decentralized collaborative learning of personalized models over
+  networks.
+\newblock In \emph{AISTATS}, 2017.
+
+\bibitem[Vepakomma et~al.(2018{\natexlab{a}})Vepakomma, Gupta, Swedish, and
+  Raskar]{vepakomma2018split}
+Praneeth Vepakomma, Otkrist Gupta, Tristan Swedish, and Ramesh Raskar.
+\newblock Split learning for health: Distributed deep learning without sharing
+  raw patient data.
+\newblock \emph{arXiv preprint arXiv:1812.00564}, 2018{\natexlab{a}}.
+
+\bibitem[Vepakomma et~al.(2018{\natexlab{b}})Vepakomma, Tonde, Elgammal,
+  et~al.]{vepakomma2018supervised}
+Praneeth Vepakomma, Chetan Tonde, Ahmed Elgammal, et~al.
+\newblock Supervised dimensionality reduction via distance correlation
+  maximization.
+\newblock \emph{Electronic Journal of Statistics}, 12\penalty0 (1):\penalty0
+  960--984, 2018{\natexlab{b}}.
+
+\bibitem[Vepakomma et~al.(2020)Vepakomma, Singh, and
+  Raskar]{vepakomma2019reducing}
+Praneeth Vepakomma, Otkrist Singh, Abhishek~Gupta, and Ramesh Raskar.
+\newblock Nopeek: Information leakage reduction to share activations in
+  distributed deep learning.
+\newblock \emph{arXiv preprint arXiv:2008.09161}, 2020.
+
+\bibitem[Vogels et~al.(2019)Vogels, Karimireddy, and Jaggi]{vogels2019powersgd}
+Thijs Vogels, Sai~Praneeth Karimireddy, and Martin Jaggi.
+\newblock Power{SGD}: Practical low-rank gradient compression for distributed
+  optimization.
+\newblock In \emph{NeurIPS 2019 - Advances in Neural Information Processing
+  Systems 32}, 2019.
+
+\bibitem[Wahby et~al.(2018)Wahby, Tzialla, Shelat, Thaler, and
+  Walfish]{DBLP:conf/sp/WahbyTSTW18}
+Riad~S. Wahby, Ioanna Tzialla, Abhi Shelat, Justin Thaler, and Michael Walfish.
+\newblock Doubly-efficient zksnarks without trusted setup.
+\newblock In \emph{2018 {IEEE} Symposium on Security and Privacy, {SP} 2018,
+  Proceedings, 21-23 May 2018, San Francisco, California, {USA}}, 2018.
+
+\bibitem[Wang et~al.(2019{\natexlab{a}})Wang, Yao, Shan, Li, Viswanath, Zheng,
+  and Zhao]{wang2019neural}
+Bolun Wang, Yuanshun Yao, Shawn Shan, Huiying Li, Bimal Viswanath, Haitao
+  Zheng, and Ben~Y Zhao.
+\newblock Neural cleanse: Identifying and mitigating backdoor attacks in neural
+  networks.
+\newblock In \emph{2019 IEEE Symposium on Security and Privacy}. IEEE,
+  2019{\natexlab{a}}.
+
+\bibitem[Wang et~al.(2020{\natexlab{a}})Wang, Sreenivasan, Rajput, Vishwakarma,
+  Agarwal, yong Sohn, Lee, and Papailiopoulos]{wang2020attack}
+Hongyi Wang, Kartik Sreenivasan, Shashank Rajput, Harit Vishwakarma, Saurabh
+  Agarwal, Jy~yong Sohn, Kangwook Lee, and Dimitris Papailiopoulos.
+\newblock Attack of the tails: Yes, you really can backdoor federated learning,
+  2020{\natexlab{a}}.
+
+\bibitem[Wang and Joshi(2018)]{wang2018cooperative}
+Jianyu Wang and Gauri Joshi.
+\newblock {Cooperative {SGD}: A unified framework for the design and analysis
+  of communication-efficient {SGD} algorithms}.
+\newblock \emph{preprint}, August 2018.
+\newblock URL \url{https://arxiv.org/abs/1808.07576}.
+
+\bibitem[Wang and Joshi(2019)]{wang2018adaptive}
+Jianyu Wang and Gauri Joshi.
+\newblock {Adaptive Communication Strategies for Best Error-Runtime Trade-offs
+  in Communication-Efficient Distributed {SGD}}.
+\newblock In \emph{Proceedings of the SysML Conference}, April 2019.
+\newblock URL \url{https://arxiv.org/abs/1810.08313}.
+
+\bibitem[Wang et~al.(2019{\natexlab{b}})Wang, Sahu, Joshi, and
+  Kar]{wang2019matcha}
+Jianyu Wang, Anit Sahu, Gauri Joshi, and Soummya Kar.
+\newblock {{MATCHA}: Speeding Up Decentralized {SGD} via Matching Decomposition
+  Sampling}.
+\newblock \emph{preprint}, May 2019{\natexlab{b}}.
+\newblock URL \url{https://arxiv.org/abs/1905.09435}.
+
+\bibitem[Wang et~al.(2019{\natexlab{c}})Wang, Tantia, Ballas, and
+  Rabbat]{wang2019slowmo}
+Jianyu Wang, Vinayak Tantia, Nicolas Ballas, and Michael Rabbat.
+\newblock Slow{M}o: Improving communication-efficient distributed {SGD} with
+  slow momentum.
+\newblock \emph{arXiv preprint arXiv:1910.00643}, 2019{\natexlab{c}}.
+
+\bibitem[Wang et~al.(2020{\natexlab{b}})Wang, Liu, Liang, Joshi, and
+  Poor]{wang2020tackling}
+Jianyu Wang, Qinghua Liu, Hao Liang, Gauri Joshi, and H~Vincent Poor.
+\newblock Tackling the objective inconsistency problem in heterogeneous
+  federated optimization.
+\newblock \emph{Advances in Neural Information Processing Systems}, 33,
+  2020{\natexlab{b}}.
+
+\bibitem[Wang et~al.(2019{\natexlab{d}})Wang, Mathews, Kiddon, Eichner,
+  Beaufays, and Ramage]{wang2019federated}
+Kangkang Wang, Rajiv Mathews, Chloé Kiddon, Hubert Eichner, Françoise
+  Beaufays, and Daniel Ramage.
+\newblock Federated evaluation of on-device personalization.
+\newblock \emph{arXiv preprint arXiv:1910.10252}, 2019{\natexlab{d}}.
+
+\bibitem[Wang et~al.(2018{\natexlab{a}})Wang, Zhu, Torralba, and
+  Efros]{wang2018dataset}
+Tongzhou Wang, Jun-Yan Zhu, Antonio Torralba, and Alexei~A Efros.
+\newblock Dataset distillation.
+\newblock \emph{arXiv preprint arXiv:1811.10959}, 2018{\natexlab{a}}.
+
+\bibitem[Wang et~al.(2018{\natexlab{b}})Wang, Balle, and
+  Kasiviswanathan]{wang2018subsampled}
+Yu-Xiang Wang, Borja Balle, and Shiva Kasiviswanathan.
+\newblock Subsampled {R}$\backslash$'enyi differential privacy and analytical
+  moments accountant.
+\newblock \emph{arXiv preprint arXiv:1808.00087}, 2018{\natexlab{b}}.
+
+\bibitem[Warner(1965)]{Warner65}
+Stanley~L. Warner.
+\newblock Randomized response: A survey technique for eliminating evasive
+  answer bias.
+\newblock \emph{Journal of the American Statistical Association}, 60\penalty0
+  (309):\penalty0 63--69, 1965.
+
+\bibitem[{WeBank}(2019)]{webankswissre19reinsurance}
+{WeBank}.
+\newblock We{B}ank and {S}wiss re signed cooperation {MOU}, 2019.
+\newblock URL
+  \url{https://finance.yahoo.com/news/webank-swiss-signed-cooperation-mou-112300218.html}.
+\newblock Retrieved Aug 2019.
+
+\bibitem[Wong et~al.(2019)Wong, Schmidt, and Kolter]{wong2019wasserstein}
+Eric Wong, Frank~R Schmidt, and J~Zico Kolter.
+\newblock Wasserstein adversarial examples via projected sinkhorn iterations.
+\newblock \emph{ICML}, 2019.
+
+\bibitem[Wood et~al.(2014)]{wood2014ethereum}
+Gavin Wood et~al.
+\newblock Ethereum: A secure decentralised generalised transaction ledger.
+\newblock \emph{Ethereum project yellow paper}, 151\penalty0 (2014):\penalty0
+  1--32, 2014.
+
+\bibitem[{Woodruff} and {Yekhanin}(2005)]{yekhaninpir}
+D.~{Woodruff} and S.~{Yekhanin}.
+\newblock A geometric approach to information-theoretic private information
+  retrieval.
+\newblock In \emph{20th Annual IEEE Conference on Computational Complexity
+  (CCC'05)}, pages 275--284, June 2005.
+\newblock \doi{10.1109/CCC.2005.2}.
+
+\bibitem[Woodworth et~al.(2018)Woodworth, Wang, McMahan, and
+  Srebro]{woodworth18graphoracle}
+Blake Woodworth, Jialei Wang, H.~Brendan McMahan, and Nathan Srebro.
+\newblock Graph oracle models, lower bounds, and gaps for parallel stochastic
+  optimization.
+\newblock In \emph{Advances in Neural Information Processing Systems (NIPS)},
+  2018.
+\newblock URL \url{https://arxiv.org/abs/1805.10222}.
+
+\bibitem[Woodworth et~al.(2020)Woodworth, Patel, Stich, Dai, Bullins, McMahan,
+  Shamir, and Srebro]{woodworth2020local}
+Blake Woodworth, Kumar~Kshitij Patel, Sebastian~U Stich, Zhen Dai, Brian
+  Bullins, H~Brendan McMahan, Ohad Shamir, and Nathan Srebro.
+\newblock Is local sgd better than minibatch sgd?
+\newblock \emph{arXiv preprint arXiv:2002.07839}, 2020.
+
+\bibitem[Wu et~al.(2017)Wu, Guo, Suresh, Kumar, Holtmann-Rice, Simcha, and
+  Yu]{wu2017multiscale}
+Xiang Wu, Ruiqi Guo, Ananda~Theertha Suresh, Sanjiv Kumar, Daniel~N
+  Holtmann-Rice, David Simcha, and Felix~X. Yu.
+\newblock Multiscale quantization for fast similarity search.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  5745--5755, 2017.
+
+\bibitem[Xie et~al.(2019{\natexlab{a}})Xie, Wu, van~der Maaten, Yuille, and
+  He]{xie2018feature}
+Cihang Xie, Yuxin Wu, Laurens van~der Maaten, Alan Yuille, and Kaiming He.
+\newblock Feature denoising for improving adversarial robustness.
+\newblock \emph{CVPR}, 2019{\natexlab{a}}.
+
+\bibitem[Xie(2019)]{xie2019zeno++}
+Cong Xie.
+\newblock Zeno++: robust asynchronous {SGD} with arbitrary number of
+  {B}yzantine workers.
+\newblock \emph{arXiv preprint arXiv:1903.07020}, 2019.
+
+\bibitem[Xie et~al.(2019{\natexlab{b}})Xie, Koyejo, Gupta, and
+  Lin]{xie2019local}
+Cong Xie, Oluwasanmi Koyejo, Indranil Gupta, and Haibin Lin.
+\newblock Local adaalter: Communication-efficient stochastic gradient descent
+  with adaptive learning rates.
+\newblock \emph{arXiv preprint arXiv:1911.09030}, 2019{\natexlab{b}}.
+
+\bibitem[Xie et~al.(2019{\natexlab{c}})Xie, Koyejo, and
+  Gupta]{xie2019practicalsecure}
+Cong Xie, Sanmi Koyejo, and Indranil Gupta.
+\newblock Practical distributed learning: Secure machine learning with
+  communication-efficient local updates.
+\newblock In \emph{European Conference on Machine Learning and Principles and
+  Practice of Knowledge Discovery in Databases (ECML PKDD)},
+  2019{\natexlab{c}}.
+
+\bibitem[Xie et~al.(2019{\natexlab{d}})Xie, Koyejo, and Gupta]{xie2019zeno}
+Cong Xie, Sanmi Koyejo, and Indranil Gupta.
+\newblock Zeno: Distributed stochastic gradient descent with suspicion-based
+  fault-tolerance.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  6893--6901, 2019{\natexlab{d}}.
+
+\bibitem[Xie et~al.(2018)Xie, Zheng, Liu, and Lin]{xie2018snas}
+Sirui Xie, Hehui Zheng, Chunxiao Liu, and Liang Lin.
+\newblock {SNAS}: stochastic neural architecture search.
+\newblock \emph{arXiv preprint arXiv:1812.09926}, 2018.
+
+\bibitem[Xie et~al.(2019{\natexlab{e}})Xie, Zhang, Zhang, Papamanthou, and
+  Song]{DBLP:conf/crypto/XieZZPS19}
+Tiancheng Xie, Jiaheng Zhang, Yupeng Zhang, Charalampos Papamanthou, and Dawn
+  Song.
+\newblock Libra: Succinct zero-knowledge proofs with optimal prover
+  computation.
+\newblock In \emph{{CRYPTO} {(3)}}, volume 11694 of \emph{Lecture Notes in
+  Computer Science}, pages 733--764. Springer, 2019{\natexlab{e}}.
+
+\bibitem[Yang et~al.(2019)Yang, Liu, Chen, and
+  Tong]{DBLP:journals/corr/abs-1902-04885}
+Qiang Yang, Yang Liu, Tianjian Chen, and Yongxin Tong.
+\newblock Federated machine learning: Concept and applications.
+\newblock \emph{CoRR}, abs/1902.04885, 2019.
+\newblock URL \url{http://arxiv.org/abs/1902.04885}.
+
+\bibitem[Yang et~al.(2018)Yang, Andrew, Eichner, Sun, Li, Kong, Ramage, and
+  Beaufays]{yang18gboardquery}
+Timothy Yang, Galen Andrew, Hubert Eichner, Haicheng Sun, Wei Li, Nicholas
+  Kong, Daniel Ramage, and Fran{\c{c}}oise Beaufays.
+\newblock Applied federated learning: Improving {G}oogle keyboard query
+  suggestions.
+\newblock \emph{arXiv preprint 1812.02903}, 2018.
+
+\bibitem[Yao(1982)]{yao1982protocols}
+Andrew~C Yao.
+\newblock Protocols for secure computations.
+\newblock In \emph{{Symposium on Foundations of Computer Science}}, 1982.
+
+\bibitem[Yao(1986)]{DBLP:conf/focs/Yao86}
+Andrew~Chi{-}Chih Yao.
+\newblock How to generate and exchange secrets (extended abstract).
+\newblock In \emph{{FOCS}}, pages 162--167. {IEEE} Computer Society, 1986.
+
+\bibitem[Ye et~al.(2019)Ye, Naim, and Rouayheb]{onoffitw}
+Fangwei Ye, Carolina Naim, and Salim~El Rouayheb.
+\newblock Preserving {ON-OFF} privacy for past and future requests.
+\newblock In \emph{2019 IEEE Information Theory Workshop (ITW)}, August 2019.
+
+\bibitem[Ye and Barg(2018)]{ye2018optimal}
+Min Ye and Alexander Barg.
+\newblock Optimal schemes for discrete distribution estimation under locally
+  differential privacy.
+\newblock \emph{IEEE Transactions on Information Theory}, 2018.
+
+\bibitem[Yeom et~al.(2018)Yeom, Giacomelli, Fredrikson, and
+  Jha]{yeom2018privacy}
+Samuel Yeom, Irene Giacomelli, Matt Fredrikson, and Somesh Jha.
+\newblock Privacy risk in machine learning: Analyzing the connection to
+  overfitting.
+\newblock In \emph{2018 IEEE 31st Computer Security Foundations Symposium
+  (CSF)}, pages 268--282. IEEE, 2018.
+
+\bibitem[Yin et~al.(2019)Yin, Chen, Ramchandran, and
+  Bartlett]{yin2018byzantine}
+Dong Yin, Yudong Chen, Kannan Ramchandran, and Peter Bartlett.
+\newblock Byzantine-robust distributed learning: Towards optimal statistical
+  rates.
+\newblock In \emph{ICML}, 2019.
+
+\bibitem[Yu et~al.(2018{\natexlab{a}})Yu, Tang, Renggli, Kassing, Singla,
+  Alistarh, Zhang, and Liu]{yu2018distributed}
+Chen Yu, Hanlin Tang, Cedric Renggli, Simon Kassing, Ankit Singla, Dan
+  Alistarh, Ce~Zhang, and Ji~Liu.
+\newblock Distributed learning over unreliable networks.
+\newblock \emph{arXiv preprint arXiv:1810.07766}, 2018{\natexlab{a}}.
+
+\bibitem[Yu et~al.(2020{\natexlab{a}})Yu, Liu, Liu, Chen, Cong, Weng, Niyato,
+  and Yang]{Yu-et-al:2020IS}
+Han Yu, Zelei Liu, Yang Liu, Tianjian Chen, Mingshu Cong, Xi~Weng, Dusit
+  Niyato, and Qiang Yang.
+\newblock A sustainable incentive scheme for federated learning.
+\newblock \emph{IEEE Intelligent Systems}, 35\penalty0 (4):\penalty0 58--69,
+  2020{\natexlab{a}}.
+
+\bibitem[Yu et~al.(2018{\natexlab{b}})Yu, Yang, and Zhu]{yu2018parallel}
+Hao Yu, Sen Yang, and Shenghuo Zhu.
+\newblock Parallel restarted {SGD} for non-convex optimization with faster
+  convergence and less communication.
+\newblock \emph{arXiv preprint arXiv:1807.06629}, 2018{\natexlab{b}}.
+
+\bibitem[Yu et~al.(2019)Yu, Jin, and Yang]{yu2019linear}
+Hao Yu, Rong Jin, and Sen Yang.
+\newblock On the linear speedup analysis of communication efficient momentum
+  {SGD} for distributed non-convex optimization.
+\newblock \emph{arXiv preprint arXiv:1905.03817}, 2019.
+
+\bibitem[Yu et~al.(2020{\natexlab{b}})Yu, Bagdasaryan, and
+  Shmatikov]{yu2020salvaging}
+Tao Yu, Eugene Bagdasaryan, and Vitaly Shmatikov.
+\newblock Salvaging federated learning by local adaptation.
+\newblock \emph{arXiv preprint arXiv:2002.04758}, 2020{\natexlab{b}}.
+
+\bibitem[Zafar et~al.(2017)Zafar, Valera, Rodriguez, and Gummadi]{zafar2017}
+Muhammad~Bila Zafar, Isabel Valera, Manuel~Gomez Rodriguez, and Krishna~P.
+  Gummadi.
+\newblock Fairness constraints: Mechanisms for fair classification.
+\newblock In \emph{Proceedings of the 20th International Conference on
+  Artificial Intelligence and Statistics}, 2017.
+
+\bibitem[Zantedeschi et~al.(2019)Zantedeschi, Bellet, and
+  Tommasi]{Zantedeschi2019}
+Valentina Zantedeschi, Aurélien Bellet, and Marc Tommasi.
+\newblock {Fully Decentralized Joint Learning of Personalized Models and
+  Collaboration Graphs}.
+\newblock Technical report, arXiv:1901.08460, 2019.
+
+\bibitem[Zhang et~al.(2015)Zhang, Choromanska, and LeCun]{zhang2015deep}
+Sixin Zhang, Anna~E Choromanska, and Yann LeCun.
+\newblock Deep learning with elastic averaging {SGD}.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  685--693, 2015.
+
+\bibitem[Zhang and Yang(2017)]{DBLP:journals/corr/ZhangY17aa}
+Yu~Zhang and Qiang Yang.
+\newblock A survey on multi-task learning.
+\newblock \emph{CoRR}, abs/1707.08114, 2017.
+\newblock URL \url{http://arxiv.org/abs/1707.08114}.
+
+\bibitem[Zhang et~al.(2013)Zhang, Duchi, Jordan, and Wainwright]{duchi2013}
+Yuchen Zhang, John Duchi, Micheal~I. Jordan, and Martin~J. Wainwright.
+\newblock Information-theoretic lower bounds for distributed statistical
+  estimation with communication constraints.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  2328--2336, 2013.
+
+\bibitem[Zhao et~al.(2019)Zhao, Yu, Zhao, and Liu]{zhao2019decentralized}
+Yawei Zhao, Chen Yu, Peilin Zhao, and Ji~Liu.
+\newblock Decentralized online learning: Take benefits from others' data
+  without sharing your own to track global trend.
+\newblock \emph{arXiv preprint arXiv:1901.10593}, 2019.
+
+\bibitem[Zhu and Gupta(2017)]{zhu2017prune}
+Michael Zhu and Suyog Gupta.
+\newblock To prune, or not to prune: exploring the efficacy of pruning for
+  model compression.
+\newblock \emph{arXiv preprint arXiv:1710.01878}, 2017.
+
+\bibitem[Zhu et~al.(2019)Zhu, Kairouz, Sun, McMahan, and Li]{zhu2019federated}
+Wennan Zhu, Peter Kairouz, Haicheng Sun, Brendan McMahan, and Wei Li.
+\newblock Federated heavy hitters discovery with differential privacy.
+\newblock \emph{arXiv preprint arXiv:1902.08534}, 2019.
+
+\bibitem[Zhu(2015)]{zhu2015machine}
+Xiaojin Zhu.
+\newblock Machine teaching: An inverse problem to machine learning and an
+  approach toward optimal education.
+\newblock In \emph{Twenty-Ninth AAAI Conference on Artificial Intelligence},
+  2015.
+
+\end{thebibliography}
